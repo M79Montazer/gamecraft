@@ -1,55 +1,61 @@
 using Godot;
 using System.Collections.Generic;
 
+// MeshLibrary item ids shared by the baker and the runtime.
+public static class BlockItem
+{
+    public const int Floor = 0;
+    public const int Wall = 1;
+    public const int Beacon = 2;
+    public const int Hollow = 3;
+}
+
 public class Block
 {
     public enum BlockState { Solid, Hollow, Gone }
 
     public float Dist;
-    public StaticBody3D Body;
-    public MeshInstance3D MeshInstance;
+    public Vector3I Cell;
     public BlockState State = BlockState.Solid;
     public float HollowAt;
     public float DestroyAt;
 }
 
-// Runtime wrapper around the baked level.tscn: rebuilds the hollowing
-// bookkeeping by scanning the baked block nodes when the scene loads.
+// Runtime wrapper around a level's GridMap: builds the hollowing bookkeeping
+// by scanning the occupied cells when the scene loads.
 public class Level
 {
     public static readonly float[] Rings = { 8f, 14f, 20f };
     public const float FloorRadius = 22.5f;
 
-    public Node3D Root { get; }
+    public GridMap Map { get; }
     public List<Block> SortedBlocks { get; } = new();
 
-    public Level(Node3D root)
+    public Level(GridMap map)
     {
-        Root = root;
+        Map = map;
 
-        foreach (Node child in root.GetChildren())
+        foreach (Vector3I cell in map.GetUsedCells())
         {
-            if (child is not StaticBody3D body)
-                continue;
-
-            MeshInstance3D mesh = null;
-            foreach (Node sub in body.GetChildren())
-            {
-                if (sub is MeshInstance3D mi)
-                {
-                    mesh = mi;
-                    break;
-                }
-            }
-
-            Vector3 p = body.Position;
+            Vector3 p = map.MapToLocal(cell);
             SortedBlocks.Add(new Block
             {
                 Dist = Mathf.Sqrt(p.X * p.X + p.Z * p.Z),
-                Body = body,
-                MeshInstance = mesh,
+                Cell = cell,
             });
         }
         SortedBlocks.Sort((a, b) => a.Dist.CompareTo(b.Dist));
+    }
+
+    public void MakeHollow(Block b)
+    {
+        Map.SetCellItem(b.Cell, BlockItem.Hollow);
+        b.State = Block.BlockState.Hollow;
+    }
+
+    public void Destroy(Block b)
+    {
+        Map.SetCellItem(b.Cell, -1);
+        b.State = Block.BlockState.Gone;
     }
 }

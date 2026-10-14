@@ -94,16 +94,11 @@ public partial class Nothingness : Node3D
             if (b.State == Block.BlockState.Solid)
             {
                 if (_time >= b.HollowAt)
-                {
-                    b.MeshInstance.Mesh = GameAssets.Hollow;
-                    b.MeshInstance.MaterialOverride = null;
-                    b.State = Block.BlockState.Hollow;
-                }
+                    Level.MakeHollow(b);
             }
             else if (_time >= b.DestroyAt)
             {
-                b.Body.QueueFree();
-                b.State = Block.BlockState.Gone;
+                Level.Destroy(b);
                 _pending.RemoveAt(i);
             }
         }
