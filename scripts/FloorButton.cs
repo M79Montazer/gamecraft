@@ -6,9 +6,6 @@ public partial class FloorButton : Area3D
 {
 	[Export] public string Channel = "";
 
-	private const float PlateSize = 0.8f;
-	private const float PlateHeight = 0.14f;
-
 	private MeshInstance3D _plate;
 	private StandardMaterial3D _mat;
 	private bool _pressed;
@@ -17,30 +14,8 @@ public partial class FloorButton : Area3D
 	{
 		AddToGroup("floor_button");
 
-		// visuals are built at runtime, not baked — a material swap in the
-		// baker's process wouldn't survive into the saved scene
-		_mat = new StandardMaterial3D
-		{
-			AlbedoColor = new Color(0.55f, 0.35f, 0.05f),
-			EmissionEnabled = true,
-			Emission = new Color(1f, 0.65f, 0.1f),
-			EmissionEnergyMultiplier = 2f,
-		};
-
-		AddChild(new CollisionShape3D
-		{
-			Name = "Shape",
-			Shape = new BoxShape3D { Size = new Vector3(0.95f, 0.4f, 0.95f) },
-			Position = new Vector3(0, 0.15f, 0),
-		});
-
-		_plate = new MeshInstance3D
-		{
-			Name = "Plate",
-			Mesh = new BoxMesh { Size = new Vector3(PlateSize, PlateHeight, PlateSize) },
-			MaterialOverride = _mat,
-		};
-		AddChild(_plate);
+		_plate = GetNode<MeshInstance3D>("Plate");
+		_mat = (StandardMaterial3D)_plate.MaterialOverride;
 
 		BodyEntered += OnBodyEntered;
 	}

@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/Nothingness.cs" id="1_script"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_disc"]
+top_radius = 1.0
+bottom_radius = 1.0
+height = 0.05
+radial_segments = 64
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_void"]
+shading_mode = 0
+albedo_color = Color(0.01, 0.005, 0.03, 1)
+
+[node name="Nothingness" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="Disc" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.03, 0)
+mesh = SubResource("CylinderMesh_disc")
+material_override = SubResource("StandardMaterial3D_void")

@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/Door.cs" id="1_script"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_shape"]
+size = Vector3(4, 2.4, 0.9)
+
+[sub_resource type="BoxMesh" id="BoxMesh_slab"]
+size = Vector3(4, 2.4, 0.9)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dark"]
+albedo_color = Color(0.12, 0.14, 0.2, 1)
+emission_enabled = true
+emission = Color(1, 0.6, 0.1, 1)
+emission_energy_multiplier = 1.1
+
+[node name="Door" type="StaticBody3D"]
+script = ExtResource("1_script")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_shape")
+
+[node name="Slab" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_slab")
+material_override = SubResource("StandardMaterial3D_dark")

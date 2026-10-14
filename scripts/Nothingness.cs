@@ -26,19 +26,7 @@ public partial class Nothingness : Node3D
         _radius = StartRadius;
         _speed = GrowthSpeed;
 
-        var discMat = new StandardMaterial3D
-        {
-            ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
-            AlbedoColor = new Color(0.01f, 0.005f, 0.03f),
-        };
-        _disc = new MeshInstance3D
-        {
-            Mesh = new CylinderMesh { TopRadius = 1f, BottomRadius = 1f, Height = 0.05f, RadialSegments = 64 },
-            MaterialOverride = discMat,
-            Position = new Vector3(0, 1.03f, 0),
-            Scale = new Vector3(_radius, 1, _radius),
-        };
-        AddChild(_disc);
+        _disc = GetNode<MeshInstance3D>("Disc");
 
     }
 

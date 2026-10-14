@@ -7,11 +7,12 @@ public partial class LevelRunner : Node3D
     private enum GameState { Playing, Won, Lost }
 
     private const string LevelSelectScene = "res://scenes/ui/level_select.tscn";
+    private const string NothingnessScene = "res://scenes/nothingness.tscn";
+    private const string HudScene = "res://scenes/ui/hud.tscn";
 
     private Player _player;
     private Nothingness _nothingness;
-    private Label _hud;
-    private Label _center;
+    private Hud _hud;
     private GameState _state = GameState.Playing;
     private float _time;
 
@@ -26,10 +27,12 @@ public partial class LevelRunner : Node3D
         _player = GetNode<Player>("Player");
         var level = new Level(GetNode<GridMap>("GridMap"));
 
-        _nothingness = new Nothingness { Level = level };
+        _nothingness = GD.Load<PackedScene>(NothingnessScene).Instantiate<Nothingness>();
+        _nothingness.Level = level;
         AddChild(_nothingness);
 
-        SetupHud();
+        _hud = GD.Load<PackedScene>(HudScene).Instantiate<Hud>();
+        AddChild(_hud);
     }
 
     public override void _Process(double delta)
@@ -57,7 +60,7 @@ public partial class LevelRunner : Node3D
             : dist > Level.Rings[0] ? "INNER RING"
             : "THE CENTER";
         float toGo = Mathf.Max(0f, Level.FloorRadius - dist);
-        _hud.Text = $"{zone}    escape in {toGo:0.#} m    {_time:0.0} s";
+        _hud.SetStatus($"{zone}    escape in {toGo:0.#} m    {_time:0.0} s");
     }
 
     public override void _UnhandledInput(InputEvent e)
@@ -76,59 +79,10 @@ public partial class LevelRunner : Node3D
         InputMap.ActionAddEvent(action, new InputEventKey { PhysicalKeycode = key });
     }
 
-    private void SetupHud()
-    {
-        var layer = new CanvasLayer();
-        AddChild(layer);
-
-        _hud = new Label { Position = new Vector2(16f, 12f) };
-        _hud.LabelSettings = new LabelSettings
-        {
-            FontSize = 24,
-            FontColor = Colors.White,
-            OutlineSize = 8,
-            OutlineColor = new Color(0, 0, 0, 0.85f),
-        };
-        layer.AddChild(_hud);
-
-        _center = new Label
-        {
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center,
-            Visible = false,
-        };
-        _center.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
-        _center.LabelSettings = new LabelSettings
-        {
-            FontSize = 56,
-            FontColor = Colors.White,
-            OutlineSize = 12,
-            OutlineColor = new Color(0, 0, 0, 0.9f),
-        };
-        layer.AddChild(_center);
-
-        var hint = new Label
-        {
-            Text = "WASD move   ·   Space jump   ·   amber plates open the gates   ·   R retry   ·   Esc levels",
-            HorizontalAlignment = HorizontalAlignment.Center,
-        };
-        hint.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.BottomWide);
-        hint.OffsetTop = -44f;
-        hint.LabelSettings = new LabelSettings
-        {
-            FontSize = 16,
-            FontColor = new Color(1, 1, 1, 0.65f),
-            OutlineSize = 6,
-            OutlineColor = new Color(0, 0, 0, 0.8f),
-        };
-        layer.AddChild(hint);
-    }
-
     private void SetEnd(string title, string sub)
     {
         _state = title == "YOU ESCAPED" ? GameState.Won : GameState.Lost;
         _nothingness.Active = false;
-        _center.Text = $"{title}\n{sub}\n\npress R to retry · Esc for levels";
-        _center.Visible = true;
+        _hud.ShowEnd($"{title}\n{sub}\n\npress R to retry · Esc for levels");
     }
 }
