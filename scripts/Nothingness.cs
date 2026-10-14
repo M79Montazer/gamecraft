@@ -20,7 +20,6 @@ public partial class Nothingness : Node3D
     private readonly List<Block> _pending = new();
 
     private MeshInstance3D _disc;
-    private MeshInstance3D _edge;
 
     public override void _Ready()
     {
@@ -41,22 +40,6 @@ public partial class Nothingness : Node3D
         };
         AddChild(_disc);
 
-        var edgeMat = new StandardMaterial3D
-        {
-            ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
-            AlbedoColor = new Color(0.6f, 1f, 1f),
-            EmissionEnabled = true,
-            Emission = new Color(0.35f, 0.95f, 1f),
-            EmissionEnergyMultiplier = 4f,
-        };
-        _edge = new MeshInstance3D
-        {
-            Mesh = new TorusMesh { InnerRadius = 0.96f, OuterRadius = 1.0f },
-            MaterialOverride = edgeMat,
-            Position = new Vector3(0, 1.06f, 0),
-            Scale = new Vector3(_radius, 1, _radius),
-        };
-        AddChild(_edge);
     }
 
     public override void _Process(double delta)
@@ -107,6 +90,5 @@ public partial class Nothingness : Node3D
         // wireframe blocks stay visible in a band behind the glowing rim
         float discRadius = Mathf.Max(0.01f, _radius - HollowBand);
         _disc.Scale = new Vector3(discRadius, 1, discRadius);
-        _edge.Scale = new Vector3(discRadius, 1, discRadius);
     }
 }
