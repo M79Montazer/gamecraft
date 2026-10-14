@@ -74,9 +74,29 @@ public partial class Nothingness : Node3D
             }
         }
 
+        // standalone props (doors, floor buttons) are not GridMap cells, so
+        // the circle consumes them directly: free them once the rim reaches
+        ConsumeProps();
+
         // the void disc lags behind the hollowing front so the crumbling
         // wireframe blocks stay visible in a band behind the glowing rim
         float discRadius = Mathf.Max(0.01f, _radius - HollowBand);
         _disc.Scale = new Vector3(discRadius, 1, discRadius);
+    }
+
+    private void ConsumeProps()
+    {
+        Vector3 center = GlobalTransform.Origin;
+        foreach (string group in new[] { "sliding_door", "floor_button" })
+            foreach (Node node in GetTree().GetNodesInGroup(group))
+                if (node is Node3D prop)
+                {
+                    Vector3 p = prop.GlobalTransform.Origin;
+                    float dist = Mathf.Sqrt(
+                        (p.X - center.X) * (p.X - center.X) +
+                        (p.Z - center.Z) * (p.Z - center.Z));
+                    if (dist <= _radius)
+                        prop.QueueFree();
+                }
     }
 }

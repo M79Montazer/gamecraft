@@ -15,7 +15,11 @@ public partial class FloorButton : Area3D
 		AddToGroup("floor_button");
 
 		_plate = GetNode<MeshInstance3D>("Plate");
-		_mat = (StandardMaterial3D)_plate.MaterialOverride;
+		// duplicate so the pressed tint can't be undone by the shared scene
+		// resource or batching; we mutate our own copy from here on
+		_mat = (StandardMaterial3D)_plate.MaterialOverride.Duplicate();
+		_mat.EmissionEnergyMultiplier = 2.0f;
+		_plate.MaterialOverride = _mat;
 
 		BodyEntered += OnBodyEntered;
 	}
@@ -28,6 +32,7 @@ public partial class FloorButton : Area3D
 
 		_mat.AlbedoColor = new Color(0.15f, 0.6f, 0.25f);
 		_mat.Emission = new Color(0.3f, 1f, 0.45f);
+		_mat.EmissionEnergyMultiplier = 3.0f;
 
 		var tween = CreateTween();
 		tween.TweenProperty(_plate, "position:y", -0.06f, 0.15f);
