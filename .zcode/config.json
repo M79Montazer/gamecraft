@@ -1,0 +1,13 @@
+{
+  "mcp": {
+    "servers": {
+      "blender": {
+        "command": "D:\\Regna\\RegnaPythonInterpreter\\Scripts\\python.exe",
+        "args": ["-m", "blmcp"],
+        "env": {
+          "BLENDER_PATH": "D:\\Blender 5.2\\blender.exe"
+        }
+      }
+    }
+  }
+}
