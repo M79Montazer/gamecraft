@@ -6,6 +6,7 @@ public partial class Player : CharacterBody3D
 	[Export] public float Acceleration = 40f;
 	[Export] public float AirControl = 0.5f;
 	[Export] public float JumpVelocity = 8f;
+	[Export] public float JumpMultiplier = 1f; // raised to 2 while standing on a JumpPad
 	[Export] public float Gravity = 25f;
 
 	private const float RollRadius = 0.4f;
@@ -48,7 +49,7 @@ public partial class Player : CharacterBody3D
 
 		float vertical = Velocity.Y;
 		if (IsOnFloor() && Input.IsActionJustPressed("jump"))
-			vertical = JumpVelocity;
+			vertical = JumpVelocity * JumpMultiplier;
 		else
 			vertical -= Gravity * (float)delta;
 

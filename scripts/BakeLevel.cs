@@ -144,6 +144,7 @@ public partial class BakeLevel : SceneTree
         root.AddChild(map);
 
         AddDoorsAndButtons(root);
+        AddJumpPads(root);
 
         var player = (Node3D)PlayerScene.Instantiate();
         player.Name = "Player";
@@ -200,6 +201,22 @@ public partial class BakeLevel : SceneTree
             button.Channel = $"gate_{gateDeg:0}";
             button.Position = new Vector3(Mathf.RoundToInt(Mathf.Cos(a) * 10f), 1f, Mathf.RoundToInt(Mathf.Sin(a) * 10f));
             root.AddChild(button);
+        }
+    }
+
+    // Jump pads sit flush on the floor disc: root at the block top (y = 1),
+    // the pad's cube base sunk half a cell into the floor block so only the
+    // glowing disc shows.
+    private static void AddJumpPads(Node3D root)
+    {
+        PackedScene padScene = ResourceLoader.Load<PackedScene>("res://scenes/jump_pad.tscn");
+
+        foreach ((int x, int z) in new[] { (-6, 5), (7, -4), (-3, -9) })
+        {
+            var pad = padScene.Instantiate<JumpPad>();
+            pad.Name = $"JumpPad_{x}_{z}";
+            pad.Position = new Vector3(x, 1f, z);
+            root.AddChild(pad);
         }
     }
 

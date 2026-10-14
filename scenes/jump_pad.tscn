@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/jump_pad.glb" id="1_pad"]
+[ext_resource type="Script" path="res://scripts/JumpPad.cs" id="2_script"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_pad"]
+radius = 0.42
+height = 0.4
+
+[node name="JumpPad" type="Area3D"]
+script = ExtResource("2_script")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.1, 0)
+shape = SubResource("CylinderShape3D_pad")
+
+[node name="PadModel" parent="." instance=ExtResource("1_pad")]
+position = Vector3(0, -0.5, 0)
