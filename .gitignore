@@ -385,3 +385,6 @@ smoke/
 build.log
 smoke_run.log
 import.log
+
+# ZCode local workspace
+.zcode/
