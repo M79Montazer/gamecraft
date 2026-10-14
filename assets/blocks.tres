@@ -1,4 +1,4 @@
-[gd_resource type="MeshLibrary" format=4 uid="uid://b60exc1i5sev1"]
+[gd_resource type="MeshLibrary" format=4 uid="uid://dyj6h4ov6k0dh"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qsneo"]
 resource_name = "BlockMat"

@@ -143,6 +143,8 @@ public partial class BakeLevel : SceneTree
         Paint(map);
         root.AddChild(map);
 
+        AddDoorsAndButtons(root);
+
         var player = (Node3D)PlayerScene.Instantiate();
         player.Name = "Player";
         player.Position = new Vector3(5f, 1.6f, 0f);
@@ -164,8 +166,60 @@ public partial class BakeLevel : SceneTree
 
         // PackedScene.Pack only serializes nodes owned by the packed root
         foreach (Node child in root.GetChildren())
-            child.Owner = root;
+            SetOwnerRecursive(child, root);
         return root;
+    }
+
+    // Sliding doors seal every gate of the outermost ring wall; floor buttons
+    // placed deeper inside share one channel so any pressed button opens them.
+    private static void AddDoorsAndButtons(Node3D root)
+    {
+        var doorMat = new StandardMaterial3D
+        {
+            AlbedoColor = new Color(0.12f, 0.14f, 0.2f),
+            EmissionEnabled = true,
+            Emission = new Color(1f, 0.6f, 0.1f),
+            EmissionEnergyMultiplier = 1.1f,
+        };
+        var doorShape = new BoxShape3D { Size = new Vector3(4f, 2.4f, 0.9f) };
+        var doorMesh = new BoxMesh { Size = new Vector3(4f, 2.4f, 0.9f) };
+
+        float ringRadius = Level.Rings[^1];
+        foreach (float gateDeg in RingGates[2])
+        {
+            float a = Mathf.DegToRad(gateDeg);
+            // local X must span the gate tangentially: rotY = a + 90°
+            var door = new Door
+            {
+                Name = $"Door_{gateDeg:0}",
+                Channel = $"gate_{gateDeg:0}",
+                Position = new Vector3(Mathf.Cos(a) * ringRadius, 2.2f, Mathf.Sin(a) * ringRadius),
+                RotationDegrees = new Vector3(0f, gateDeg + 90f, 0f),
+            };
+            door.AddChild(new CollisionShape3D { Shape = doorShape });
+            door.AddChild(new MeshInstance3D { Mesh = doorMesh, MaterialOverride = doorMat });
+            root.AddChild(door);
+        }
+
+        // one button per gate, placed inside at the gate's own angle
+        foreach (float gateDeg in RingGates[2])
+        {
+            float a = Mathf.DegToRad(gateDeg);
+            var button = new FloorButton
+            {
+                Name = $"Button_{gateDeg:0}",
+                Channel = $"gate_{gateDeg:0}",
+                Position = new Vector3(Mathf.RoundToInt(Mathf.Cos(a) * 10f), 1f, Mathf.RoundToInt(Mathf.Sin(a) * 10f)),
+            };
+            root.AddChild(button);
+        }
+    }
+
+    private static void SetOwnerRecursive(Node node, Node owner)
+    {
+        node.Owner = owner;
+        foreach (Node child in node.GetChildren())
+            SetOwnerRecursive(child, owner);
     }
 
     private static void Paint(GridMap map)

@@ -109,7 +109,7 @@ public partial class LevelRunner : Node3D
 
         var hint = new Label
         {
-            Text = "WASD move   ·   Space jump   ·   R retry   ·   Esc levels",
+            Text = "WASD move   ·   Space jump   ·   amber plates open the gates   ·   R retry   ·   Esc levels",
             HorizontalAlignment = HorizontalAlignment.Center,
         };
         hint.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.BottomWide);
