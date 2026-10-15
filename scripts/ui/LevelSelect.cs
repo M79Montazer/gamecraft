@@ -2,15 +2,17 @@ using Godot;
 using System.Collections.Generic;
 
 // Level selector: scans scenes/levels/*/ for level scenes at runtime and shows
-// one button per level. All levels are open for now; the unlock/progress
-// filter goes in FindLevelScenes once a save system exists.
+// one button per level. Levels past Progress.Unlocked show locked (disabled).
 public partial class LevelSelect : Control
 {
-    private const string LevelsDir = "res://scenes/levels";
     private const string MenuScene = "res://scenes/main.tscn";
 
     public override void _Ready()
     {
+        // arriving here from a paused end card must not stay paused
+        GetTree().Paused = false;
+        Input.MouseMode = Input.MouseModeEnum.Visible;
+
         var bg = new ColorRect { Color = new Color(0.015f, 0.015f, 0.03f) };
         bg.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
         AddChild(bg);
@@ -36,13 +38,19 @@ public partial class LevelSelect : Control
         var spacer = new Control { CustomMinimumSize = new Vector2(0f, 18f) };
         box.AddChild(spacer);
 
-        List<string> scenes = FindLevelScenes();
+        List<string> scenes = Progress.FindLevelScenes();
         Button first = null;
         foreach (string path in scenes)
         {
-            var b = MainMenu.MenuButton(Prettify(path));
-            string scenePath = $"{LevelsDir}/{path}";
-            b.Pressed += () => GetTree().ChangeSceneToFile(scenePath);
+            int number = Progress.LevelNumber(path);
+            bool unlocked = Progress.IsUnlocked(number);
+            var b = MainMenu.MenuButton(unlocked ? Prettify(path) : $"{Prettify(path)} 🔒");
+            b.Disabled = !unlocked;
+            if (unlocked)
+            {
+                string scenePath = $"res://scenes/levels/{path}";
+                b.Pressed += () => GetTree().ChangeSceneToFile(scenePath);
+            }
             box.AddChild(b);
             first ??= b;
         }
@@ -72,46 +80,6 @@ public partial class LevelSelect : Control
     {
         if (e.IsActionPressed("ui_cancel"))
             GetTree().ChangeSceneToFile(MenuScene);
-    }
-
-    private static List<string> FindLevelScenes()
-    {
-        var scenes = new List<string>();
-        using var root = DirAccess.Open(LevelsDir);
-        if (root == null)
-            return scenes;
-
-        root.ListDirBegin();
-        string dir;
-        while ((dir = root.GetNext()) != "")
-        {
-            if (!root.CurrentIsDir() || dir.StartsWith("."))
-                continue;
-            using var sub = DirAccess.Open($"{LevelsDir}/{dir}");
-            if (sub == null)
-                continue;
-            sub.ListDirBegin();
-            string file;
-            while ((file = sub.GetNext()) != "")
-            {
-                // Only the folder's own <folder>.tscn is a level; other .tscn
-                // files (e.g. intro_dialogue.tscn) are support files.
-                if (!sub.CurrentIsDir() && file == $"{dir}.tscn")
-                    scenes.Add($"{dir}/{file}");
-            }
-            sub.ListDirEnd();
-        }
-        root.ListDirEnd();
-
-        // level_2 before level_10
-        scenes.Sort((a, b) => LevelNumber(a).CompareTo(LevelNumber(b)));
-        return scenes;
-    }
-
-    private static int LevelNumber(string path)
-    {
-        var match = System.Text.RegularExpressions.Regex.Match(path, @"(\d+)");
-        return match.Success ? int.Parse(match.Value) : int.MaxValue;
     }
 
     private static string Prettify(string path)

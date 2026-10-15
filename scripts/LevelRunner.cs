@@ -1,4 +1,5 @@
 using Godot;
+using System.Collections.Generic;
 
 // Per-level game controller: the root script of a level scene, expected to sit
 // alongside its GridMap, Player and Camera nodes.
@@ -33,6 +34,11 @@ public partial class LevelRunner : Node3D
 
     public override void _Ready()
     {
+        // a reload/scene change from a paused end card must start unpaused
+        GetTree().Paused = false;
+        // keep working while the tree is paused on the end card
+        ProcessMode = ProcessModeEnum.Always;
+
         EnsureAction("move_left", Key.A);
         EnsureAction("move_right", Key.D);
         EnsureAction("move_forward", Key.W);
@@ -64,6 +70,12 @@ public partial class LevelRunner : Node3D
             }
         }
 
+        // this node stays Always so R/Esc work while paused, but everything
+        // world-side must still freeze during the intro dialogue and end card
+        foreach (Node child in GetChildren())
+            if (child != _hud)
+                child.ProcessMode = ProcessModeEnum.Pausable;
+
         StartIntroDialogue();
     }
 
@@ -91,7 +103,8 @@ public partial class LevelRunner : Node3D
 
     public override void _Process(double delta)
     {
-        if (_state != GameState.Playing)
+        // this node runs while paused (for R/Esc), but the clock must not
+        if (GetTree().Paused || _state != GameState.Playing)
             return;
         _time += (float)delta;
 
@@ -153,7 +166,16 @@ public partial class LevelRunner : Node3D
     {
         _state = GameState.Lost;
         _nothingness.Active = false;
+        PauseWorld();
         _hud.ShowEnd($"{title}\n{sub}\n\npress R to retry · Esc for levels");
+    }
+
+    // Freeze everything under the end card: physics, nothingness and the ball
+    // all stop while the overlay is up.
+    private void PauseWorld()
+    {
+        Input.MouseMode = Input.MouseModeEnum.Visible;
+        GetTree().Paused = true;
     }
 
     // 1 star for escaping, plus one per star picked up, up to 3.
@@ -161,7 +183,21 @@ public partial class LevelRunner : Node3D
     {
         _state = GameState.Won;
         _nothingness.Active = false;
-        _hud.ShowScoreCard(1 + _starsCollected, _time);
+        int number = Progress.LevelNumber(SceneFilePath);
+        Progress.MarkCompleted(number);
+        PauseWorld();
+        _hud.ShowScoreCard(1 + _starsCollected, _time, NextLevelPath());
+    }
+
+    // The level scene sorted right after this one, or null on the last level.
+    private string NextLevelPath()
+    {
+        List<string> scenes = Progress.FindLevelScenes();
+        string own = SceneFilePath.Replace("res://scenes/levels/", "");
+        int i = scenes.IndexOf(own);
+        if (i < 0 || i + 1 >= scenes.Count)
+            return null;
+        return $"res://scenes/levels/{scenes[i + 1]}";
     }
 
     private void OnStarCollected(Star star)

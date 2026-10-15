@@ -11,6 +11,8 @@ public partial class Hud : CanvasLayer
 
 	public override void _Ready()
 	{
+		// the score card must receive input while the tree is paused on it
+		ProcessMode = ProcessModeEnum.Always;
 		_hud = GetNode<Label>("Hud");
 		_center = GetNode<Label>("Center");
 		_scoreCard = GetNode<ScoreCard>("ScoreCard");
@@ -24,10 +26,10 @@ public partial class Hud : CanvasLayer
 		_center.Visible = true;
 	}
 
-	public void ShowScoreCard(int stars, float time)
+	public void ShowScoreCard(int stars, float time, string nextLevelPath = null)
 	{
 		_center.Visible = false;
 		_hud.Visible = false;
-		_scoreCard.Show(stars, time);
+		_scoreCard.Show(stars, time, nextLevelPath);
 	}
 }
