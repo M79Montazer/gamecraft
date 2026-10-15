@@ -8,13 +8,17 @@ public partial class Door : StaticBody3D
 {
     [Export] public string Channel = "";
 
-    private const float SinkDepth = 2.6f; // slab height 2.4 + a little margin
+    // Distance the Panel sinks when opening — tune in the inspector to match
+    // the door.fbx scale once fixed in the editor.
+    [Export] public float SinkDepth = 2.6f;
 
+    private Node3D _panel;
     private bool _open;
 
     public override void _Ready()
     {
         AddToGroup("sliding_door");
+        _panel = GetNode<Node3D>("Panel");
     }
 
     public void Open()
@@ -24,7 +28,7 @@ public partial class Door : StaticBody3D
         _open = true;
 
         var tween = CreateTween();
-        tween.TweenProperty(this, "position", Position + new Vector3(0, -SinkDepth, 0), 1.4f)
+        tween.TweenProperty(_panel, "position", _panel.Position + new Vector3(0, -SinkDepth, 0), 1.4f)
             .SetTrans(Tween.TransitionType.Cubic)
             .SetEase(Tween.EaseType.InOut);
         // collision off only once the ball can't be standing on the slab top

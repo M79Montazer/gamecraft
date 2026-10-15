@@ -1,25 +1,24 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://bscep6moooxla"]
 
-[ext_resource type="Script" path="res://scripts/Door.cs" id="1_script"]
+[ext_resource type="Script" uid="uid://bstbxs5812t0e" path="res://scripts/Door.cs" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://dixbsuldn0a8x" path="res://assets/walls_n_doors/door_frame.fbx" id="2_frame"]
+[ext_resource type="PackedScene" uid="uid://bg5vnwmiktvfg" path="res://assets/walls_n_doors/door.fbx" id="3_door"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_shape"]
-size = Vector3(4, 2.4, 0.9)
+size = Vector3(1.0941162, 1.6712158, 0.29970703)
 
-[sub_resource type="BoxMesh" id="BoxMesh_slab"]
-size = Vector3(4, 2.4, 0.9)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dark"]
-albedo_color = Color(0.12, 0.14, 0.2, 1)
-emission_enabled = true
-emission = Color(1, 0.6, 0.1, 1)
-emission_energy_multiplier = 1.1
-
-[node name="Door" type="StaticBody3D"]
+[node name="Door" type="StaticBody3D" unique_id=1008327234]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 script = ExtResource("1_script")
 
-[node name="Shape" type="CollisionShape3D" parent="."]
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=1389466861]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.016052246, 0.59865284, -0.0347168)
 shape = SubResource("BoxShape3D_shape")
 
-[node name="Slab" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_slab")
-material_override = SubResource("StandardMaterial3D_dark")
+[node name="Frame" parent="." unique_id=1920763278 instance=ExtResource("2_frame")]
+transform = Transform3D(0.96269184, 0, -0.27060047, 0, 1, 0, 0.27060047, 0, 0.96269184, 4.77, 0.794, -0.746)
+
+[node name="Panel" type="Node3D" parent="." unique_id=538856120]
+
+[node name="Mesh" parent="Panel" unique_id=1642467833 instance=ExtResource("3_door")]
+transform = Transform3D(0.9621466, 0, -0.27253237, 0, 1, 0, 0.27253237, 0, 0.9621466, 4.766648, 0.82689524, -0.48380136)

@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" uid="uid://cnsthuy0tkdq4" path="res://scripts/LevelRunner.cs" id="1_napug"]
 [ext_resource type="MeshLibrary" uid="uid://csr65qdew51ik" path="res://assets/blocks.tres" id="2_1jeig"]
-[ext_resource type="PackedScene" path="res://scenes/door.tscn" id="3_hhmec"]
+[ext_resource type="PackedScene" uid="uid://bscep6moooxla" path="res://scenes/door.tscn" id="3_hhmec"]
 [ext_resource type="PackedScene" uid="uid://bkoab37hifokg" path="res://scenes/floor_button.tscn" id="5_ldw0e"]
 [ext_resource type="PackedScene" path="res://scenes/jump_pad.tscn" id="7_wloe5"]
 [ext_resource type="PackedScene" uid="uid://cpgpbs5ogwxca" path="res://scenes/player.tscn" id="10_41r28"]
 [ext_resource type="PackedScene" path="res://scenes/third_person_camera.tscn" id="11_tpcam"]
-[ext_resource type="PackedScene" path="res://scenes/star.tscn" id="12_star"]
+[ext_resource type="PackedScene" uid="uid://bawhaeqrv1j5d" path="res://scenes/star.tscn" id="12_star"]
 
 [sub_resource type="Environment" id="Environment_1fq2y"]
 background_mode = 1
@@ -43,15 +43,15 @@ data = {
 }
 
 [node name="Door_60" parent="." unique_id=1429496744 instance=ExtResource("3_hhmec")]
-transform = Transform3D(-0.8660254, 0, 0.50000006, 0, 1, 0, -0.50000006, 0, -0.8660254, 9.999999, 2.2, 17.320509)
+transform = Transform3D(1.7159218, 0, 1.0274304, 0, 2, 0, -1.0274304, 0, 1.7159218, 9.744618, 1.0447962, 17.320509)
 Channel = "gate_60"
 
 [node name="Door_200" parent="." unique_id=494129691 instance=ExtResource("3_hhmec")]
-transform = Transform3D(0.3420201, 0, -0.9396926, 0, 1, 0, 0.9396926, 0, 0.3420201, -18.793852, 2.2, -6.840403)
+transform = Transform3D(-0.48444936, 0, -1.9404404, 0, 2, 0, 1.9404404, 0, -0.48444936, -18.468048, 0.99595714, -7.036863)
 Channel = "gate_200"
 
 [node name="Door_300" parent="." unique_id=1407247051 instance=ExtResource("3_hhmec")]
-transform = Transform3D(0.8660254, 0, 0.50000006, 0, 1, 0, -0.50000006, 0, 0.8660254, 9.999998, 2.2, -17.320509)
+transform = Transform3D(-1.7163773, 0, 1.0266688, 0, 2, 0, -1.0266688, 0, -1.7163773, 9.538223, 0.9454045, -17.015064)
 Channel = "gate_300"
 
 [node name="Button_60" parent="." unique_id=954751107 instance=ExtResource("5_ldw0e")]
