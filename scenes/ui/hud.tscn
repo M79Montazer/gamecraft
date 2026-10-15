@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/Hud.cs" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/ui/score_card.tscn" id="2_card"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="3_pause"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_hud"]
 font_size = 24
@@ -48,8 +49,10 @@ anchor_bottom = 1.0
 offset_top = -44.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "WASD move   ·   Space jump   ·   amber plates open the gates   ·   R retry   ·   Esc levels"
+text = "WASD move   ·   Space jump   ·   amber plates open the gates   ·   R retry   ·   Esc pause"
 horizontal_alignment = 1
 label_settings = SubResource("LabelSettings_hint")
 
 [node name="ScoreCard" parent="." instance=ExtResource("2_card")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("3_pause")]

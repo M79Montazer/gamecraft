@@ -56,8 +56,9 @@ public partial class LevelRunner : Node3D
         _nothingness.Level = _level;
         AddChild(_nothingness);
 
-        _hud = GD.Load<PackedScene>(HudScene).Instantiate<Hud>();
-        AddChild(_hud);
+		_hud = GD.Load<PackedScene>(HudScene).Instantiate<Hud>();
+		AddChild(_hud);
+		_hud.PauseMenu.Resumed += OnPauseResumed;
 
         // stars are instanced straight into the level scene; children _Ready
         // before this root, so the group is populated by now
@@ -136,8 +137,20 @@ public partial class LevelRunner : Node3D
             GetTree().ReloadCurrentScene();
         else if (e.IsActionPressed("ui_cancel"))
         {
-            Input.MouseMode = Input.MouseModeEnum.Visible;
-            GetTree().ChangeSceneToFile(LevelSelectScene);
+            // mid-run Esc opens the pause menu, which consumes the next Esc
+            // itself. Once the run is over (end card, score card) or the tree
+            // is already paused (intro dialogue), Esc still exits to the
+            // level select, as those overlays advertise.
+            if (_state == GameState.Playing && !GetTree().Paused)
+            {
+                PauseWorld();
+                _hud.PauseMenu.Open();
+            }
+            else
+            {
+                Input.MouseMode = Input.MouseModeEnum.Visible;
+                GetTree().ChangeSceneToFile(LevelSelectScene);
+            }
         }
         else if (e.IsActionPressed("toggle_camera"))
             ToggleCamera();
@@ -180,6 +193,16 @@ public partial class LevelRunner : Node3D
     {
         Input.MouseMode = Input.MouseModeEnum.Visible;
         GetTree().Paused = true;
+    }
+
+    // The pause menu only hides itself; unpausing and restoring the mouse
+    // mode for whichever camera is active stay with the pause bookkeeping.
+    private void OnPauseResumed()
+    {
+        GetTree().Paused = false;
+        Input.MouseMode = _thirdPersonActive
+            ? Input.MouseModeEnum.Captured
+            : Input.MouseModeEnum.Visible;
     }
 
     // 1 star for escaping, plus one per star picked up, up to 3.
