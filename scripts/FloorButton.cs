@@ -1,27 +1,25 @@
 using Godot;
 
-// Floor pressure plate: glows amber until the robot floats over it, then locks
-// pressed (sinks, turns green) and opens every Door sharing its Channel.
-// Detection works both ways: the body collision or the player's tall
-// FeetTrigger area (the robot hovers, so usually the trigger) entering.
+// Floor pressure plate: shows the red model until the robot floats over it,
+// then locks pressed (swaps to the green model, sinks) and opens every Door
+// sharing its Channel. Models are button_red.fbx / button_green.fbx, instanced
+// as sibling nodes in scenes/floor_button.tscn. Detection works both ways: the
+// body collision or the player's tall FeetTrigger area (the robot hovers, so
+// usually the trigger) entering.
 public partial class FloorButton : Area3D
 {
 	[Export] public string Channel = "";
 
-	private MeshInstance3D _plate;
-	private StandardMaterial3D _mat;
+	private Node3D _redModel;
+	private Node3D _greenModel;
 	private bool _pressed;
 
 	public override void _Ready()
 	{
 		AddToGroup("floor_button");
 
-		_plate = GetNode<MeshInstance3D>("Plate");
-		// duplicate so the pressed tint can't be undone by the shared scene
-		// resource or batching; we mutate our own copy from here on
-		_mat = (StandardMaterial3D)_plate.MaterialOverride.Duplicate();
-		_mat.EmissionEnergyMultiplier = 2.0f;
-		_plate.MaterialOverride = _mat;
+		_redModel = GetNode<Node3D>("RedModel");
+		_greenModel = GetNode<Node3D>("GreenModel");
 
 		// the body filter matters: the plate's collision box slightly penetrates
 		// the GridMap floor, so the floor body itself fires BodyEntered at the
@@ -48,12 +46,11 @@ public partial class FloorButton : Area3D
 			return;
 		_pressed = true;
 
-		_mat.AlbedoColor = new Color(0.15f, 0.6f, 0.25f);
-		_mat.Emission = new Color(0.3f, 1f, 0.45f);
-		_mat.EmissionEnergyMultiplier = 3.0f;
+		_redModel.Visible = false;
+		_greenModel.Visible = true;
 
 		var tween = CreateTween();
-		tween.TweenProperty(_plate, "position:y", -0.06f, 0.15f);
+		tween.TweenProperty(_greenModel, "position:y", -0.06f, 0.15f);
 		tween.TweenCallback(Callable.From(OpenDoors));
 	}
 

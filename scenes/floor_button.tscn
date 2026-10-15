@@ -1,27 +1,22 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://bkoab37hifokg"]
 
-[ext_resource type="Script" path="res://scripts/FloorButton.cs" id="1_script"]
+[ext_resource type="Script" uid="uid://b75smyoqbp1k2" path="res://scripts/FloorButton.cs" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://b41lfr2kvbjkp" path="res://assets/button_red.fbx" id="2_red"]
+[ext_resource type="PackedScene" uid="uid://ctpic1n0pfim5" path="res://assets/button_green.fbx" id="3_green"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_shape"]
-size = Vector3(0.95, 0.4, 0.95)
+size = Vector3(1.2884766, 0.4, 1.2608154)
 
-[sub_resource type="BoxMesh" id="BoxMesh_plate"]
-size = Vector3(0.8, 0.14, 0.8)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_amber"]
-resource_local_to_scene = true
-albedo_color = Color(0.55, 0.35, 0.05, 1)
-emission_enabled = true
-emission = Color(1, 0.65, 0.1, 1)
-emission_energy_multiplier = 2.0
-
-[node name="FloorButton" type="Area3D"]
+[node name="FloorButton" type="Area3D" unique_id=1045174706]
 script = ExtResource("1_script")
 
-[node name="Shape" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.15, 0)
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=1358239599]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16923828, 0.15, -0.010217324)
 shape = SubResource("BoxShape3D_shape")
 
-[node name="Plate" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_plate")
-material_override = SubResource("StandardMaterial3D_amber")
+[node name="RedModel" parent="." unique_id=2095611580 instance=ExtResource("2_red")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.220514, 0, 0.022600412)
+
+[node name="GreenModel" parent="." unique_id=139880298 instance=ExtResource("3_green")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.221, 0, 0.023)
+visible = false

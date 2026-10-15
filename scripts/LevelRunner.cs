@@ -148,7 +148,11 @@ public partial class LevelRunner : Node3D
     private void ToggleCamera()
     {
         _thirdPersonActive = !_thirdPersonActive;
+        // make both explicit: artist FBX models embed their own Camera3D, and
+        // unsetting one camera's Current alone would let the viewport fall back
+        // to whichever of those it finds first
         _thirdPersonCamera.Current = _thirdPersonActive;
+        _fixedCamera.Current = !_thirdPersonActive;
         Input.MouseMode = _thirdPersonActive
             ? Input.MouseModeEnum.Captured
             : Input.MouseModeEnum.Visible;
