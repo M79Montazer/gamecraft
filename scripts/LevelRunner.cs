@@ -19,6 +19,9 @@ public partial class LevelRunner : Node3D
     private Level _level;
     private Nothingness _nothingness;
     private Hud _hud;
+    private Camera3D _fixedCamera;
+    private ThirdPersonCamera _thirdPersonCamera;
+    private bool _thirdPersonActive;
     private GameState _state = GameState.Playing;
     private float _time;
 
@@ -29,9 +32,13 @@ public partial class LevelRunner : Node3D
         EnsureAction("move_forward", Key.W);
         EnsureAction("move_back", Key.S);
         EnsureAction("jump", Key.Space);
+        EnsureAction("toggle_camera", Key.H);
 
         _player = GetNode<Player>("Player");
         _level = new Level(GetNode<GridMap>("GridMap"), FloorRadius, Rings);
+
+        _fixedCamera = GetNode<Camera3D>("Camera");
+        _thirdPersonCamera = GetNode<ThirdPersonCamera>("ThirdPersonCamera");
 
         _nothingness = GD.Load<PackedScene>(NothingnessScene).Instantiate<Nothingness>();
         _nothingness.Level = _level;
@@ -95,7 +102,23 @@ public partial class LevelRunner : Node3D
         if (e is InputEventKey { Pressed: true } key && (key.PhysicalKeycode == Key.R || key.Keycode == Key.R))
             GetTree().ReloadCurrentScene();
         else if (e.IsActionPressed("ui_cancel"))
+        {
+            Input.MouseMode = Input.MouseModeEnum.Visible;
             GetTree().ChangeSceneToFile(LevelSelectScene);
+        }
+        else if (e.IsActionPressed("toggle_camera"))
+            ToggleCamera();
+    }
+
+    // H swaps between the fixed overview camera and the orbiting third-person
+    // one; the third-person view captures the mouse for orbiting.
+    private void ToggleCamera()
+    {
+        _thirdPersonActive = !_thirdPersonActive;
+        _thirdPersonCamera.Current = _thirdPersonActive;
+        Input.MouseMode = _thirdPersonActive
+            ? Input.MouseModeEnum.Captured
+            : Input.MouseModeEnum.Visible;
     }
 
     private static void EnsureAction(string action, Key key)

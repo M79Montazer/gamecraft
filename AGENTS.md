@@ -35,6 +35,8 @@ dotnet build                                                # compile C#
 - **Player**: `scenes/player.tscn` (script + sphere collision + ball.glb
   instance) is shared by all levels; edit it there, not per level.
 - **UI** (menus, HUD): built in code, not editor scenes — keep that pattern.
+- when adding a new scene or node or object, unless necessary, don't have anything generated in runtime (any Godot nodes).
+  have them a node or a separate scene editable in the Godot editor 
 
 ## Gotchas
 

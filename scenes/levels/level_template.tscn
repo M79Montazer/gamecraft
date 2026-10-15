@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cnsthuy0tkdq4" path="res://scripts/LevelRunner.cs" id="1_runner"]
 [ext_resource type="MeshLibrary" uid="uid://csr65qdew51ik" path="res://assets/blocks.tres" id="2_blocks"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://scenes/third_person_camera.tscn" id="4_tpcam"]
 
 [sub_resource type="Environment" id="Environment_1"]
 background_mode = 1
@@ -41,3 +42,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 transform = Transform3D(1, 0, 0, 0, 0.5547002, 0.83205026, 0, -0.83205026, 0.5547002, 0, 45, 30)
 current = true
 fov = 55.0
+
+[node name="ThirdPersonCamera" parent="." instance=ExtResource("4_tpcam")]

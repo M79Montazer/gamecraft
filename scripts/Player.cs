@@ -41,7 +41,7 @@ public partial class Player : CharacterBody3D
 		_time += dt;
 
 		Vector2 input = Input.GetVector("move_left", "move_right", "move_forward", "move_back");
-		Vector3 dir = new Vector3(input.X, 0, input.Y);
+		Vector3 dir = CameraRelativeDir(input);
 		if (dir.LengthSquared() > 1f)
 			dir = dir.Normalized();
 
@@ -81,6 +81,20 @@ public partial class Player : CharacterBody3D
 		Velocity = new Vector3(horizontal.X, vertical, horizontal.Z);
 		MoveAndSlide();
 		Animate(dt, horizontal);
+	}
+
+	// WASD relative to whichever camera is current: forward is the camera's
+	// flattened view direction. For the fixed overview camera (yaw 0) this
+	// reduces to the old world-axis mapping.
+	private Vector3 CameraRelativeDir(Vector2 input)
+	{
+		var cam = GetViewport().GetCamera3D();
+		if (cam == null)
+			return new Vector3(input.X, 0, input.Y);
+		Basis b = cam.GlobalTransform.Basis;
+		Vector3 forward = new Vector3(-b.Z.X, 0, -b.Z.Z);
+		Vector3 right = new Vector3(b.X.X, 0, b.X.Z);
+		return right * input.X + forward * -input.Y;
 	}
 
 	private bool IsHovering()
