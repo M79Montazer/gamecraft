@@ -25,6 +25,10 @@ public partial class LevelRunner : Node3D
     private GameState _state = GameState.Playing;
     private float _time;
 
+    // Intro dialogue is shown only the first time a level loads in a session;
+    // restarts and revisits skip straight to gameplay.
+    private static bool _introDialogueShown;
+
     public override void _Ready()
     {
         EnsureAction("move_left", Key.A);
@@ -57,10 +61,13 @@ public partial class LevelRunner : Node3D
     // and survives re-bakes. Levels without that file start playing directly.
     private void StartIntroDialogue()
     {
+        if (_introDialogueShown)
+            return;
         string introPath = SceneFilePath.GetBaseDir().PathJoin("intro_dialogue.tscn");
         if (!ResourceLoader.Exists(introPath))
             return;
 
+        _introDialogueShown = true;
         var dialogue = GD.Load<PackedScene>(introPath).Instantiate<StageDialogue>();
         AddChild(dialogue);
         if (dialogue.HasLines)
