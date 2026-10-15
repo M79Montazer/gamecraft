@@ -24,6 +24,8 @@ public partial class LevelRunner : Node3D
     private bool _thirdPersonActive;
     private GameState _state = GameState.Playing;
     private float _time;
+    private int _starsTotal;
+    private int _starsCollected;
 
     // Intro dialogue is shown only the first time a level loads in a session;
     // restarts and revisits skip straight to gameplay.
@@ -50,6 +52,17 @@ public partial class LevelRunner : Node3D
 
         _hud = GD.Load<PackedScene>(HudScene).Instantiate<Hud>();
         AddChild(_hud);
+
+        // stars are instanced straight into the level scene; children _Ready
+        // before this root, so the group is populated by now
+        foreach (Node node in GetTree().GetNodesInGroup("star"))
+        {
+            if (node is Star star)
+            {
+                _starsTotal++;
+                star.Collected += OnStarCollected;
+            }
+        }
 
         StartIntroDialogue();
     }
@@ -92,7 +105,7 @@ public partial class LevelRunner : Node3D
         }
         if (dist > _level.FloorRadius)
         {
-            SetEnd("YOU ESCAPED", "the robot outran the hollow");
+            Win();
             return;
         }
 
@@ -101,7 +114,7 @@ public partial class LevelRunner : Node3D
             : dist > _level.Rings[0] ? "INNER RING"
             : "THE CENTER";
         float toGo = Mathf.Max(0f, _level.FloorRadius - dist);
-        _hud.SetStatus($"{zone}    escape in {toGo:0.#} m    {_time:0.0} s");
+        _hud.SetStatus($"{zone}    escape in {toGo:0.#} m    {_time:0.0} s    stars {_starsCollected}/{_starsTotal}");
     }
 
     public override void _UnhandledInput(InputEvent e)
@@ -138,8 +151,22 @@ public partial class LevelRunner : Node3D
 
     private void SetEnd(string title, string sub)
     {
-        _state = title == "YOU ESCAPED" ? GameState.Won : GameState.Lost;
+        _state = GameState.Lost;
         _nothingness.Active = false;
         _hud.ShowEnd($"{title}\n{sub}\n\npress R to retry · Esc for levels");
+    }
+
+    // 1 star for escaping, plus one per star picked up, up to 3.
+    private void Win()
+    {
+        _state = GameState.Won;
+        _nothingness.Active = false;
+        _hud.ShowScoreCard(1 + _starsCollected, _time);
+    }
+
+    private void OnStarCollected(Star star)
+    {
+        _starsCollected++;
+        _hud.SetStatus($"stars {_starsCollected}/{_starsTotal}");
     }
 }

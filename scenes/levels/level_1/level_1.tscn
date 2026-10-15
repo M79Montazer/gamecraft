@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/jump_pad.tscn" id="7_wloe5"]
 [ext_resource type="PackedScene" uid="uid://cpgpbs5ogwxca" path="res://scenes/player.tscn" id="10_41r28"]
 [ext_resource type="PackedScene" path="res://scenes/third_person_camera.tscn" id="11_tpcam"]
+[ext_resource type="PackedScene" path="res://scenes/star.tscn" id="12_star"]
 
 [sub_resource type="Environment" id="Environment_1fq2y"]
 background_mode = 1
@@ -82,4 +83,10 @@ transform = Transform3D(1, 0, 0, 0, 0.5547002, 0.83205026, 0, -0.83205026, 0.554
 current = true
 fov = 55.0
 
-[node name="ThirdPersonCamera" parent="." instance=ExtResource("11_tpcam")]
+[node name="ThirdPersonCamera" parent="." unique_id=216769161 instance=ExtResource("11_tpcam")]
+
+[node name="Star_-14_14" parent="." unique_id=456420922 instance=ExtResource("12_star")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.990814, 1.5, 14)
+
+[node name="Star_14_-14" parent="." unique_id=1696815938 instance=ExtResource("12_star")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 1.5, -11.179786)
