@@ -8,8 +8,7 @@ top-down camera.
 ## Commands
 
 ```sh
-dotnet build                                                # compile C# (always before running headless scripts)
-"D:/Godot_v4.7.2-stable_mono_win64/Godot_v4.7.2-stable_mono_win64_console.exe" --headless --path . --script res://scripts/BakeLevel.cs
+dotnet build                                                # compile C#
 ```
 
 - Godot exe lives at `D:/Godot_v4.7.2-stable_mono_win64/` (use the `_console` exe for headless).
@@ -23,9 +22,11 @@ dotnet build                                                # compile C# (always
   → level scene. Esc goes back; R restarts a level.
 - **Levels**: `scenes/levels/<name>/<name>.tscn` are fully self-contained
   (LevelRunner root, WorldEnvironment, Sun, GridMap, Player instance, fixed
-  Camera3D). They are **generated** by `scripts/BakeLevel.cs` — hand edits to a
-  baked level are lost on re-bake. `scenes/levels/level_1/level_1.md`
-  documents layout + how to add levels.
+  Camera3D). Levels are **hand-authored in the Godot editor** — no generator
+  script. Duplicate `scenes/levels/level_template.tscn`, paint the GridMap,
+  save as `<name>.tscn`; tune `FloorRadius` (win/escape distance from origin)
+  and `Rings` (HUD zones) exports on the LevelRunner root per level.
+  `scenes/levels/level_1/level_1.md` documents layout + how to add levels.
 - **GridMap**: all level geometry is one GridMap using `assets/blocks.tres`
   (MeshLibrary: 0 floor, 1 wall, 2 beacon, 3 hollow; ids in `BlockItem`).
   Hollowing/destruction = `SetCellItem` swaps (Level.cs wraps this).

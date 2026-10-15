@@ -1,7 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 
-// MeshLibrary item ids shared by the baker and the runtime.
+// MeshLibrary item ids shared by the editor palette and the runtime.
 public static class BlockItem
 {
     public const int Floor = 0;
@@ -25,15 +25,17 @@ public class Block
 // by scanning the occupied cells when the scene loads.
 public class Level
 {
-    public static readonly float[] Rings = { 8f, 14f, 20f };
-    public const float FloorRadius = 22.5f;
+    public float FloorRadius { get; }
+    public float[] Rings { get; }
 
     public GridMap Map { get; }
     public List<Block> SortedBlocks { get; } = new();
 
-    public Level(GridMap map)
+    public Level(GridMap map, float floorRadius, float[] rings)
     {
         Map = map;
+        FloorRadius = floorRadius;
+        Rings = rings;
 
         foreach (Vector3I cell in map.GetUsedCells())
         {

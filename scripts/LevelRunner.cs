@@ -1,7 +1,7 @@
 using Godot;
 
-// Per-level game controller: the root script of a baked level scene, expected
-// to sit alongside its GridMap, Player and CameraRig nodes.
+// Per-level game controller: the root script of a level scene, expected to sit
+// alongside its GridMap, Player and Camera nodes.
 public partial class LevelRunner : Node3D
 {
     private enum GameState { Playing, Won, Lost }
@@ -10,7 +10,13 @@ public partial class LevelRunner : Node3D
     private const string NothingnessScene = "res://scenes/nothingness.tscn";
     private const string HudScene = "res://scenes/ui/hud.tscn";
 
+    // Distance from the origin past which the ball counts as escaped.
+    [Export] public float FloorRadius { get; set; } = 22.5f;
+    // Distances marking the HUD zone boundaries, inner to outer.
+    [Export] public float[] Rings { get; set; } = { 8f, 14f, 20f };
+
     private Player _player;
+    private Level _level;
     private Nothingness _nothingness;
     private Hud _hud;
     private GameState _state = GameState.Playing;
@@ -25,10 +31,10 @@ public partial class LevelRunner : Node3D
         EnsureAction("jump", Key.Space);
 
         _player = GetNode<Player>("Player");
-        var level = new Level(GetNode<GridMap>("GridMap"));
+        _level = new Level(GetNode<GridMap>("GridMap"), FloorRadius, Rings);
 
         _nothingness = GD.Load<PackedScene>(NothingnessScene).Instantiate<Nothingness>();
-        _nothingness.Level = level;
+        _nothingness.Level = _level;
         AddChild(_nothingness);
 
         _hud = GD.Load<PackedScene>(HudScene).Instantiate<Hud>();
@@ -49,17 +55,17 @@ public partial class LevelRunner : Node3D
             SetEnd("HOLLOWED", "the void consumed the world");
             return;
         }
-        if (dist > Level.FloorRadius)
+        if (dist > _level.FloorRadius)
         {
             SetEnd("YOU ESCAPED", "the ball outran the hollow");
             return;
         }
 
-        string zone = dist > Level.Rings[2] ? "OUTER RING"
-            : dist > Level.Rings[1] ? "MIDDLE RING"
-            : dist > Level.Rings[0] ? "INNER RING"
+        string zone = dist > _level.Rings[2] ? "OUTER RING"
+            : dist > _level.Rings[1] ? "MIDDLE RING"
+            : dist > _level.Rings[0] ? "INNER RING"
             : "THE CENTER";
-        float toGo = Mathf.Max(0f, Level.FloorRadius - dist);
+        float toGo = Mathf.Max(0f, _level.FloorRadius - dist);
         _hud.SetStatus($"{zone}    escape in {toGo:0.#} m    {_time:0.0} s");
     }
 
