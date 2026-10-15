@@ -5,9 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/door.tscn" id="3_hhmec"]
 [ext_resource type="PackedScene" path="res://scenes/floor_button.tscn" id="5_ldw0e"]
 [ext_resource type="PackedScene" path="res://scenes/jump_pad.tscn" id="7_wloe5"]
-[ext_resource type="PackedScene" uid="uid://c4r4os6agrw0d" path="res://assets/jump_pad.glb" id="9_5d3u7"]
-[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="10_41r28"]
-[ext_resource type="PackedScene" uid="uid://1jueqj73t62j" path="res://assets/ball.glb" id="12_v0dvh"]
+[ext_resource type="PackedScene" uid="uid://cpgpbs5ogwxca" path="res://scenes/player.tscn" id="10_41r28"]
 
 [sub_resource type="Environment" id="Environment_1fq2y"]
 background_mode = 1
@@ -22,52 +20,6 @@ glow_bloom = 0.1
 fog_enabled = true
 fog_light_color = Color(0.05, 0.05, 0.1, 1)
 fog_density = 0.012
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_shape"]
-size = Vector3(4, 2.4, 0.9)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dark"]
-albedo_color = Color(0.12, 0.14, 0.2, 1)
-emission_enabled = true
-emission = Color(1, 0.6, 0.1, 1)
-emission_energy_multiplier = 1.1
-
-[sub_resource type="BoxMesh" id="BoxMesh_slab"]
-size = Vector3(4, 2.4, 0.9)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_q7p11"]
-size = Vector3(0.95, 0.4, 0.95)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vva6n"]
-resource_local_to_scene = true
-albedo_color = Color(0.55, 0.35, 0.05, 1)
-emission_enabled = true
-emission = Color(1, 0.65, 0.1, 1)
-emission_energy_multiplier = 2.0
-
-[sub_resource type="BoxMesh" id="BoxMesh_plate"]
-size = Vector3(0.8, 0.14, 0.8)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vm2d2"]
-resource_local_to_scene = true
-albedo_color = Color(0.55, 0.35, 0.05, 1)
-emission_enabled = true
-emission = Color(1, 0.65, 0.1, 1)
-emission_energy_multiplier = 2.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hws8l"]
-resource_local_to_scene = true
-albedo_color = Color(0.55, 0.35, 0.05, 1)
-emission_enabled = true
-emission = Color(1, 0.65, 0.1, 1)
-emission_energy_multiplier = 2.0
-
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_pad"]
-height = 0.4
-radius = 0.42
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_ball"]
-radius = 0.4
 
 [node name="Level_1" type="Node3D" unique_id=140622449]
 script = ExtResource("1_napug")
@@ -92,108 +44,37 @@ data = {
 transform = Transform3D(-0.8660254, 0, 0.50000006, 0, 1, 0, -0.50000006, 0, -0.8660254, 9.999999, 2.2, 17.320509)
 Channel = "gate_60"
 
-[node name="Shape2" type="CollisionShape3D" parent="Door_60" unique_id=770183348]
-shape = SubResource("BoxShape3D_shape")
-
-[node name="Slab2" type="MeshInstance3D" parent="Door_60" unique_id=1527758867]
-material_override = SubResource("StandardMaterial3D_dark")
-mesh = SubResource("BoxMesh_slab")
-
 [node name="Door_200" parent="." unique_id=494129691 instance=ExtResource("3_hhmec")]
 transform = Transform3D(0.3420201, 0, -0.9396926, 0, 1, 0, 0.9396926, 0, 0.3420201, -18.793852, 2.2, -6.840403)
 Channel = "gate_200"
-
-[node name="Shape2" type="CollisionShape3D" parent="Door_200" unique_id=1020895596]
-shape = SubResource("BoxShape3D_shape")
-
-[node name="Slab2" type="MeshInstance3D" parent="Door_200" unique_id=1112132309]
-material_override = SubResource("StandardMaterial3D_dark")
-mesh = SubResource("BoxMesh_slab")
 
 [node name="Door_300" parent="." unique_id=1407247051 instance=ExtResource("3_hhmec")]
 transform = Transform3D(0.8660254, 0, 0.50000006, 0, 1, 0, -0.50000006, 0, 0.8660254, 9.999998, 2.2, -17.320509)
 Channel = "gate_300"
 
-[node name="Shape2" type="CollisionShape3D" parent="Door_300" unique_id=846730471]
-shape = SubResource("BoxShape3D_shape")
-
-[node name="Slab2" type="MeshInstance3D" parent="Door_300" unique_id=212280891]
-material_override = SubResource("StandardMaterial3D_dark")
-mesh = SubResource("BoxMesh_slab")
-
 [node name="Button_60" parent="." unique_id=954751107 instance=ExtResource("5_ldw0e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1, 9)
 Channel = "gate_60"
-
-[node name="Shape2" type="CollisionShape3D" parent="Button_60" unique_id=1518511736]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
-shape = SubResource("BoxShape3D_q7p11")
-
-[node name="Plate2" type="MeshInstance3D" parent="Button_60" unique_id=328949362]
-material_override = SubResource("StandardMaterial3D_vva6n")
-mesh = SubResource("BoxMesh_plate")
 
 [node name="Button_200" parent="." unique_id=1896739882 instance=ExtResource("5_ldw0e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 1, -3)
 Channel = "gate_200"
 
-[node name="Shape2" type="CollisionShape3D" parent="Button_200" unique_id=237306168]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
-shape = SubResource("BoxShape3D_q7p11")
-
-[node name="Plate2" type="MeshInstance3D" parent="Button_200" unique_id=1039449791]
-material_override = SubResource("StandardMaterial3D_vm2d2")
-mesh = SubResource("BoxMesh_plate")
-
 [node name="Button_300" parent="." unique_id=304692441 instance=ExtResource("5_ldw0e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1, -9)
 Channel = "gate_300"
 
-[node name="Shape2" type="CollisionShape3D" parent="Button_300" unique_id=1473059869]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
-shape = SubResource("BoxShape3D_q7p11")
-
-[node name="Plate2" type="MeshInstance3D" parent="Button_300" unique_id=937125140]
-material_override = SubResource("StandardMaterial3D_hws8l")
-mesh = SubResource("BoxMesh_plate")
-
 [node name="JumpPad_-6_5" parent="." unique_id=419805337 instance=ExtResource("7_wloe5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.0159276, 9.849907)
-
-[node name="Shape2" type="CollisionShape3D" parent="JumpPad_-6_5" unique_id=1731892502]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
-shape = SubResource("CylinderShape3D_pad")
-
-[node name="PadModel2" parent="JumpPad_-6_5" unique_id=643978424 instance=ExtResource("9_5d3u7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.0521635, 9.849907)
 
 [node name="JumpPad_7_-4" parent="." unique_id=794242193 instance=ExtResource("7_wloe5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.403349, 1.0659876, -4)
-
-[node name="Shape2" type="CollisionShape3D" parent="JumpPad_7_-4" unique_id=69577252]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
-shape = SubResource("CylinderShape3D_pad")
-
-[node name="PadModel2" parent="JumpPad_7_-4" unique_id=1285361664 instance=ExtResource("9_5d3u7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.403349, 1.0938274, -4)
 
 [node name="JumpPad_-3_-9" parent="." unique_id=1264693897 instance=ExtResource("7_wloe5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.552012, 1.0057547, -9)
-
-[node name="Shape2" type="CollisionShape3D" parent="JumpPad_-3_-9" unique_id=2082773152]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
-shape = SubResource("CylinderShape3D_pad")
-
-[node name="PadModel2" parent="JumpPad_-3_-9" unique_id=675791269 instance=ExtResource("9_5d3u7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.552012, 1.0473615, -9)
 
 [node name="Player" parent="." unique_id=1901649029 instance=ExtResource("10_41r28")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.6, 0)
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Player" unique_id=983120185]
-shape = SubResource("SphereShape3D_ball")
-
-[node name="BallModel2" parent="Player" unique_id=2009133134 instance=ExtResource("12_v0dvh")]
 
 [node name="Camera" type="Camera3D" parent="." unique_id=1910441399]
 transform = Transform3D(1, 0, 0, 0, 0.5547002, 0.83205026, 0, -0.83205026, 0.5547002, 0, 45, 30)

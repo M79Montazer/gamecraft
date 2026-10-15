@@ -1,15 +1,31 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://cpgpbs5ogwxca"]
 
-[ext_resource type="PackedScene" path="res://assets/ball.glb" id="1_ball"]
-[ext_resource type="Script" path="res://scripts/Player.cs" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://2euunvrahn" path="res://assets/main_ch.fbx" id="1_model"]
+[ext_resource type="Script" uid="uid://daxk3l5b7ixnv" path="res://scripts/Player.cs" id="2_player"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_ball"]
-radius = 0.4
+[sub_resource type="SphereShape3D" id="SphereShape3D_body"]
+radius = 0.42
 
-[node name="Player" type="CharacterBody3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_feet"]
+size = Vector3(0.7, 2.4, 0.7)
+
+[node name="Player" type="CharacterBody3D" unique_id=288310965]
+transform = Transform3D(-0.09665781, 0, 0.9953177, 0, 1, 0, -0.9953177, 0, -0.09665781, 0, 0, 0)
 script = ExtResource("2_player")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_ball")
+[node name="BodyShape" type="CollisionShape3D" parent="." unique_id=960316376]
+shape = SubResource("SphereShape3D_body")
 
-[node name="BallModel" parent="." instance=ExtResource("1_ball")]
+[node name="FeetTrigger" type="Area3D" parent="." unique_id=1959053488 groups=["player_feet"]]
+
+[node name="FeetShape" type="CollisionShape3D" parent="FeetTrigger" unique_id=991604808]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.2, 0)
+shape = SubResource("BoxShape3D_feet")
+
+[node name="GroundRay" type="RayCast3D" parent="." unique_id=1064697372]
+target_position = Vector3(0, -2, 0)
+
+[node name="ModelPivot" type="Node3D" parent="." unique_id=343109111]
+
+[node name="RobotModel" parent="ModelPivot" unique_id=1609974270 instance=ExtResource("1_model")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.12, 0.105, 0.035)

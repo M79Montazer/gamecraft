@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://cnsthuy0tkdq4" path="res://scripts/LevelRunner.cs" id="1_runner"]
 [ext_resource type="MeshLibrary" uid="uid://csr65qdew51ik" path="res://assets/blocks.tres" id="2_blocks"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="3_player"]
-[ext_resource type="PackedScene" uid="uid://1jueqj73t62j" path="res://assets/ball.glb" id="4_ball"]
 
 [sub_resource type="Environment" id="Environment_1"]
 background_mode = 1
@@ -18,9 +17,6 @@ glow_bloom = 0.1
 fog_enabled = true
 fog_light_color = Color(0.05, 0.05, 0.1, 1)
 fog_density = 0.012
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_ball"]
-radius = 0.4
 
 [node name="Level" type="Node3D"]
 script = ExtResource("1_runner")
@@ -40,11 +36,6 @@ cell_size = Vector3(1, 1, 1)
 
 [node name="Player" parent="." instance=ExtResource("3_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Player"]
-shape = SubResource("SphereShape3D_ball")
-
-[node name="BallModel2" parent="Player" instance=ExtResource("4_ball")]
 
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.5547002, 0.83205026, 0, -0.83205026, 0.5547002, 0, 45, 30)

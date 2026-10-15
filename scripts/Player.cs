@@ -1,72 +1,116 @@
 using Godot;
 
+// The player is a floating robot: a CharacterBody3D whose core sphere never
+// touches the ground — a downward GroundRay holds it at HoverHeight above
+// whatever is below (spring + damping), so it glides over the floor and falls
+// into hollowed holes. Because the body collision sits too high to reach the
+// floor props, a tall FeetTrigger Area3D (long in Y, reaching the floor)
+// overlaps FloorButtons and JumpPads instead.
 public partial class Player : CharacterBody3D
 {
 	[Export] public float MoveSpeed = 7f;
 	[Export] public float Acceleration = 40f;
-	[Export] public float AirControl = 0.5f;
 	[Export] public float JumpVelocity = 8f;
-	[Export] public float JumpMultiplier = 1f; // raised to 2 while standing on a JumpPad
+	[Export] public float JumpMultiplier = 1f; // raised to 2 while above a JumpPad
 	[Export] public float Gravity = 25f;
+	[Export] public float HoverHeight = 0.95f; // core height above the ground
+	[Export] public float HoverSpring = 60f;   // height error -> upward accel
+	[Export] public float HoverDamping = 14f;  // vertical speed damping while hovering
 
-	private const float RollRadius = 0.4f;
-
-	private MeshInstance3D _mesh;
+	private RayCast3D _groundRay;
+	private Node3D _modelPivot;
+	private float _time;
+	private float _yaw;
+	// true from the moment of a jump until the hover spring takes over again,
+	// so gravity (not the spring) shapes the jump arc like it did for the ball
+	private bool _airborne;
 
 	public override void _Ready()
 	{
-		// player.tscn instances assets/ball.glb as the BallModel child; the
-		// mesh may sit one node down depending on the glb's root
-		_mesh = FindFirstMesh(GetNodeOrNull("BallModel"));
-		if (_mesh == null)
-			GD.PushError($"{Name}: no MeshInstance3D found under BallModel — ball won't roll");
-	}
+		_groundRay = GetNode<RayCast3D>("GroundRay");
+		_modelPivot = GetNode<Node3D>("ModelPivot");
 
-	private static MeshInstance3D FindFirstMesh(Node node)
-	{
-		if (node == null)
-			return null;
-		if (node is MeshInstance3D mi && mi.Mesh != null)
-			return mi;
-		foreach (Node child in node.GetChildren())
-		{
-			MeshInstance3D found = FindFirstMesh(child);
-			if (found != null)
-				return found;
-		}
-		return null;
+		// the fbx carries a leftover camera from the DCC; it must never render
+		foreach (Node child in _modelPivot.FindChildren("*", "Camera3D", true, false))
+			child.QueueFree();
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
+		float dt = (float)delta;
+		_time += dt;
+
 		Vector2 input = Input.GetVector("move_left", "move_right", "move_forward", "move_back");
 		Vector3 dir = new Vector3(input.X, 0, input.Y);
 		if (dir.LengthSquared() > 1f)
 			dir = dir.Normalized();
 
-		float accel = Acceleration * (IsOnFloor() ? 1f : AirControl);
-		Vector3 horizontal = new Vector3(Velocity.X, 0, Velocity.Z).MoveToward(dir * MoveSpeed, accel * (float)delta);
+		Vector3 horizontal = new Vector3(Velocity.X, 0, Velocity.Z)
+			.MoveToward(dir * MoveSpeed, Acceleration * dt);
 
+		bool hovering = IsHovering();
 		float vertical = Velocity.Y;
-		if (IsOnFloor() && Input.IsActionJustPressed("jump"))
-			vertical = JumpVelocity * JumpMultiplier;
+		if (_airborne)
+		{
+			vertical -= Gravity * dt;
+			// falling back through hover height ends the airborne arc
+			if (vertical < 0f && hovering)
+				_airborne = false;
+		}
+		else if (hovering)
+		{
+			if (Input.IsActionJustPressed("jump"))
+			{
+				_airborne = true;
+				vertical = JumpVelocity * JumpMultiplier;
+			}
+			else
+			{
+				// acceleration form (not direct velocity) — the explicit
+				// velocity form goes unstable at 60 fps physics
+				float heightErr = HoverHeight - HeightAboveGround();
+				vertical += (heightErr * HoverSpring - Velocity.Y * HoverDamping) * dt;
+			}
+		}
 		else
-			vertical -= Gravity * (float)delta;
+		{
+			// nothing below (hollowed edge): fall into the void
+			vertical -= Gravity * dt;
+		}
 
 		Velocity = new Vector3(horizontal.X, vertical, horizontal.Z);
 		MoveAndSlide();
-		Roll((float)delta);
+		Animate(dt, horizontal);
 	}
 
-	private void Roll(float delta)
+	private bool IsHovering()
 	{
-		Vector3 horizontal = new Vector3(Velocity.X, 0, Velocity.Z);
-		if (horizontal.LengthSquared() < 0.01f)
-			return;
+		return _groundRay.IsColliding() && HeightAboveGround() < HoverHeight + 0.3f;
+	}
 
-		Vector3 axis = Vector3.Up.Cross(horizontal).Normalized();
-		float angle = horizontal.Length() / RollRadius * delta;
-		_mesh.Basis = new Basis(axis, angle) * _mesh.Basis;
-		_mesh.Basis = _mesh.Basis.Orthonormalized();
+	private float HeightAboveGround()
+	{
+		return GlobalPosition.Y - _groundRay.GetCollisionPoint().Y;
+	}
+
+	// Graceful idle float: gentle bob and slow tilt wobble; while moving, the
+	// robot smoothly turns to face its travel direction and leans into it.
+	private void Animate(float dt, Vector3 horizontal)
+	{
+		float speed = horizontal.Length();
+		if (speed > 0.5f)
+		{
+			// +PI/2 because the fbx model faces -X at yaw 0, not -Z
+			float targetYaw = Mathf.Atan2(horizontal.X, horizontal.Z) + Mathf.Pi / 2f;
+			_yaw = Mathf.LerpAngle(_yaw, targetYaw, 1f - Mathf.Exp(-6f * dt));
+		}
+
+		float bob = Mathf.Sin(_time * 2.4f) * 0.06f;
+		float lean = Mathf.Clamp(speed * 0.02f, 0f, 0.15f);
+		_modelPivot.Position = new Vector3(0, bob, 0);
+		_modelPivot.Rotation = new Vector3(
+			Mathf.Cos(_time * 1.9f) * 0.03f + lean,
+			_yaw,
+			Mathf.Sin(_time * 1.7f) * 0.03f);
 	}
 }

@@ -10,7 +10,7 @@ public partial class LevelRunner : Node3D
     private const string NothingnessScene = "res://scenes/nothingness.tscn";
     private const string HudScene = "res://scenes/ui/hud.tscn";
 
-    // Distance from the origin past which the ball counts as escaped.
+    // Distance from the origin past which the player counts as escaped.
     [Export] public float FloorRadius { get; set; } = 22.5f;
     // Distances marking the HUD zone boundaries, inner to outer.
     [Export] public float[] Rings { get; set; } = { 8f, 14f, 20f };
@@ -57,7 +57,7 @@ public partial class LevelRunner : Node3D
         }
         if (dist > _level.FloorRadius)
         {
-            SetEnd("YOU ESCAPED", "the ball outran the hollow");
+            SetEnd("YOU ESCAPED", "the robot outran the hollow");
             return;
         }
 

@@ -1,7 +1,9 @@
 using Godot;
 
-// Floor pressure plate: glows amber until the ball rolls onto it, then locks
+// Floor pressure plate: glows amber until the robot floats over it, then locks
 // pressed (sinks, turns green) and opens every Door sharing its Channel.
+// Detection works both ways: the body collision or the player's tall
+// FeetTrigger area (the robot hovers, so usually the trigger) entering.
 public partial class FloorButton : Area3D
 {
 	[Export] public string Channel = "";
@@ -21,12 +23,28 @@ public partial class FloorButton : Area3D
 		_mat.EmissionEnergyMultiplier = 2.0f;
 		_plate.MaterialOverride = _mat;
 
+		// the body filter matters: the plate's collision box slightly penetrates
+		// the GridMap floor, so the floor body itself fires BodyEntered at the
+		// first physics frame — without the filter every door opens on load
 		BodyEntered += OnBodyEntered;
+		AreaEntered += OnAreaEntered;
 	}
 
 	private void OnBodyEntered(Node3D body)
 	{
-		if (_pressed || body is not Player)
+		if (body is Player)
+			OnPlayer(body);
+	}
+
+	private void OnAreaEntered(Area3D area)
+	{
+		if (area.IsInGroup("player_feet"))
+			OnPlayer(area);
+	}
+
+	private void OnPlayer(Node3D _)
+	{
+		if (_pressed)
 			return;
 		_pressed = true;
 
