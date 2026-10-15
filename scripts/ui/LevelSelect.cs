@@ -94,7 +94,9 @@ public partial class LevelSelect : Control
             string file;
             while ((file = sub.GetNext()) != "")
             {
-                if (!sub.CurrentIsDir() && file.EndsWith(".tscn"))
+                // Only the folder's own <folder>.tscn is a level; other .tscn
+                // files (e.g. intro_dialogue.tscn) are support files.
+                if (!sub.CurrentIsDir() && file == $"{dir}.tscn")
                     scenes.Add($"{dir}/{file}");
             }
             sub.ListDirEnd();
