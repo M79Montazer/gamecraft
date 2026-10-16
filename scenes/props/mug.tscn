@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bqnmuxt2y0wd3"]
+
+[ext_resource type="PackedScene" uid="uid://b8kd8lanhbm5t" path="res://assets/props/mug.fbx" id="1_model"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_prop"]
+size = Vector3(0.32894287, 0.2520752, 0.24001464)
+
+[node name="Mug" type="StaticBody3D" unique_id=503473409]
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=1013983737]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0015075803, 0.1260376, 0.0018432736)
+shape = SubResource("BoxShape3D_prop")
+
+[node name="Model" parent="." unique_id=2026691189 instance=ExtResource("1_model")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12502974, 0)

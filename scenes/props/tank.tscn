@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bqnmux1h6jwoa"]
+
+[ext_resource type="PackedScene" uid="uid://bpaik8oxp6kmv" path="res://assets/props/tank.fbx" id="1_model"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_prop"]
+size = Vector3(0.66638184, 0.8953613, 0.6555176)
+
+[node name="Tank" type="StaticBody3D" unique_id=1676649153]
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=1840583531]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0017700195, 0.5041748, 0.2977295)
+shape = SubResource("BoxShape3D_prop")
+
+[node name="Model" parent="." unique_id=189270502 instance=ExtResource("1_model")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.49399, 0)

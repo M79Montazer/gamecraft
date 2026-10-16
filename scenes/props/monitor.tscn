@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bqnmuxtv6hpoa"]
+
+[ext_resource type="PackedScene" uid="uid://bcqwa51q6gske" path="res://assets/props/monitor.fbx" id="1_model"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_prop"]
+size = Vector3(1.832373, 1.134497, 0.30562744)
+
+[node name="Monitor" type="StaticBody3D" unique_id=1715368752]
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=1235932120]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04069829, 0.5672485, -0.00718385)
+shape = SubResource("BoxShape3D_prop")
+
+[node name="Model" parent="." unique_id=201282452 instance=ExtResource("1_model")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58193105, 0)

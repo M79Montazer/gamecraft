@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bqnmuxjhtkaoa"]
+
+[ext_resource type="PackedScene" uid="uid://dr2t03fh4mk86" path="res://assets/props/cable.fbx" id="1_model"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_prop"]
+size = Vector3(0.15523681, 0.07341309, 0.91154325)
+
+[node name="Cable" type="StaticBody3D" unique_id=539382774]
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=268279391]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.011370838, 0.44772416, 0.024816904)
+shape = SubResource("BoxShape3D_prop")
+
+[node name="Model" parent="." unique_id=357378440 instance=ExtResource("1_model")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.14528385, 0)
