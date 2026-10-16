@@ -88,7 +88,7 @@ public partial class Nothingness : Node3D
     private void ConsumeProps()
     {
         Vector3 center = GlobalTransform.Origin;
-        foreach (string group in new[] { "sliding_door", "floor_button", "jump_pad" })
+        foreach (string group in new[] { "sliding_door", "floor_button", "jump_pad", "star" })
             foreach (Node node in GetTree().GetNodesInGroup(group))
                 if (node is Node3D prop)
                 {
