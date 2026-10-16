@@ -14,11 +14,16 @@ public partial class Door : StaticBody3D
 
     private Node3D _panel;
     private bool _open;
+    private uint _restCollisionLayer;
+    private Vector3 _restPanelPosition;
+    private Tween _tween;
 
     public override void _Ready()
     {
         AddToGroup("sliding_door");
         _panel = GetNode<Node3D>("Panel");
+        _restCollisionLayer = CollisionLayer;
+        _restPanelPosition = _panel.Position;
     }
 
     public void Open()
@@ -27,11 +32,33 @@ public partial class Door : StaticBody3D
             return;
         _open = true;
 
-        var tween = CreateTween();
-        tween.TweenProperty(_panel, "position", _panel.Position + new Vector3(0, -SinkDepth, 0), 1.4f)
+        _tween?.Kill();
+        _tween = CreateTween();
+        _tween.TweenProperty(_panel, "position", _restPanelPosition + new Vector3(0, -SinkDepth, 0), 1.4f)
             .SetTrans(Tween.TransitionType.Cubic)
             .SetEase(Tween.EaseType.InOut);
         // collision off only once the ball can't be standing on the slab top
-        tween.TweenCallback(Callable.From(() => CollisionLayer = 0));
+        _tween.TweenCallback(Callable.From(() => CollisionLayer = 0));
+    }
+
+    // For switch levers: an open door closes back up, a closed one opens.
+    public void Toggle()
+    {
+        if (_open)
+        {
+            _open = false;
+
+            // collision back on immediately — the slab rises through anything on it
+            CollisionLayer = _restCollisionLayer;
+            _tween?.Kill();
+            _tween = CreateTween();
+            _tween.TweenProperty(_panel, "position", _restPanelPosition, 1.4f)
+                .SetTrans(Tween.TransitionType.Cubic)
+                .SetEase(Tween.EaseType.InOut);
+        }
+        else
+        {
+            Open();
+        }
     }
 }

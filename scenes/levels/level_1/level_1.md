@@ -37,3 +37,18 @@ buttons / jump pads as needed, and save as
 runtime and lists every `.tscn` it finds. Tune `FloorRadius` (win/escape
 distance from the origin) and `Rings` (HUD zone boundaries) on the LevelRunner
 root in the inspector to match your layout.
+
+### Doors, buttons and switches
+
+- `scenes/door.tscn` — sliding gate. Set `Channel`; a door opens (and stays
+  open) when any floor button with that channel is pressed.
+- `scenes/floor_button.tscn` — one-use pressure plate. Set `Channel` to open
+  every door sharing it.
+- `scenes/switch_button.tscn` — re-usable toggle lever. Walking into it flips
+  the lever and **toggles** every door in both of its channels, `ChannelA` and
+  `ChannelB` (open doors close back up, closed ones open). Other exports:
+  `CooldownSeconds` (time before it can trigger again, default 2s). Give it
+  two channels, put one door on each, and put a floor button on the first
+  channel for the open-one/close-the-other puzzle pattern. Its placeholder
+  models are `assets/switch_lever_left.glb` / `switch_lever_right.glb` (swap
+  the `LeverLeft` / `LeverRight` instances when the real asset lands).

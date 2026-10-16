@@ -6,6 +6,7 @@
 [ext_resource type="MeshLibrary" uid="uid://c3i87tmotpc4a" path="res://scenes/mesh_library/wall_mesh.tres" id="3_ojo11"]
 [ext_resource type="PackedScene" uid="uid://bkoab37hifokg" path="res://scenes/floor_button.tscn" id="5_ldw0e"]
 [ext_resource type="PackedScene" path="res://scenes/jump_pad.tscn" id="7_wloe5"]
+[ext_resource type="PackedScene" path="res://scenes/switch_button.tscn" id="10_31rk5"]
 [ext_resource type="PackedScene" uid="uid://cpgpbs5ogwxca" path="res://scenes/player.tscn" id="10_41r28"]
 [ext_resource type="PackedScene" path="res://scenes/third_person_camera.tscn" id="11_tpcam"]
 [ext_resource type="PackedScene" uid="uid://bawhaeqrv1j5d" path="res://scenes/star.tscn" id="12_star"]
@@ -100,3 +101,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.990814, 1.5, 14)
 
 [node name="Star_14_-14" parent="." unique_id=1696815938 instance=ExtResource("12_star")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 1.5, -11.179786)
+
+[node name="SwitchButton" parent="." unique_id=1102750074 instance=ExtResource("10_31rk5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.307217, 1, 0.083013535)
+ChannelA = "gate_60"
+ChannelB = "gate_300"
