@@ -30,8 +30,8 @@ public partial class JumpPad : Area3D
 			_mat.EmissionEnergyMultiplier = 2.0f;
 			_pad.SetSurfaceOverrideMaterial(0, _mat);
 		}
-		else
-			GD.PushError($"{Name}: no MeshInstance3D under PadModel — pad won't glow");
+		//else
+		//	GD.PushWarning($"{Name}: no MeshInstance3D under PadModel — pad won't glow");
 
 		BodyEntered += OnEntered;
 		BodyExited += OnExited;

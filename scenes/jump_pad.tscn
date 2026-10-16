@@ -1,18 +1,18 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://svt74x7s5ye8"]
 
-[ext_resource type="PackedScene" path="res://assets/jump_pad.glb" id="1_pad"]
-[ext_resource type="Script" path="res://scripts/JumpPad.cs" id="2_script"]
+[ext_resource type="PackedScene" uid="uid://cm06f8dcldpm2" path="res://assets/jump_pad.fbx" id="2_kabc6"]
+[ext_resource type="Script" uid="uid://1kfmmi11krgy" path="res://scripts/JumpPad.cs" id="2_script"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_pad"]
-radius = 0.42
 height = 0.4
+radius = 0.42
 
-[node name="JumpPad" type="Area3D"]
+[node name="JumpPad" type="Area3D" unique_id=1399657577]
 script = ExtResource("2_script")
 
-[node name="Shape" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.1, 0)
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=469206821]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.1, 0)
 shape = SubResource("CylinderShape3D_pad")
 
-[node name="PadModel" parent="." instance=ExtResource("1_pad")]
-position = Vector3(0, -0.5, 0)
+[node name="jump_pad" parent="." unique_id=380003789 instance=ExtResource("2_kabc6")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
