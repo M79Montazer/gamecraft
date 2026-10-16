@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://daxk3l5b7ixnv" path="res://scripts/Player.cs" id="2_player"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_body"]
-radius = 0.42
+radius = 0.6175791
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_feet"]
 size = Vector3(0.7, 2.4, 0.7)
@@ -14,6 +14,7 @@ transform = Transform3D(-0.09665781, 0, 0.9953177, 0, 1, 0, -0.9953177, 0, -0.09
 script = ExtResource("2_player")
 
 [node name="BodyShape" type="CollisionShape3D" parent="." unique_id=960316376]
+transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 0.100841336, 0.042106688, 0.009792956)
 shape = SubResource("SphereShape3D_body")
 
 [node name="FeetTrigger" type="Area3D" parent="." unique_id=1959053488 groups=["player_feet"]]
