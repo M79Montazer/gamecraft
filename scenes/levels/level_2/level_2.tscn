@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cpgpbs5ogwxca" path="res://scenes/player.tscn" id="10_41r28"]
 [ext_resource type="PackedScene" path="res://scenes/third_person_camera.tscn" id="11_tpcam"]
 [ext_resource type="PackedScene" path="res://scenes/star.tscn" id="12_star"]
+[ext_resource type="PackedScene" path="res://scenes/win_condition.tscn" id="13_wincond"]
 
 [sub_resource type="Environment" id="Environment_1fq2y"]
 background_mode = 1
@@ -90,3 +91,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 1.5, 12)
 
 [node name="Star_12_-15" parent="." unique_id=1696815938 instance=ExtResource("12_star")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1.5, -15)
+
+[node name="WinCondition" parent="." instance=ExtResource("13_wincond")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 1.5, 0)

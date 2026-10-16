@@ -25,16 +25,14 @@ public class Block
 // by scanning the occupied cells when the scene loads.
 public class Level
 {
-    public float FloorRadius { get; }
     public float[] Rings { get; }
 
     public GridMap Map { get; }
     public List<Block> SortedBlocks { get; } = new();
 
-    public Level(GridMap map, float floorRadius, float[] rings)
+    public Level(GridMap map, float[] rings)
     {
         Map = map;
-        FloorRadius = floorRadius;
         Rings = rings;
 
         foreach (Vector3I cell in map.GetUsedCells())

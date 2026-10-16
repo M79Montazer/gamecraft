@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://cpgpbs5ogwxca" path="res://scenes/player.tscn" id="10_41r28"]
 [ext_resource type="PackedScene" path="res://scenes/third_person_camera.tscn" id="11_tpcam"]
 [ext_resource type="PackedScene" uid="uid://bawhaeqrv1j5d" path="res://scenes/star.tscn" id="12_star"]
+[ext_resource type="PackedScene" uid="uid://45mp03pxt8ou" path="res://scenes/win_condition.tscn" id="13_wincond"]
 
 [sub_resource type="Environment" id="Environment_1fq2y"]
 background_mode = 1
@@ -108,3 +109,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 1.5, -11.179786)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.307217, 1, 0.083013535)
 ChannelA = "gate_60"
 ChannelB = "gate_300"
+
+[node name="WinCondition" parent="." unique_id=1110857844 instance=ExtResource("13_wincond")]
+transform = Transform3D(0.9433798, 0, -0.3317145, 0, 1, 0, 0.3317145, 0, 0.9433798, 9.258905, 1.5, -18.968504)
+
+[node name="WinCondition2" parent="." unique_id=756174313 instance=ExtResource("13_wincond")]
+transform = Transform3D(0.9781349, 0, -0.20797169, 0, 1, 0, 0.20797169, 0, 0.9781349, -20.6049, 1.5, -6.6642804)
+
+[node name="WinCondition3" parent="." unique_id=281536990 instance=ExtResource("13_wincond")]
+transform = Transform3D(0.84979045, 0, 0.5271207, 0, 1, 0, -0.5271207, 0, 0.84979045, 10.187252, 1.4325204, 19.05048)

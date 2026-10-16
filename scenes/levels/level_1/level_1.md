@@ -15,7 +15,7 @@ circle hollows the floor under you.
 ## Scene contents
 
 `level_1.tscn` is fully self-contained: LevelRunner (root, game state + HUD,
-per-level `FloorRadius` / `Rings` exports), WorldEnvironment, Sun, GridMap
+per-level `Rings` export), WorldEnvironment, Sun, GridMap
 (all geometry, `assets/blocks.tres` library), Player (instance of
 `scenes/player.tscn`: script + sphere collision + ball.glb model), and a fixed
 Camera3D aimed at the arena center — it does not follow the ball; it is placed
@@ -34,9 +34,15 @@ Duplicate `scenes/levels/level_template.tscn` (root + GridMap wired to
 `assets/blocks.tres` + Player + Camera), paint the GridMap, drop in doors /
 buttons / jump pads as needed, and save as
 `scenes/levels/<name>/<name>.tscn`. The selector scans `scenes/levels/*/` at
-runtime and lists every `.tscn` it finds. Tune `FloorRadius` (win/escape
-distance from the origin) and `Rings` (HUD zone boundaries) on the LevelRunner
-root in the inspector to match your layout.
+runtime and lists every `.tscn` it finds. Tune `Rings` (HUD zone boundaries)
+on the LevelRunner root in the inspector to match your layout.
+
+### Winning
+
+A level is won by entering a `scenes/win_condition.tscn` instance (invisible
+Area3D trigger, script `scripts/WinCondition.cs`). Drop one or more into the
+level, move/scale its `Shape` CollisionShape3D to cover the escape spot —
+touching it as the player shows the score card.
 
 ### Doors, buttons and switches
 

@@ -11,8 +11,6 @@ public partial class LevelRunner : Node3D
     private const string NothingnessScene = "res://scenes/nothingness.tscn";
     private const string HudScene = "res://scenes/ui/hud.tscn";
 
-    // Distance from the origin past which the player counts as escaped.
-    [Export] public float FloorRadius { get; set; } = 22.5f;
     // Distances marking the HUD zone boundaries, inner to outer.
     [Export] public float[] Rings { get; set; } = { 8f, 14f, 20f };
 
@@ -47,7 +45,7 @@ public partial class LevelRunner : Node3D
         EnsureAction("toggle_camera", Key.H);
 
         _player = GetNode<Player>("Player");
-        _level = new Level(GetNode<GridMap>("GridMap"), FloorRadius, Rings);
+        _level = new Level(GetNode<GridMap>("GridMap"), Rings);
 
         _fixedCamera = GetNode<Camera3D>("Camera");
         _thirdPersonCamera = GetNode<ThirdPersonCamera>("ThirdPersonCamera");
@@ -70,6 +68,13 @@ public partial class LevelRunner : Node3D
                 star.Collected += OnStarCollected;
             }
         }
+
+        // escape zones (scenes/win_condition.tscn) are instanced straight into
+        // the level scene; children _Ready before this root, so the group is
+        // populated by now
+        foreach (Node node in GetTree().GetNodesInGroup("win_condition"))
+            if (node is WinCondition winCondition)
+                winCondition.Entered += OnWinConditionEntered;
 
         // this node stays Always so R/Esc work while paused, but everything
         // world-side must still freeze during the intro dialogue and end card
@@ -117,18 +122,12 @@ public partial class LevelRunner : Node3D
             SetEnd("HOLLOWED", "the void consumed the world");
             return;
         }
-        if (dist > _level.FloorRadius)
-        {
-            Win();
-            return;
-        }
 
         string zone = dist > _level.Rings[2] ? "OUTER RING"
             : dist > _level.Rings[1] ? "MIDDLE RING"
             : dist > _level.Rings[0] ? "INNER RING"
             : "THE CENTER";
-        float toGo = Mathf.Max(0f, _level.FloorRadius - dist);
-        _hud.SetStatus($"{zone}    escape in {toGo:0.#} m    {_time:0.0} s    stars {_starsCollected}/{_starsTotal}");
+        _hud.SetStatus($"{zone}    {_time:0.0} s    stars {_starsCollected}/{_starsTotal}");
     }
 
     public override void _UnhandledInput(InputEvent e)
@@ -214,6 +213,12 @@ public partial class LevelRunner : Node3D
         Progress.MarkCompleted(number);
         PauseWorld();
         _hud.ShowScoreCard(1 + _starsCollected, _time, NextLevelPath());
+    }
+
+    private void OnWinConditionEntered(WinCondition winCondition)
+    {
+        if (_state == GameState.Playing)
+            Win();
     }
 
     // The level scene sorted right after this one, or null on the last level.

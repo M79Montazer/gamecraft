@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://45mp03pxt8ou"]
+
+[ext_resource type="Script" uid="uid://byyfmeh4kumfn" path="res://scripts/WinCondition.cs" id="1_wincond"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_zone"]
+size = Vector3(3, 1.4023438, 3)
+
+[node name="WinCondition" type="Area3D" unique_id=756174313]
+script = ExtResource("1_wincond")
+
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=672273924]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17497921, -0.7988281, -0.04613924)
+shape = SubResource("BoxShape3D_zone")
+debug_color = Color(18.892157, 0, 0, 1)

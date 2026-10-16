@@ -4,6 +4,7 @@
 [ext_resource type="MeshLibrary" uid="uid://csr65qdew51ik" path="res://assets/blocks.tres" id="2_blocks"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://scenes/third_person_camera.tscn" id="4_tpcam"]
+[ext_resource type="PackedScene" path="res://scenes/win_condition.tscn" id="5_wincond"]
 
 [sub_resource type="Environment" id="Environment_1"]
 background_mode = 1
@@ -44,3 +45,6 @@ current = true
 fov = 55.0
 
 [node name="ThirdPersonCamera" parent="." instance=ExtResource("4_tpcam")]
+
+[node name="WinCondition" parent="." instance=ExtResource("5_wincond")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 1.5, 0)
