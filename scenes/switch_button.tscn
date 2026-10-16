@@ -1,20 +1,22 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://e5m4wddxlky3"]
 
-[ext_resource type="Script" path="res://scripts/SwitchButton.cs" id="1_script"]
-[ext_resource type="PackedScene" path="res://assets/switch_lever_left.glb" id="2_left"]
-[ext_resource type="PackedScene" path="res://assets/switch_lever_right.glb" id="3_right"]
+[ext_resource type="Script" uid="uid://d2d7jkostd80y" path="res://scripts/SwitchButton.cs" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://dgefsj4r56pr8" path="res://assets/walls_n_doors/v3/lever_left.fbx" id="2_wvq7r"]
+[ext_resource type="PackedScene" uid="uid://ba2f8wg10hyh8" path="res://assets/walls_n_doors/v3/lever_right.fbx" id="3_7ujup"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_shape"]
 size = Vector3(1.3, 1.2, 1.3)
 
-[node name="SwitchButton" type="Area3D"]
+[node name="SwitchButton" type="Area3D" unique_id=1950344911]
 script = ExtResource("1_script")
 
-[node name="Shape" type="CollisionShape3D" parent="."]
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=2115881111]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_shape")
 
-[node name="LeverLeft" parent="." instance=ExtResource("2_left")]
+[node name="LeverLeft" parent="." unique_id=911434004 instance=ExtResource("2_wvq7r")]
+transform = Transform3D(25, 0, 0, 0, 25, 0, 0, 0, 25, 0, 0, 0)
 
-[node name="LeverRight" parent="." instance=ExtResource("3_right")]
+[node name="LeverRight" parent="." unique_id=2115234678 instance=ExtResource("3_7ujup")]
+transform = Transform3D(25, 0, 0, 0, 25, 0, 0, 0, 25, 0, 0, 0)
 visible = false
