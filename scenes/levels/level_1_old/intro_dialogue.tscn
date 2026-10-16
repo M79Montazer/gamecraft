@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://b41p5sbb50tvm"]
+
+[ext_resource type="PackedScene" uid="uid://bkhhc5h3fwlm5" path="res://scenes/ui/Dialogue/stage_dialogue.tscn" id="1_bcnoo"]
+[ext_resource type="Script" uid="uid://lhn6khriqvfa" path="res://scripts/ui/MiniDialogue/DialogueLine.cs" id="2_swdd2"]
+[ext_resource type="Texture2D" uid="uid://ck4rohmcgu1fd" path="res://assets/MiniDialogue/MainCh.png" id="3_5r5ya"]
+[ext_resource type="Texture2D" uid="uid://ceyj6vn1lpcwu" path="res://assets/MiniDialogue/RoboCh.png" id="4_scyxj"]
+
+[sub_resource type="Resource" id="line_1"]
+script = ExtResource("2_swdd2")
+Text = "This is a test for dialogues"
+
+[sub_resource type="Resource" id="line_2"]
+script = ExtResource("2_swdd2")
+Speaker = 1
+Text = "Dialogue works"
+
+[sub_resource type="Resource" id="line_3"]
+script = ExtResource("2_swdd2")
+Text = "what's the best team"
+
+[sub_resource type="Resource" id="line_4"]
+script = ExtResource("2_swdd2")
+Speaker = 1
+Text = "Regna is always the best"
+
+[node name="IntroDialogue" unique_id=1092870509 instance=ExtResource("1_bcnoo")]
+Lines = Array[ExtResource("2_swdd2")]([SubResource("line_1"), SubResource("line_2"), SubResource("line_3"), SubResource("line_4")])
+UpperAvatar = ExtResource("3_5r5ya")
+LowerAvatar = ExtResource("4_scyxj")
+BlurStrength = 10.0
+BackdropDarkness = 0.6
