@@ -8,6 +8,7 @@ height = 0.4
 radius = 0.42
 
 [node name="JumpPad" type="Area3D" unique_id=1399657577]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 script = ExtResource("2_script")
 
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=469206821]

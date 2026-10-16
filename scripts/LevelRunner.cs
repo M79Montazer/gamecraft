@@ -51,7 +51,13 @@ public partial class LevelRunner : Node3D
 #endif
 
         _player = GetNode<Player>("Player");
-        _level = new Level(GetNode<GridMap>("GridMap"), Rings);
+        // every GridMap in the level participates in the hollowing (floor
+        // blocks, walls, anything future levels add)
+        var maps = new List<GridMap>();
+        foreach (Node child in GetChildren())
+            if (child is GridMap map)
+                maps.Add(map);
+        _level = new Level(maps, Rings);
 
         _fixedCamera = GetNode<Camera3D>("Camera");
         _thirdPersonCamera = GetNode<ThirdPersonCamera>("ThirdPersonCamera");

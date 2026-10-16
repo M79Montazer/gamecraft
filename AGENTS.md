@@ -27,9 +27,15 @@ dotnet build                                                # compile C#
   save as `<name>.tscn`; tune `FloorRadius` (win/escape distance from origin)
   and `Rings` (HUD zones) exports on the LevelRunner root per level.
   `scenes/levels/level_1/level_1.md` documents layout + how to add levels.
-- **GridMap**: all level geometry is one GridMap using `assets/blocks.tres`
-  (MeshLibrary: 0 floor, 1 wall, 2 beacon, 3 hollow; ids in `BlockItem`).
-  Hollowing/destruction = `SetCellItem` swaps (Level.cs wraps this).
+- **GridMap**: level geometry lives in one or more GridMap nodes (e.g.
+  `GridMap` with `assets/blocks.tres`: 0 floor, 1 wall, 2 beacon, 3 hollow;
+  ids in `BlockItem`; level_1 also has `GridMap3` with
+  `assets/walls_n_doors/v4/walls3.tres`). LevelRunner collects **every**
+  GridMap child of the level root for hollowing/destruction = `SetCellItem`
+  swaps (Level.cs wraps this). Each library's solid→hollow mapping is resolved
+  by item-name convention: `hollow_X` is the hollow variant of `X`, or a plain
+  `hollow` item is the universal hollow for the whole library — new libraries
+  need no code changes if they follow that naming.
   MeshLibrary has no per-item material — tinted variants duplicate the mesh and
   `SurfaceSetMaterial`.
 - **Player**: `scenes/player.tscn` (script + sphere collision + ball.glb

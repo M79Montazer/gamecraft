@@ -16,7 +16,8 @@ circle hollows the floor under you.
 
 `level_1.tscn` is fully self-contained: LevelRunner (root, game state + HUD,
 per-level `Rings` export), WorldEnvironment, Sun, GridMap
-(all geometry, `assets/blocks.tres` library), Player (instance of
+(floor geometry, `assets/blocks.tres` library), GridMap3 (ring walls,
+`assets/walls_n_doors/v4/walls3.tres`), Player (instance of
 `scenes/player.tscn`: script + sphere collision + ball.glb model), and a fixed
 Camera3D aimed at the arena center — it does not follow the ball; it is placed
 so the whole disc fits its 55° fov.
@@ -24,9 +25,14 @@ so the whole disc fits its 55° fov.
 ## Editing
 
 This scene is hand-edited in the Godot editor like any other scene — there is
-no generator script anymore. Select the GridMap node and use the GridMap paint
-tool; palette ids come from `assets/blocks.tres` (`BlockItem` in Level.cs):
-**0** floor · **1** wall · **2** beacon · **3** hollow (pre-hollowed shell).
+no generator script anymore. Select a GridMap node and use the GridMap paint
+tool; palette ids come from the node's mesh library (`BlockItem` in Level.cs
+covers `assets/blocks.tres`: **0** floor · **1** wall · **2** beacon ·
+**3** hollow). The nothingness hollows every GridMap in the level: a library
+item named `hollow_X` is the hollow variant of `X` (walls3.tres: wall,
+wall_extended, half_wall), or a plain `hollow` item is used for everything
+(blocks.tres). Pre-hollowed items just crumble away when the circle reaches
+them.
 
 ## Adding a level
 
