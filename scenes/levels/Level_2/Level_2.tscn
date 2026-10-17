@@ -61,7 +61,7 @@ transform = Transform3D(1, 0, 0, 0, 0.12655158, 0.99196005, 0, -0.99196005, 0.12
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7541494, 1.5, -49.91243)
 
 [node name="Player" parent="." unique_id=288310965 instance=ExtResource("5_g0i1q")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 15.122322, 1.6, 15.226072)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 3.0852213, 1.6, 0.80461884)
 
 [node name="ThirdPersonCamera" parent="." unique_id=524669408 instance=ExtResource("6_k3gyt")]
 
