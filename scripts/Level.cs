@@ -51,7 +51,7 @@ public class Level
             Dictionary<int, int> hollowOf = BuildHollowMapping(map.MeshLibrary);
             foreach (Vector3I cell in map.GetUsedCells())
             {
-                Vector3 p = map.MapToLocal(cell);
+                Vector3 p = map.ToGlobal(map.MapToLocal(cell));
                 SortedBlocks.Add(new Block
                 {
                     Map = map,
