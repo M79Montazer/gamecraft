@@ -13,6 +13,7 @@ public enum Sfx
     SwitchButton,
     Win,
     Lose,
+    StarPickup,
 }
 
 // Autoload singleton (scenes/sfx_player.tscn), the SFX counterpart to
