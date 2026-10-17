@@ -7,8 +7,8 @@ public partial class MainMenu : Control
 
 	public override void _Ready()
 	{
-		var play = GetNode<Button>("Center/Box/Play");
-		var quit = GetNode<Button>("Center/Box/Quit");
+		var play = GetNode<Button>("Center/Row/ButtonsContainer/Play");
+		var quit = GetNode<Button>("Center/Row/ButtonsContainer/Quit");
 
 		play.Pressed += () => GetTree().ChangeSceneToFile(LevelSelectScene);
 		quit.Pressed += () => GetTree().Quit();

@@ -1,16 +1,8 @@
 [gd_scene format=3 uid="uid://bg1ey1bpjqucw"]
 
 [ext_resource type="Script" uid="uid://cd5sq402n4bje" path="res://scripts/ui/MainMenu.cs" id="1_menu"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_title"]
-font_size = 84
-font_color = Color(0.88, 0.94, 1, 1)
-outline_size = 16
-outline_color = Color(0, 0, 0, 0.9)
-
-[sub_resource type="LabelSettings" id="LabelSettings_sub"]
-font_size = 17
-font_color = Color(0.45, 0.7, 0.8, 0.8)
+[ext_resource type="Texture2D" uid="uid://on881gv5e2in" path="res://assets/UI_asset/background/MAIN MENUE.png" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://daa0kapkshbii" path="res://assets/UI_asset/logo/png/Frame 16.png" id="3_logo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_normal"]
 content_margin_left = 24.0
@@ -81,14 +73,16 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_menu")
 
-[node name="Bg" type="ColorRect" parent="." unique_id=1170889495]
+[node name="Bg" type="TextureRect" parent="." unique_id=1170889495]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.015, 0.015, 0.03, 1)
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="Center" type="CenterContainer" parent="." unique_id=752323803]
 layout_mode = 1
@@ -98,28 +92,27 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Box" type="VBoxContainer" parent="Center" unique_id=1146919137]
+[node name="Row" type="HBoxContainer" parent="Center" unique_id=2146919137]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 40
 alignment = 1
 
-[node name="Title" type="Label" parent="Center/Box" unique_id=1261785967]
-layout_mode = 2
-text = "H O L L O W"
-label_settings = SubResource("LabelSettings_title")
-horizontal_alignment = 1
-
-[node name="Subtitle" type="Label" parent="Center/Box" unique_id=448617124]
-layout_mode = 2
-text = "outrun the circle that unmakes the world"
-label_settings = SubResource("LabelSettings_sub")
-horizontal_alignment = 1
-
-[node name="Spacer" type="Control" parent="Center/Box" unique_id=372459534]
-custom_minimum_size = Vector2(0, 30)
+[node name="LogoContainer" type="VBoxContainer" parent="Center/Row" unique_id=722854038]
 layout_mode = 2
 
-[node name="Play" type="Button" parent="Center/Box" unique_id=1157111322]
+[node name="Logo" type="TextureRect" parent="Center/Row/LogoContainer" unique_id=-2033181329]
+custom_minimum_size = Vector2(420, 420)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("3_logo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ButtonsContainer" type="VBoxContainer" parent="Center/Row" unique_id=1218393098]
+layout_mode = 2
+alignment = 1
+
+[node name="Play" type="Button" parent="Center/Row/ButtonsContainer" unique_id=1157111322]
 custom_minimum_size = Vector2(260, 52)
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
@@ -129,7 +122,11 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
 theme_override_styles/focus = SubResource("StyleBoxFlat_focus")
 text = "PLAY"
 
-[node name="Quit" type="Button" parent="Center/Box" unique_id=829354400]
+[node name="Spacer" type="Control" parent="Center/Row/ButtonsContainer" unique_id=372459534]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="Quit" type="Button" parent="Center/Row/ButtonsContainer" unique_id=829354400]
 custom_minimum_size = Vector2(260, 52)
 layout_mode = 2
 theme_override_font_sizes/font_size = 22

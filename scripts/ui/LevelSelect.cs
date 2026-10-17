@@ -13,7 +13,12 @@ public partial class LevelSelect : Control
         GetTree().Paused = false;
         Input.MouseMode = Input.MouseModeEnum.Visible;
 
-        var bg = new ColorRect { Color = new Color(0.015f, 0.015f, 0.03f) };
+        var bg = new TextureRect
+        {
+            Texture = GD.Load<Texture2D>("res://assets/UI_asset/background/LEVEL SELECT.png"),
+            ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+            StretchMode = TextureRect.StretchModeEnum.KeepAspectCovered,
+        };
         bg.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
         AddChild(bg);
 
