@@ -131,7 +131,7 @@ public partial class LevelRunner : Node3D
 
         if (p.Y < -4f)
         {
-            SetEnd("HOLLOWED", "the void consumed the world");
+            SetEnd();
             return;
         }
 
@@ -212,12 +212,12 @@ public partial class LevelRunner : Node3D
         InputMap.ActionAddEvent(action, new InputEventKey { PhysicalKeycode = key });
     }
 
-    private void SetEnd(string title, string sub)
+    private void SetEnd()
     {
         _state = GameState.Lost;
         _nothingness.Active = false;
         PauseWorld();
-        _hud.ShowEnd($"{title}\n{sub}\n\npress R to retry · Esc for levels");
+        _hud.ShowLose();
     }
 
     // Freeze everything under the end card: physics, nothingness and the ball

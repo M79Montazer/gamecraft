@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Win / Lose</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sarpanch:wght@600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --blue: #87d1ef;
+      --ink: #00131a;
+      --red: #ff383c;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #000;
+      font-family: "Sarpanch", sans-serif;
+    }
+
+    .preview {
+      width: 100%;
+      max-width: 1300px;
+      margin-inline: auto;
+      container-type: inline-size;
+      display: grid;
+      gap: 14.23077cqw;
+    }
+
+    .result {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 13 / 7;
+      overflow: hidden;
+      border-radius: 7.69231cqw;
+      /* Translucent Figma fill composited over the white canvas. */
+      background:
+        linear-gradient(
+          180deg,
+          rgb(68.48 121.13 142.76 / 80%),
+          rgb(0.14 18.65 26.15 / 80%)
+        ),
+        #fff;
+    }
+
+    .result--lose {
+      outline: 1px solid #b0e8ff;
+      outline-offset: -1px;
+    }
+
+    .result h2 {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      margin: 0;
+      color: var(--blue);
+      text-align: center;
+      font-size: 7.38462cqw;
+      font-weight: 700;
+      line-height: 0.6;
+    }
+
+    .result--lose h2 {
+      top: 27.57143%;
+      color: var(--red);
+    }
+
+    .result--win h2 {
+      top: 49%;
+    }
+
+    .actions {
+      position: absolute;
+      left: 3.61538%;
+      right: 3.53846%;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 3.84615cqw;
+      height: 6.38462cqw;
+    }
+
+    .result--lose .actions {
+      top: 60.57143%;
+    }
+
+    .result--win .actions {
+      top: 68.57143%;
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      padding: 0;
+      border: 2px solid var(--blue);
+      border-radius: 1.53846cqw;
+      background: var(--blue);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 3.69231cqw;
+      font-weight: 600;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    button:focus-visible {
+      outline: 3px solid white;
+      outline-offset: 4px;
+    }
+
+    .stars {
+      position: absolute;
+      left: 36.46154%;
+      top: 19.42857%;
+      width: 27.15385%;
+      height: 23.57143%;
+      fill: var(--blue);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="preview" aria-label="Game result screens">
+    <section
+      class="result result--lose"
+      aria-labelledby="lose-title"
+    >
+      <h2 id="lose-title">Hollowfied!</h2>
+
+      <nav class="actions" aria-label="Loss actions">
+        <button type="button">Retry</button>
+        <button type="button">Level Select</button>
+        <button type="button">Main Menu</button>
+      </nav>
+    </section>
+
+    <section
+      class="result result--win"
+      aria-labelledby="win-title"
+    >
+      <svg
+        class="stars"
+        viewBox="0 0 353 165"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <defs>
+          <polygon
+            id="star"
+            points="
+              64,0 79.1,46.4 128,46.4 88.4,75.1
+              103.6,121.6 64,92.9 24.4,121.6
+              39.6,75.1 0,46.4 48.9,46.4
+            "
+          />
+        </defs>
+        <use href="#star" x="0" y="37" />
+        <use href="#star" x="113" y="0" />
+        <use href="#star" x="225" y="37" />
+      </svg>
+
+      <h2 id="win-title">You Spaced!</h2>
+
+      <nav class="actions" aria-label="Win actions">
+        <button type="button">Retry</button>
+        <button type="button">Level Select</button>
+        <button type="button">Main Menu</button>
+      </nav>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,91 @@
+[gd_scene format=3 uid="uid://3w582f50ltq6"]
+
+[ext_resource type="Script" uid="uid://srf8wx2vjtbm" path="res://scripts/ui/WinCard.cs" id="1_script"]
+[ext_resource type="FontFile" uid="uid://dox6m5vdl0oq7" path="res://assets/fonts/Sarpanch-SemiBold.ttf" id="2_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+content_margin_left = 48.0
+content_margin_top = 28.0
+content_margin_right = 48.0
+content_margin_bottom = 44.0
+bg_color = Color(0.075, 0.19, 0.24, 0.85)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font = ExtResource("2_font")
+font_size = 64
+font_color = Color(0.529, 0.82, 0.937, 1)
+outline_size = 12
+outline_color = Color(0, 0, 0, 0.9)
+
+[sub_resource type="LabelSettings" id="LabelSettings_time"]
+font = ExtResource("2_font")
+font_size = 24
+font_color = Color(0.85, 0.85, 0.9, 1)
+outline_size = 6
+outline_color = Color(0, 0, 0, 0.85)
+
+[node name="WinCard" type="Control" unique_id=660735320]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Center" type="CenterContainer" parent="." unique_id=1606300354]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Card" type="Panel" parent="Center" unique_id=143656608]
+custom_minimum_size = Vector2(900, 485)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="Box" type="VBoxContainer" parent="Center/Card" unique_id=1957954180]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 14
+
+[node name="TopGap" type="Control" parent="Center/Card/Box" unique_id=1257023615]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+
+[node name="Stars" type="CenterContainer" parent="Center/Card/Box" unique_id=549832994]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Center/Card/Box" unique_id=504598965]
+layout_mode = 2
+text = "Escaped!"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+
+[node name="Gap" type="Control" parent="Center/Card/Box" unique_id=31817656]
+custom_maximum_size = Vector2(-1, 20)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Time" type="Label" parent="Center/Card/Box" unique_id=259059190]
+layout_mode = 2
+text = "0.0 s"
+label_settings = SubResource("LabelSettings_time")
+horizontal_alignment = 1
+
+[node name="Buttons" type="HBoxContainer" parent="Center/Card/Box" unique_id=2004559044]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
