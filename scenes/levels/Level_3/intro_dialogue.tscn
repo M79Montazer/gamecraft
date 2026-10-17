@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://ba4231qax0pny"]
+
+[ext_resource type="PackedScene" uid="uid://bkhhc5h3fwlm5" path="res://scenes/ui/Dialogue/stage_dialogue.tscn" id="1_sipmv"]
+[ext_resource type="Script" uid="uid://lhn6khriqvfa" path="res://scripts/ui/MiniDialogue/DialogueLine.cs" id="2_ykmdu"]
+[ext_resource type="Texture2D" uid="uid://ck4rohmcgu1fd" path="res://assets/MiniDialogue/MainCh.png" id="3_flfc8"]
+[ext_resource type="Texture2D" uid="uid://ceyj6vn1lpcwu" path="res://assets/MiniDialogue/RoboCh.png" id="4_qufiq"]
+
+[sub_resource type="Resource" id="line_1"]
+script = ExtResource("2_ykmdu")
+Speaker = 1
+Text = "Good thing we have theeeeese to protect us."
+
+[sub_resource type="Resource" id="line_2"]
+script = ExtResource("2_ykmdu")
+Text = "What is that?"
+
+[sub_resource type="Resource" id="line_3"]
+script = ExtResource("2_ykmdu")
+Speaker = 1
+Text = "Nothing. Juuuuust some floor panels"
+
+[node name="IntroDialogue" unique_id=1092870509 instance=ExtResource("1_sipmv")]
+Lines = Array[ExtResource("2_ykmdu")]([SubResource("line_1"), SubResource("line_2"), SubResource("line_3")])
+UpperAvatar = ExtResource("3_flfc8")
+LowerAvatar = ExtResource("4_qufiq")
+BlurStrength = 10.0
+BackdropDarkness = 0.6
