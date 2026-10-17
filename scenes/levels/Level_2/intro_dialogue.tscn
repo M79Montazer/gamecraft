@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://bvrw6g0lx7hix"]
+
+[ext_resource type="PackedScene" uid="uid://bkhhc5h3fwlm5" path="res://scenes/ui/Dialogue/stage_dialogue.tscn" id="1_q1xog"]
+[ext_resource type="Script" uid="uid://lhn6khriqvfa" path="res://scripts/ui/MiniDialogue/DialogueLine.cs" id="2_o4xxe"]
+[ext_resource type="Texture2D" uid="uid://ck4rohmcgu1fd" path="res://assets/MiniDialogue/MainCh.png" id="3_kgksh"]
+[ext_resource type="Texture2D" uid="uid://ceyj6vn1lpcwu" path="res://assets/MiniDialogue/RoboCh.png" id="4_q5ib1"]
+
+[sub_resource type="Resource" id="line_1"]
+script = ExtResource("2_o4xxe")
+Text = "That was way too easy for my program. Only 5… 6… some more sectors left. "
+
+[sub_resource type="Resource" id="line_2"]
+script = ExtResource("2_o4xxe")
+Speaker = 1
+Text = "Yesss. we are out. Too bad we lost our giant table friend."
+
+[sub_resource type="Resource" id="line_3"]
+script = ExtResource("2_o4xxe")
+Text = "That was the remote control panel. Great. Manual buttons it is."
+
+[node name="IntroDialogue" unique_id=1092870509 instance=ExtResource("1_q1xog")]
+Lines = Array[ExtResource("2_o4xxe")]([SubResource("line_1"), SubResource("line_2"), SubResource("line_3")])
+UpperAvatar = ExtResource("3_kgksh")
+LowerAvatar = ExtResource("4_q5ib1")
+BlurStrength = 10.0
+BackdropDarkness = 0.6
