@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://lhn6khriqvfa" path="res://scripts/ui/MiniDialogue/DialogueLine.cs" id="2_2knpv"]
 [ext_resource type="Texture2D" uid="uid://ck4rohmcgu1fd" path="res://assets/MiniDialogue/MainCh.png" id="3_qarii"]
 [ext_resource type="Texture2D" uid="uid://ceyj6vn1lpcwu" path="res://assets/MiniDialogue/RoboCh.png" id="4_f2wof"]
+[ext_resource type="Shader" uid="uid://dk1oym562qd83" path="res://scenes/ui/Dialogue/blur_background.gdshader" id="5_2knpv"]
 
 [sub_resource type="Resource" id="line_1"]
 script = ExtResource("2_2knpv")
@@ -19,9 +20,44 @@ script = ExtResource("2_2knpv")
 Speaker = 1
 Text = "Why is Steve… … … missing?"
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qarii"]
+resource_local_to_scene = true
+shader = ExtResource("5_2knpv")
+shader_parameter/blur_strength = 2.0
+shader_parameter/darkness = 0.35
+
 [node name="IntroDialogue" unique_id=1092870509 instance=ExtResource("1_i5w1t")]
 Lines = Array[ExtResource("2_2knpv")]([SubResource("line_1"), SubResource("line_2"), SubResource("line_3")])
 UpperAvatar = ExtResource("3_qarii")
 LowerAvatar = ExtResource("4_f2wof")
 BlurStrength = 10.0
 BackdropDarkness = 0.6
+
+[node name="Backdrop" parent="." index="0"]
+material = SubResource("ShaderMaterial_qarii")
+
+[node name="Name" parent="DialogueCenter/DialogueRows/UpperDialog" index="2"]
+offset_top = 31.0
+offset_bottom = 82.0
+
+[node name="Message" parent="DialogueCenter/DialogueRows/UpperDialog" index="3"]
+offset_left = 302.0
+offset_top = 105.0
+offset_right = 833.0
+offset_bottom = 225.0
+
+[node name="Name" parent="DialogueCenter/DialogueRows/LowerDialog" index="2"]
+offset_left = 66.0
+offset_top = 29.0
+offset_right = 609.0
+offset_bottom = 80.0
+text = "Robot Friend"
+
+[node name="Message" parent="DialogueCenter/DialogueRows/LowerDialog" index="3"]
+offset_left = 66.0
+offset_top = 102.0
+offset_right = 609.0
+offset_bottom = 222.0
+
+[node name="ContinueHint" parent="." index="2"]
+anchors_preset = 7

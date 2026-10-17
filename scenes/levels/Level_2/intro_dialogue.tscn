@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://lhn6khriqvfa" path="res://scripts/ui/MiniDialogue/DialogueLine.cs" id="2_o4xxe"]
 [ext_resource type="Texture2D" uid="uid://ck4rohmcgu1fd" path="res://assets/MiniDialogue/MainCh.png" id="3_kgksh"]
 [ext_resource type="Texture2D" uid="uid://ceyj6vn1lpcwu" path="res://assets/MiniDialogue/RoboCh.png" id="4_q5ib1"]
+[ext_resource type="Shader" uid="uid://dk1oym562qd83" path="res://scenes/ui/Dialogue/blur_background.gdshader" id="5_o4xxe"]
 
 [sub_resource type="Resource" id="line_1"]
 script = ExtResource("2_o4xxe")
@@ -18,9 +19,46 @@ Text = "Yesss. we are out. Too bad we lost our giant table friend."
 script = ExtResource("2_o4xxe")
 Text = "That was the remote control panel. Great. Manual buttons it is."
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kgksh"]
+resource_local_to_scene = true
+shader = ExtResource("5_o4xxe")
+shader_parameter/blur_strength = 2.0
+shader_parameter/darkness = 0.35
+
 [node name="IntroDialogue" unique_id=1092870509 instance=ExtResource("1_q1xog")]
 Lines = Array[ExtResource("2_o4xxe")]([SubResource("line_1"), SubResource("line_2"), SubResource("line_3")])
 UpperAvatar = ExtResource("3_kgksh")
 LowerAvatar = ExtResource("4_q5ib1")
 BlurStrength = 10.0
 BackdropDarkness = 0.6
+
+[node name="Backdrop" parent="." index="0"]
+material = SubResource("ShaderMaterial_kgksh")
+
+[node name="Name" parent="DialogueCenter/DialogueRows/UpperDialog" index="2"]
+offset_left = 303.0
+offset_top = 30.0
+offset_right = 839.0
+offset_bottom = 81.0
+
+[node name="Message" parent="DialogueCenter/DialogueRows/UpperDialog" index="3"]
+offset_left = 303.0
+offset_top = 112.0
+offset_right = 834.0
+offset_bottom = 232.0
+
+[node name="Name" parent="DialogueCenter/DialogueRows/LowerDialog" index="2"]
+offset_left = 66.0
+offset_top = 33.0
+offset_right = 609.0
+offset_bottom = 84.0
+text = "Robot Friend"
+
+[node name="Message" parent="DialogueCenter/DialogueRows/LowerDialog" index="3"]
+offset_left = 66.0
+offset_top = 112.0
+offset_right = 609.0
+offset_bottom = 232.0
+
+[node name="ContinueHint" parent="." index="2"]
+anchors_preset = 7

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dialog Box</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarpanch:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      font-family: "Sarpanch", sans-serif;
+    }
+
+    .dialogs {
+      width: min(100%, 930px);
+      container-type: inline-size;
+    }
+
+    .dialog {
+      position: relative;
+      height: 28.6022cqw;
+      color: #87d1ef;
+      border: 1px solid #87d1ef;
+      border-radius: 10.7527cqw;
+      background: linear-gradient(to bottom, rgba(68, 121, 143, 0.8), rgba(0, 19, 26, 0.8));
+    }
+
+    .dialog + .dialog { margin-top: 4.8387cqw; }
+    .dialog--left { width: 94.5161%; }
+    .dialog--right { width: 95.6989%; }
+
+    .dialog__profile {
+      position: absolute;
+      top: 1.0753cqw;
+      width: 26.2366cqw;
+      height: 26.2366cqw;
+      border: 1px solid #87d1ef;
+      border-radius: 10.7527cqw;
+      background: #fff;
+    }
+
+    .dialog--left .dialog__profile { left: 1.0753cqw; }
+    .dialog--right .dialog__profile { right: 1.0753cqw; }
+
+    .dialog__content {
+      position: absolute;
+      top: 9.5699cqw;
+      width: 55.5914cqw;
+    }
+
+    .dialog--left .dialog__content { left: 32.6882cqw; }
+    .dialog--right .dialog__content { left: 7.2043cqw; }
+
+    .dialog__name {
+      margin: 0;
+      height: 3.871cqw;
+      font-size: 3.871cqw;
+      font-weight: 700;
+      line-height: 5.0323cqw;
+    }
+
+    .dialog__message {
+      margin: 1.5054cqw 0 0;
+      font-size: 3.0108cqw;
+      font-weight: 500;
+      line-height: 3.914cqw;
+    }
+  </style>
+</head>
+<body>
+  <main class="dialogs" aria-label="Dialog box variants">
+    <article class="dialog dialog--left" aria-label="Left profile dialog">
+      <div class="dialog__profile" aria-hidden="true"></div>
+      <div class="dialog__content">
+        <h2 class="dialog__name">RGN</h2>
+        <p class="dialog__message">THIS IS TEST DIALOG</p>
+      </div>
+    </article>
+
+    <article class="dialog dialog--right" aria-label="Right profile dialog">
+      <div class="dialog__content">
+        <h2 class="dialog__name">STEVE</h2>
+        <p class="dialog__message">THIS IS TEST DIALOG</p>
+      </div>
+      <div class="dialog__profile" aria-hidden="true"></div>
+    </article>
+  </main>
+</body>
+</html>

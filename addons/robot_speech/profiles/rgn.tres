@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RobotVoiceProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/robot_speech/RobotVoiceProfile.cs" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+DisplayName = "RGN"
+VoiceSeed = 1701
+PhonemePalette = PackedInt32Array(0, 1, 3, 4, 1, 5)
+BasePitchHz = 292.0
+PitchRangeSemitones = 6.2
+Pace = 1.08
+Brightness = 0.62
+Buzz = 0.11
+Noise = 0.025
+Gain = 0.56

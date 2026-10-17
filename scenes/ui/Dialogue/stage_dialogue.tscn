@@ -1,6 +1,19 @@
-[gd_scene load_steps=2 format=3 uid="uid://bkhhc5h3fwlm5"]
+[gd_scene load_steps=10 format=3 uid="uid://bkhhc5h3fwlm5"]
 
-[ext_resource type="Script" uid="uid://dfo80raxsvrle" path="res://scripts/ui/MiniDialogue/StageDialogue.cs" id="1_ghkd8"]
+[ext_resource type="Script" uid="uid://dfo80raxsvrle" path="res://scripts/ui/MiniDialogue/StageDialogue.cs" id="1_script"]
+[ext_resource type="Shader" path="res://scenes/ui/Dialogue/blur_background.gdshader" id="2_blur"]
+[ext_resource type="Texture2D" path="res://assets/UI_asset/dialouge box/svg/dialog_left_empty.svg" id="3_left"]
+[ext_resource type="Texture2D" path="res://assets/UI_asset/dialouge box/svg/dialog_right_empty.svg" id="4_right"]
+[ext_resource type="FontFile" uid="uid://dox6m5vdl0oq7" path="res://assets/fonts/Sarpanch-SemiBold.ttf" id="5_font"]
+[ext_resource type="Script" path="res://addons/robot_speech/RobotSpeechPlayer.cs" id="6_speech"]
+[ext_resource type="Resource" path="res://addons/robot_speech/profiles/rgn.tres" id="7_rgn"]
+[ext_resource type="Resource" path="res://addons/robot_speech/profiles/steve.tres" id="8_steve"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
+resource_local_to_scene = true
+shader = ExtResource("2_blur")
+shader_parameter/blur_strength = 2.0
+shader_parameter/darkness = 0.35
 
 [node name="StageDialogue" type="Control"]
 layout_mode = 3
@@ -10,4 +23,158 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("1_ghkd8")
+script = ExtResource("1_script")
+UpperVoiceProfile = ExtResource("7_rgn")
+LowerVoiceProfile = ExtResource("8_steve")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_blur")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="DialogueCenter" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="DialogueRows" type="VBoxContainer" parent="DialogueCenter"]
+custom_minimum_size = Vector2(930, 577)
+layout_mode = 2
+theme_override_constants/separation = 45
+
+[node name="UpperDialog" type="Control" parent="DialogueCenter/DialogueRows"]
+custom_minimum_size = Vector2(930, 266)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Frame" type="TextureRect" parent="DialogueCenter/DialogueRows/UpperDialog"]
+layout_mode = 0
+offset_right = 879.0
+offset_bottom = 266.0
+mouse_filter = 2
+texture = ExtResource("3_left")
+expand_mode = 1
+
+[node name="Avatar" type="TextureRect" parent="DialogueCenter/DialogueRows/UpperDialog"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 250.0
+offset_bottom = 250.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="DialogueCenter/DialogueRows/UpperDialog"]
+layout_mode = 0
+offset_left = 304.0
+offset_top = 82.0
+offset_right = 840.0
+offset_bottom = 130.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.529, 0.82, 0.937, 1)
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 36
+text = "RGN"
+
+[node name="Message" type="RichTextLabel" parent="DialogueCenter/DialogueRows/UpperDialog"]
+layout_mode = 0
+offset_left = 304.0
+offset_top = 132.0
+offset_right = 835.0
+offset_bottom = 252.0
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.529, 0.82, 0.937, 1)
+theme_override_fonts/normal_font = ExtResource("5_font")
+theme_override_font_sizes/normal_font_size = 28
+bbcode_enabled = false
+fit_content = false
+scroll_active = false
+autowrap_mode = 2
+
+[node name="LowerDialog" type="Control" parent="DialogueCenter/DialogueRows"]
+custom_minimum_size = Vector2(930, 266)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Frame" type="TextureRect" parent="DialogueCenter/DialogueRows/LowerDialog"]
+layout_mode = 0
+offset_right = 890.0
+offset_bottom = 266.0
+mouse_filter = 2
+texture = ExtResource("4_right")
+expand_mode = 1
+
+[node name="Avatar" type="TextureRect" parent="DialogueCenter/DialogueRows/LowerDialog"]
+layout_mode = 0
+offset_left = 640.0
+offset_top = 16.0
+offset_right = 874.0
+offset_bottom = 250.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="DialogueCenter/DialogueRows/LowerDialog"]
+layout_mode = 0
+offset_left = 67.0
+offset_top = 82.0
+offset_right = 610.0
+offset_bottom = 130.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.529, 0.82, 0.937, 1)
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 36
+text = "STEVE"
+
+[node name="Message" type="RichTextLabel" parent="DialogueCenter/DialogueRows/LowerDialog"]
+layout_mode = 0
+offset_left = 67.0
+offset_top = 132.0
+offset_right = 610.0
+offset_bottom = 252.0
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.529, 0.82, 0.937, 1)
+theme_override_fonts/normal_font = ExtResource("5_font")
+theme_override_font_sizes/normal_font_size = 28
+bbcode_enabled = false
+fit_content = false
+scroll_active = false
+autowrap_mode = 2
+
+[node name="ContinueHint" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -180.0
+offset_top = -54.0
+offset_right = 180.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.529, 0.82, 0.937, 0.75)
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 20
+text = "SPACE / ENTER"
+horizontal_alignment = 1
+
+[node name="RobotSpeechPlayer" type="Node" parent="."]
+script = ExtResource("6_speech")
+OutputBus = &"SFX"
+
+[node name="GeneratedVoice" type="AudioStreamPlayer" parent="RobotSpeechPlayer"]
+bus = &"SFX"

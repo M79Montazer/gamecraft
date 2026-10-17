@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://lhn6khriqvfa" path="res://scripts/ui/MiniDialogue/DialogueLine.cs" id="2_c6106"]
 [ext_resource type="Texture2D" uid="uid://ck4rohmcgu1fd" path="res://assets/MiniDialogue/MainCh.png" id="3_bhd15"]
 [ext_resource type="Texture2D" uid="uid://ceyj6vn1lpcwu" path="res://assets/MiniDialogue/RoboCh.png" id="4_t5vyf"]
+[ext_resource type="Shader" uid="uid://dk1oym562qd83" path="res://scenes/ui/Dialogue/blur_background.gdshader" id="5_c6106"]
 
 [sub_resource type="Resource" id="line_1"]
 script = ExtResource("2_c6106")
@@ -23,9 +24,44 @@ Text = "A fantastic friend"
 script = ExtResource("2_c6106")
 Text = "Fantastic? Fantastic RGN. I will notify G-Craft."
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bhd15"]
+resource_local_to_scene = true
+shader = ExtResource("5_c6106")
+shader_parameter/blur_strength = 2.0
+shader_parameter/darkness = 0.35
+
 [node name="IntroDialogue" unique_id=1092870509 instance=ExtResource("1_it1wh")]
 Lines = Array[ExtResource("2_c6106")]([SubResource("line_1"), SubResource("line_2"), SubResource("line_3"), SubResource("line_4")])
 UpperAvatar = ExtResource("3_bhd15")
 LowerAvatar = ExtResource("4_t5vyf")
 BlurStrength = 10.0
 BackdropDarkness = 0.6
+
+[node name="Backdrop" parent="." index="0"]
+material = SubResource("ShaderMaterial_bhd15")
+
+[node name="Name" parent="DialogueCenter/DialogueRows/UpperDialog" index="2"]
+offset_left = 302.0
+offset_top = 32.0
+offset_right = 838.0
+offset_bottom = 83.0
+
+[node name="Message" parent="DialogueCenter/DialogueRows/UpperDialog" index="3"]
+offset_left = 303.0
+offset_top = 107.0
+offset_right = 834.0
+offset_bottom = 227.0
+
+[node name="Name" parent="DialogueCenter/DialogueRows/LowerDialog" index="2"]
+offset_left = 65.0
+offset_top = 38.0
+offset_right = 608.0
+offset_bottom = 89.0
+text = "Robot Friend"
+
+[node name="Message" parent="DialogueCenter/DialogueRows/LowerDialog" index="3"]
+offset_top = 110.0
+offset_bottom = 230.0
+
+[node name="ContinueHint" parent="." index="2"]
+anchors_preset = 7
