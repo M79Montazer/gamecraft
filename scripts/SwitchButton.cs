@@ -53,6 +53,7 @@ public partial class SwitchButton : Area3D
 			return;
 		_readyAtTicks = now + (ulong)(CooldownSeconds * 1000.0f);
 
+		SfxPlayer.Play(Sfx.SwitchButton);
 		_leftIsUp = !_leftIsUp;
 		_leverLeft.Visible = _leftIsUp;
 		_leverRight.Visible = !_leftIsUp;

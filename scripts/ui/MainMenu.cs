@@ -164,5 +164,12 @@ public partial class MainMenu : Control
 		b.AddThemeStyleboxOverride("hover", hover);
 		b.AddThemeStyleboxOverride("pressed", pressed);
 		b.AddThemeStyleboxOverride("focus", focus);
+
+		// every styled button gets the standard UI sounds — this is the shared
+		// choke point for all menu buttons (level-select cards wire their own).
+		// Mouse hover only: menus GrabFocus() on open, and FocusEntered would
+		// play a spurious hover sound every time one appears.
+		b.MouseEntered += () => SfxPlayer.Play(Sfx.UiHover);
+		b.Pressed += () => SfxPlayer.Play(Sfx.UiClick);
 	}
 }

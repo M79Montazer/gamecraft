@@ -31,6 +31,7 @@ public partial class LoseCard : Control
     public void Show()
     {
         Visible = true;
+        SfxPlayer.Play(Sfx.Lose);
         _retry.GrabFocus();
     }
 }

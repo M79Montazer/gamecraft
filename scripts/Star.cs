@@ -33,6 +33,7 @@ public partial class Star : Area3D
         if (_taken || body is not Player)
             return;
         _taken = true;
+        SfxPlayer.Play(Sfx.StarPickup);
         EmitSignal(SignalName.Collected, this);
         // tiny scale-out pop so the pickup reads as taken, then free
         var tween = CreateTween();

@@ -1,0 +1,51 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/SfxPlayer.cs" id="1_script"]
+[ext_resource type="AudioStream" path="res://assets/SFX/UI/button_hover.ogg" id="2_uihover"]
+[ext_resource type="AudioStream" path="res://assets/SFX/UI/Button_Pressed.wav" id="3_uiclick"]
+[ext_resource type="AudioStream" path="res://assets/SFX/Jump/Player_Jump_low.wav" id="4_jump"]
+[ext_resource type="AudioStream" path="res://assets/SFX/Door/door_opening_Low.wav" id="5_door"]
+[ext_resource type="AudioStream" path="res://assets/SFX/Button/floor_button.wav" id="6_floorbutton"]
+[ext_resource type="AudioStream" path="res://assets/SFX/Button/switch_button.wav" id="7_switchbutton"]
+[ext_resource type="AudioStream" path="res://assets/SFX/Win Screen/Win.wav" id="8_win"]
+[ext_resource type="AudioStream" path="res://assets/SFX/Lose Screen/Lose3.wav" id="9_lose"]
+[ext_resource type="AudioStream" path="res://assets/SFX/Star/Star_pickup.wav" id="10_starpickup"]
+
+[node name="SfxPlayer" type="Node"]
+script = ExtResource("1_script")
+
+[node name="UiHover" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_uihover")
+bus = &"SFX"
+
+[node name="UiClick" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_uiclick")
+bus = &"SFX"
+
+[node name="Jump" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_jump")
+bus = &"SFX"
+
+[node name="Door" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_door")
+bus = &"SFX"
+
+[node name="FloorButton" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_floorbutton")
+bus = &"SFX"
+
+[node name="SwitchButton" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_switchbutton")
+bus = &"SFX"
+
+[node name="Win" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_win")
+bus = &"SFX"
+
+[node name="Lose" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_lose")
+bus = &"SFX"
+
+[node name="StarPickup" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_starpickup")
+bus = &"SFX"

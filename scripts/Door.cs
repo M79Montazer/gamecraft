@@ -43,6 +43,8 @@ public partial class Door : StaticBody3D
             return;
         _open = true;
 
+        SfxPlayer.Play(Sfx.Door);
+
         _tween?.Kill();
         _tween = CreateTween();
         _tween.TweenProperty(_panel, "position", _restPanelPosition + new Vector3(0, -SinkDepth, 0), 1.4f)
@@ -58,6 +60,7 @@ public partial class Door : StaticBody3D
         if (_open)
         {
             _open = false;
+            SfxPlayer.Play(Sfx.Door);
 
             // collision back on immediately — the slab rises through anything on it
             CollisionLayer = _restCollisionLayer;
