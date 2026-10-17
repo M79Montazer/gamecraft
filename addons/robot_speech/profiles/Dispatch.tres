@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="RobotVoiceProfile" format=3 uid="uid://ckpxqrvxs20ut"]
+
+[ext_resource type="Script" uid="uid://ceahfwogrn556" path="res://addons/robot_speech/RobotVoiceProfile.cs" id="1_nmoq3"]
+
+[resource]
+script = ExtResource("1_nmoq3")
+BasePitchHz = 121.0
+PitchRangeSemitones = 2.0
+Pace = 0.9
+Brightness = 0.4
+Buzz = 0.3
+Gain = 0.9
+metadata/_custom_type_script = "uid://ceahfwogrn556"

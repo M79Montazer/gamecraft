@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://lhn6khriqvfa" path="res://scripts/ui/MiniDialogue/DialogueLine.cs" id="2_r054n"]
 [ext_resource type="Texture2D" uid="uid://ck4rohmcgu1fd" path="res://assets/MiniDialogue/MainCh.png" id="3_nc1hq"]
 [ext_resource type="Texture2D" uid="uid://ceyj6vn1lpcwu" path="res://assets/MiniDialogue/RoboCh.png" id="4_y7bkg"]
+[ext_resource type="Resource" uid="uid://ckpxqrvxs20ut" path="res://addons/robot_speech/profiles/Dispatch.tres" id="5_nc1hq"]
 [ext_resource type="Shader" uid="uid://dk1oym562qd83" path="res://scenes/ui/Dialogue/blur_background.gdshader" id="5_r054n"]
 
 [sub_resource type="Resource" id="line_1"]
@@ -15,7 +16,7 @@ Text = "ATTENTION. FROM DISPATCH TO RGN RESCUE UNIT. PROJECT G-CRAFT HAS CAUSED 
 script = ExtResource("2_r054n")
 Text = "Oh no. The Robot Friends are in danger. Navigating."
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nc1hq"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y7bkg"]
 resource_local_to_scene = true
 shader = ExtResource("5_r054n")
 shader_parameter/blur_strength = 2.0
@@ -25,11 +26,12 @@ shader_parameter/darkness = 0.35
 Lines = Array[ExtResource("2_r054n")]([SubResource("line_1"), SubResource("line_2")])
 UpperAvatar = ExtResource("3_nc1hq")
 LowerAvatar = ExtResource("4_y7bkg")
+LowerVoiceProfile = ExtResource("5_nc1hq")
 BlurStrength = 10.0
 BackdropDarkness = 0.6
 
 [node name="Backdrop" parent="." index="0"]
-material = SubResource("ShaderMaterial_nc1hq")
+material = SubResource("ShaderMaterial_y7bkg")
 
 [node name="Name" parent="DialogueCenter/DialogueRows/UpperDialog" index="2"]
 offset_left = 303.0
@@ -58,3 +60,5 @@ offset_bottom = 227.0
 
 [node name="ContinueHint" parent="." index="2"]
 anchors_preset = 7
+offset_top = -36.0
+offset_bottom = 0.0

@@ -14,12 +14,13 @@ Text = "That was way too easy for my program. Only 5… 6… some more sectors l
 script = ExtResource("2_o4xxe")
 Speaker = 1
 Text = "Yesss. we are out. Too bad we lost our giant table friend."
+Emotion = 4
 
 [sub_resource type="Resource" id="line_3"]
 script = ExtResource("2_o4xxe")
 Text = "That was the remote control panel. Great. Manual buttons it is."
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_kgksh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o4xxe"]
 resource_local_to_scene = true
 shader = ExtResource("5_o4xxe")
 shader_parameter/blur_strength = 2.0
@@ -33,7 +34,7 @@ BlurStrength = 10.0
 BackdropDarkness = 0.6
 
 [node name="Backdrop" parent="." index="0"]
-material = SubResource("ShaderMaterial_kgksh")
+material = SubResource("ShaderMaterial_o4xxe")
 
 [node name="Name" parent="DialogueCenter/DialogueRows/UpperDialog" index="2"]
 offset_left = 303.0
@@ -62,3 +63,5 @@ offset_bottom = 232.0
 
 [node name="ContinueHint" parent="." index="2"]
 anchors_preset = 7
+offset_top = -36.0
+offset_bottom = 0.0

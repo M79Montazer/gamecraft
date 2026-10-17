@@ -1,16 +1,16 @@
-[gd_resource type="Resource" script_class="RobotVoiceProfile" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="RobotVoiceProfile" format=3 uid="uid://das3uw85dvvb8"]
 
-[ext_resource type="Script" path="res://addons/robot_speech/RobotVoiceProfile.cs" id="1_profile"]
+[ext_resource type="Script" uid="uid://ceahfwogrn556" path="res://addons/robot_speech/RobotVoiceProfile.cs" id="1_profile"]
 
 [resource]
 script = ExtResource("1_profile")
 DisplayName = "STEVE"
 VoiceSeed = 4207
 PhonemePalette = PackedInt32Array(2, 5, 3, 0, 5, 4)
-BasePitchHz = 174.0
-PitchRangeSemitones = 3.8
-Pace = 0.93
-Brightness = 0.30
-Buzz = 0.27
-Noise = 0.05
-Gain = 0.61
+BasePitchHz = 220.0
+PitchRangeSemitones = 8.0
+Pace = 1.08
+Brightness = 0.75
+Buzz = 0.2
+Noise = 0.03
+Gain = 0.8
