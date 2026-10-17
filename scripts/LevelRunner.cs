@@ -61,6 +61,12 @@ public partial class LevelRunner : Node3D
 
         _fixedCamera = GetNode<Camera3D>("Camera");
         _thirdPersonCamera = GetNode<ThirdPersonCamera>("ThirdPersonCamera");
+        // H must only ever swap between these two, so any other camera in the
+        // scene (the player's FBX embeds one) is freed and ours starts current
+        foreach (Node cam in FindChildren("*", "Camera3D", true, false))
+            if (cam != _fixedCamera && cam != _thirdPersonCamera)
+                cam.QueueFree();
+        _fixedCamera.Current = true;
 
         _nothingness = GD.Load<PackedScene>(NothingnessScene).Instantiate<Nothingness>();
         _nothingness.Level = _level;
