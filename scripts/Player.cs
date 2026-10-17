@@ -29,10 +29,6 @@ public partial class Player : CharacterBody3D
 	{
 		_groundRay = GetNode<RayCast3D>("GroundRay");
 		_modelPivot = GetNode<Node3D>("ModelPivot");
-
-		// the fbx carries a leftover camera from the DCC; it must never render
-		foreach (Node child in _modelPivot.FindChildren("*", "Camera3D", true, false))
-			child.QueueFree();
 	}
 
 	public override void _PhysicsProcess(double delta)
