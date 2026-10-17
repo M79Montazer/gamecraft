@@ -14,6 +14,14 @@ public partial class LevelRunner : Node3D
     // Distances marking the HUD zone boundaries, inner to outer.
     [Export] public float[] Rings { get; set; } = { 8f, 14f, 20f };
 
+    // Seconds of calm after the level starts before the nothingness begins
+    // to spread (0 = starts immediately).
+    [Export] public float NothingnessStartDelay { get; set; } = 0f;
+
+    // Base spread speed of the nothingness rim in blocks per second, before
+    // the per-ring speedups kick in.
+    [Export] public float NothingnessSpeed { get; set; } = 0.9f;
+
     private Player _player;
     private Level _level;
     private Nothingness _nothingness;
@@ -73,6 +81,10 @@ public partial class LevelRunner : Node3D
 
         _nothingness = GD.Load<PackedScene>(NothingnessScene).Instantiate<Nothingness>();
         _nothingness.Level = _level;
+        // before AddChild: Nothingness._Ready copies GrowthSpeed into its
+        // live speed on enter tree
+        _nothingness.GrowthSpeed = NothingnessSpeed;
+        _nothingness.StartDelay = NothingnessStartDelay;
         AddChild(_nothingness);
 
 		_hud = GD.Load<PackedScene>(HudScene).Instantiate<Hud>();

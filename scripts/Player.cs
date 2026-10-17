@@ -81,15 +81,17 @@ public partial class Player : CharacterBody3D
 
 	// WASD relative to whichever camera is current: forward is the camera's
 	// flattened view direction. For the fixed overview camera (yaw 0) this
-	// reduces to the old world-axis mapping.
+	// reduces to the old world-axis mapping. Flattening to XZ projects the
+	// basis vectors, shortening them by cos(pitch) — normalize so a steep
+	// overview camera doesn't slow W/S to a fraction of MoveSpeed.
 	private Vector3 CameraRelativeDir(Vector2 input)
 	{
 		var cam = GetViewport().GetCamera3D();
 		if (cam == null)
 			return new Vector3(input.X, 0, input.Y);
 		Basis b = cam.GlobalTransform.Basis;
-		Vector3 forward = new Vector3(-b.Z.X, 0, -b.Z.Z);
-		Vector3 right = new Vector3(b.X.X, 0, b.X.Z);
+		Vector3 forward = new Vector3(-b.Z.X, 0, -b.Z.Z).Normalized();
+		Vector3 right = new Vector3(b.X.X, 0, b.X.Z).Normalized();
 		return right * input.X + forward * -input.Y;
 	}
 

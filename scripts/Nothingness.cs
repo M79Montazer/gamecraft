@@ -6,8 +6,12 @@ public partial class Nothingness : Node3D
     public Level Level;
     public bool Active = true;
 
+    // set by LevelRunner per level; GrowthSpeed mirrors its
+    // NothingnessSpeed export, so it is not an editor knob here anymore
+    public float GrowthSpeed = 0.9f;
+    public float StartDelay = 0f;
+
     [Export] public float StartRadius = 1.5f;
-    [Export] public float GrowthSpeed = 0.9f;
     [Export] public float RingSpeedup = 1.15f;
     [Export] public float FuseTime = 3.0f;
     [Export] public float HollowBand = 2.0f;
@@ -15,6 +19,7 @@ public partial class Nothingness : Node3D
     private float _radius;
     private float _time;
     private float _speed;
+    private float _delayRemaining;
     private int _blocksPtr;
     private int _ringsCrossed;
     private readonly List<Block> _pending = new();
@@ -26,9 +31,13 @@ public partial class Nothingness : Node3D
     {
         _radius = StartRadius;
         _speed = GrowthSpeed;
+        _delayRemaining = StartDelay;
 
         _disc = GetNode<MeshInstance3D>("Disc");
-
+        // the void is not there yet during the grace period; the disc only
+        // appears once spreading begins
+        if (StartDelay > 0f)
+            _disc.Visible = false;
     }
 
     public override void _Process(double delta)
@@ -37,6 +46,16 @@ public partial class Nothingness : Node3D
             return;
 
         float dt = (float)delta;
+
+        // grace period: no growth, hollowing or consuming until it runs out
+        if (_delayRemaining > 0f)
+        {
+            _delayRemaining -= dt;
+            if (_delayRemaining > 0f)
+                return;
+            _disc.Visible = true;
+        }
+
         _time += dt;
         _radius += _speed * dt;
 
