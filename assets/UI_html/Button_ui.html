@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Play button export</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarpanch:wght@600&display=swap"
+        rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #000;
+    }
+
+    .variants {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 64px 49px;
+      padding: 92px 34px;
+    }
+
+    .play-button {
+      appearance: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 369px;
+      max-width: 100%;
+      height: 150px;
+      padding: 2px;
+      border: 2px solid #87d1ef;
+      border-radius: 20px;
+      background: rgb(0.14% 7.31% 10.26%);
+      color: #87d1ef;
+      font: 600 48px/57.6px "Sarpanch", sans-serif;
+      cursor: pointer;
+    }
+
+    .play-button:hover,
+    .play-button.is-hover {
+      height: 139px;
+      box-shadow: 0 0 38px #87d1ef;
+      text-shadow: 0 0 2.2px #87d1ef;
+    }
+
+    .play-button:active,
+    .play-button.is-clicked,
+    .play-button.is-clicked:hover {
+      height: 150px;
+      box-shadow: 0 0 16.1px #87d1ef;
+      text-shadow: 0 0 2.2px #87d1ef;
+    }
+
+    .play-button:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 8px;
+    }
+  </style>
+</head>
+<body>
+  <main class="variants" aria-label="Play button variants">
+    <button class="play-button" type="button">play</button>
+    <button class="play-button is-hover" type="button">play</button>
+    <button class="play-button is-clicked" type="button">play</button>
+  </main>
+</body>
+</html>
