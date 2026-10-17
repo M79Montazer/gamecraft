@@ -61,6 +61,15 @@ text = "PLAY"
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
+[node name="Settings" type="Button" parent="Center/Row/ButtonsContainer"]
+custom_minimum_size = Vector2(260, 52)
+layout_mode = 2
+text = "SETTINGS"
+
+[node name="Spacer2" type="Control" parent="Center/Row/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
 [node name="Quit" type="Button" parent="Center/Row/ButtonsContainer" unique_id=829354400]
 custom_minimum_size = Vector2(260, 52)
 layout_mode = 2

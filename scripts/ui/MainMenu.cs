@@ -4,6 +4,7 @@ using Godot;
 public partial class MainMenu : Control
 {
 	private const string LevelSelectScene = "res://scenes/ui/level_select.tscn";
+	private const string SettingsScene = "res://scenes/ui/settings.tscn";
 
 	// Designer spec from assets/UI_html/Button_ui.html.
 	private static readonly Color Accent = new("87d1ef");
@@ -12,13 +13,18 @@ public partial class MainMenu : Control
 
 	public override void _Ready()
 	{
+		MusicPlayer.Instance.Play(0);
+
 		var play = GetNode<Button>("Center/Row/ButtonsContainer/Play");
+		var settings = GetNode<Button>("Center/Row/ButtonsContainer/Settings");
 		var quit = GetNode<Button>("Center/Row/ButtonsContainer/Quit");
 
 		ApplyButtonStyle(play);
+		ApplyButtonStyle(settings);
 		ApplyButtonStyle(quit);
 
 		play.Pressed += () => GetTree().ChangeSceneToFile(LevelSelectScene);
+		settings.Pressed += () => GetTree().ChangeSceneToFile(SettingsScene);
 		quit.Pressed += () => GetTree().Quit();
 
 		play.GrabFocus();
@@ -34,6 +40,90 @@ public partial class MainMenu : Control
 		};
 		ApplyButtonStyle(b);
 		return b;
+	}
+
+	// Volume slider styled to the theme; 0..100 with 1% steps, value01 = 0..1.
+	internal static HSlider MenuSlider(float value01)
+	{
+		var slider = new HSlider
+		{
+			MinValue = 0,
+			MaxValue = 100,
+			Step = 1,
+			Value = value01 * 100f,
+			CustomMinimumSize = new Vector2(0f, 24f),
+			SizeFlagsVertical = SizeFlags.ShrinkCenter,
+			FocusMode = FocusModeEnum.All,
+		};
+
+		var groove = new StyleBoxFlat
+		{
+			BgColor = Bg,
+			BorderColor = Accent,
+			ContentMarginTop = 8f,
+			ContentMarginBottom = 8f,
+		};
+		groove.SetBorderWidthAll(2);
+		groove.SetCornerRadiusAll(10);
+
+		var fill = new StyleBoxFlat { BgColor = Accent };
+		fill.SetCornerRadiusAll(10);
+
+		var fillFocus = new StyleBoxFlat { BgColor = new Color(1f, 1f, 1f) };
+		fillFocus.SetCornerRadiusAll(10);
+
+		slider.AddThemeStyleboxOverride("slider", groove);
+		slider.AddThemeStyleboxOverride("grabber_area", fill);
+		slider.AddThemeStyleboxOverride("grabber_area_highlight", fillFocus);
+		slider.AddThemeIconOverride("grabber", GrabberIcon);
+		slider.AddThemeIconOverride("grabber_highlight", GrabberIcon);
+		slider.AddThemeIconOverride("grabber_disabled", GrabberIcon);
+		return slider;
+	}
+
+	// Label + slider row sized to line up with MenuButton's 260px buttons.
+	internal static HBoxContainer SliderRow(string text, HSlider slider)
+	{
+		var label = new Label { Text = text, CustomMinimumSize = new Vector2(90f, 0f) };
+		label.AddThemeFontSizeOverride("font_size", 22);
+		label.AddThemeFontOverride("font", GD.Load<Font>("res://assets/fonts/Sarpanch-SemiBold.ttf"));
+		label.AddThemeColorOverride("font_color", Accent);
+
+		slider.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+
+		var row = new HBoxContainer { CustomMinimumSize = new Vector2(300f, 52f) };
+		row.AddChild(label);
+		row.AddChild(slider);
+		return row;
+	}
+
+	private static Texture2D _grabberIcon;
+
+	// circular knob drawn in code so sliders match the accent theme without
+	// needing an icon asset
+	private static Texture2D GrabberIcon => _grabberIcon ??= CreateGrabberIcon();
+
+	private static Texture2D CreateGrabberIcon()
+	{
+		const int size = 24;
+		const float radius = 11f;
+
+		var img = Image.CreateEmpty(size, size, false, Image.Format.Rgba8);
+		var center = new Vector2(size / 2f - 0.5f, size / 2f - 0.5f);
+		for (int y = 0; y < size; y++)
+		{
+			for (int x = 0; x < size; x++)
+			{
+				float d = center.DistanceTo(new Vector2(x, y));
+				if (d > radius)
+					continue;
+				// one-pixel alpha falloff smooths the edge
+				float edge = Mathf.Clamp(radius - d, 0f, 1f);
+				var color = d > radius - 4f ? new Color(1f, 1f, 1f) : Accent;
+				img.SetPixel(x, y, new Color(color, edge));
+			}
+		}
+		return ImageTexture.CreateFromImage(img);
 	}
 
 	internal static void ApplyButtonStyle(Button b)

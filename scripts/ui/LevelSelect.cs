@@ -20,6 +20,8 @@ public partial class LevelSelect : Control
         GetTree().Paused = false;
         Input.MouseMode = Input.MouseModeEnum.Visible;
 
+        MusicPlayer.Instance.Play(0);
+
         var bg = new TextureRect
         {
             Texture = GD.Load<Texture2D>("res://assets/UI_asset/background/LEVEL SELECT.png"),
