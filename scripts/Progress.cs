@@ -51,9 +51,16 @@ public static class Progress
             string file;
             while ((file = sub.GetNext()) != "")
             {
-                // Only the folder's own <folder>.tscn is a level; other .tscn
-                // files (e.g. intro_dialogue.tscn) are support files.
-                if (!sub.CurrentIsDir() && file == $"{dir}.tscn")
+                if (sub.CurrentIsDir())
+                    continue;
+                // Exported builds remap resources inside the PCK, so DirAccess
+                // reports e.g. "level_1.tscn.remap" — strip the suffix before
+                // comparing. Binary exports may report ".scn".
+                if (file.EndsWith(".remap"))
+                    file = file[..^".remap".Length];
+                // Only the folder's own <folder>.tscn is a level; other scenes
+                // (e.g. intro_dialogue.tscn) are support files.
+                if (file == $"{dir}.tscn" || file == $"{dir}.scn")
                     scenes.Add($"{dir}/{file}");
             }
             sub.ListDirEnd();
