@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://cmip0pe2rqmta"]
+
+[ext_resource type="Script" uid="uid://d4kggdu3m0l8f" path="res://scripts/Wall.cs" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://d1jb38s7hk70o" path="res://assets/walls_n_doors/v4/half_wall.fbx" id="2_solid"]
+[ext_resource type="PackedScene" uid="uid://b584fdlbvugnj" path="res://assets/walls_n_doors/v4/hollow_half_wall.fbx" id="3_hollow"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_halfwall"]
+size = Vector3(1.251001, 0.9766846, 0.33862305)
+
+[node name="HalfWall" type="StaticBody3D" unique_id=1609580011]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+script = ExtResource("1_script")
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=1609580012]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.003894031, 0.4883423, -0.017700195)
+shape = SubResource("BoxShape3D_halfwall")
+
+[node name="Solid" parent="." unique_id=1609580013 instance=ExtResource("2_solid")]
+transform = Transform3D(0.97357893, 0, 0.20757093, 0, 0.909, 0, -0.22835086, 0, 0.88498324, 0, 0.695, 0)
+
+[node name="Hollow" parent="." unique_id=1609580014 instance=ExtResource("3_hollow")]
+transform = Transform3D(0.97357893, 0, 0.20757093, 0, 0.909, 0, -0.22835086, 0, 0.88498324, 0, 0.695, 0)
+visible = false

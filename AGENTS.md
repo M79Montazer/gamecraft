@@ -40,6 +40,13 @@ dotnet build                                                # compile C#
   `SurfaceSetMaterial`.
 - **Player**: `scenes/player.tscn` (script + sphere collision + ball.glb
   instance) is shared by all levels; edit it there, not per level.
+- **Free walls**: `scenes/walls/wall.tscn` / `half_wall.tscn` are standalone
+  wall scenes for placing walls at arbitrary angles/scales (no GridMap grid).
+  Each is a `StaticBody3D` with script `scripts/Wall.cs` and `Solid`/`Hollow`
+  model children — the nothingness swaps Solid→Hollow then frees the wall on
+  the same fuse rhythm as GridMap blocks (group `free_wall`, handled by
+  `Nothingness.ConsumeWalls`). Model scale ~300 matches the GridMap
+  `cell_scale`; collision boxes are rough and tuned per-instance in the editor.
 - **UI** (menus, HUD): built in code, not editor scenes — keep that pattern.
 - when adding a new scene or node or object, unless necessary, don't have anything generated in runtime (any Godot nodes).
   have them a node or a separate scene editable in the Godot editor 

@@ -18,6 +18,7 @@ public partial class Nothingness : Node3D
     private int _blocksPtr;
     private int _ringsCrossed;
     private readonly List<Block> _pending = new();
+    private readonly List<Wall> _pendingWalls = new();
 
     private MeshInstance3D _disc;
 
@@ -74,6 +75,25 @@ public partial class Nothingness : Node3D
             }
         }
 
+        // free-placed wall scenes (scenes/walls) are not GridMap cells but get
+        // the same rhythm as blocks: swap to the hollow mesh on a short fuse,
+        // then disappear
+        ConsumeWalls();
+        for (int i = _pendingWalls.Count - 1; i >= 0; i--)
+        {
+            Wall w = _pendingWalls[i];
+            if (!w.Hollowed)
+            {
+                if (_time >= w.HollowAt)
+                    w.MakeHollow();
+            }
+            else if (_time >= w.DestroyAt)
+            {
+                w.QueueFree();
+                _pendingWalls.RemoveAt(i);
+            }
+        }
+
         // standalone props (doors, floor buttons, jump pads) are not GridMap
         // cells, so the circle consumes them directly: free them once the rim
         // reaches
@@ -83,6 +103,26 @@ public partial class Nothingness : Node3D
         // wireframe blocks stay visible in a band behind the glowing rim
         float discRadius = Mathf.Max(0.01f, _radius - HollowBand);
         _disc.Scale = new Vector3(discRadius, 1, discRadius);
+    }
+
+    private void ConsumeWalls()
+    {
+        Vector3 center = GlobalTransform.Origin;
+        foreach (Node node in GetTree().GetNodesInGroup("free_wall"))
+            if (node is Wall wall && !wall.Scheduled)
+            {
+                Vector3 p = wall.GlobalTransform.Origin;
+                float dist = Mathf.Sqrt(
+                    (p.X - center.X) * (p.X - center.X) +
+                    (p.Z - center.Z) * (p.Z - center.Z));
+                if (dist <= _radius)
+                {
+                    wall.Scheduled = true;
+                    wall.HollowAt = _time + (float)GD.RandRange(0.0, 0.5);
+                    wall.DestroyAt = wall.HollowAt + FuseTime + (float)GD.RandRange(0.0, 0.3);
+                    _pendingWalls.Add(wall);
+                }
+            }
     }
 
     private void ConsumeProps()

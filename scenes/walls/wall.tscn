@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bwall1freewal"]
+
+[ext_resource type="Script" uid="uid://d4kggdu3m0l8f" path="res://scripts/Wall.cs" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://derhk4rr8ocya" path="res://assets/walls_n_doors/v2/plain_wall (1).fbx" id="2_solid"]
+[ext_resource type="PackedScene" uid="uid://djnbp6akas3r5" path="res://assets/walls_n_doors/v4/hollow_wall.fbx" id="3_hollow"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall"]
+size = Vector3(1.244983, 1.4746094, 0.31689453)
+
+[node name="Wall" type="StaticBody3D" unique_id=1609580001]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+script = ExtResource("1_script")
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=1609580002]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.021783471, 0.7373047, -0.028076172)
+shape = SubResource("BoxShape3D_wall")
+
+[node name="Solid" parent="." unique_id=1609580003 instance=ExtResource("2_solid")]
+transform = Transform3D(0.97357893, 0, 0.20757093, 0, 0.909, 0, -0.22835086, 0, 0.88498324, 0, 0.695, 0)
+
+[node name="Hollow" parent="." unique_id=1609580004 instance=ExtResource("3_hollow")]
+transform = Transform3D(0.97357893, 0, 0.20757093, 0, 0.909, 0, -0.22835086, 0, 0.88498324, 0, 0.695, 0)
+visible = false
