@@ -12,6 +12,10 @@ public partial class Door : StaticBody3D
     // the door.fbx scale once fixed in the editor.
     [Export] public float SinkDepth = 2.6f;
 
+    // If true, the door starts the game already open (panel sunk, collision
+    // off); switch/button toggling still works from that state.
+    [Export] public bool StartOpen = false;
+
     private Node3D _panel;
     private bool _open;
     private uint _restCollisionLayer;
@@ -24,6 +28,13 @@ public partial class Door : StaticBody3D
         _panel = GetNode<Node3D>("Panel");
         _restCollisionLayer = CollisionLayer;
         _restPanelPosition = _panel.Position;
+
+        if (StartOpen)
+        {
+            _open = true;
+            _panel.Position = _restPanelPosition + new Vector3(0, -SinkDepth, 0);
+            CollisionLayer = 0;
+        }
     }
 
     public void Open()

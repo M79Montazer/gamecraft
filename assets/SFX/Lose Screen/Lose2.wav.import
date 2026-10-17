@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cwee0cr5504y3"
+path="res://.godot/imported/Lose2.wav-dee8aa901f79be42dd5ce00f311a38ae.sample"
+
+[deps]
+
+source_file="res://assets/SFX/Lose Screen/Lose2.wav"
+dest_files=["res://.godot/imported/Lose2.wav-dee8aa901f79be42dd5ce00f311a38ae.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
