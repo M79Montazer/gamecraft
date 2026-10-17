@@ -22,8 +22,8 @@ default_bus_layout="res://default_bus_layout.tres"
 [autoload]
 
 MusicPlayer="*res://scenes/music_player.tscn"
-SfxPlayer="*res://scenes/sfx_player.tscn"
 AppSettings="*res://scripts/AppSettings.cs"
+SfxPlayer="*res://scenes/sfx_player.tscn"
 
 [display]
 
