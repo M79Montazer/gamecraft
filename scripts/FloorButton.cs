@@ -45,6 +45,7 @@ public partial class FloorButton : Area3D
 		if (_pressed)
 			return;
 		_pressed = true;
+		SfxPlayer.Play(Sfx.FloorButton);
 
 		_redModel.Visible = false;
 		_greenModel.Visible = true;

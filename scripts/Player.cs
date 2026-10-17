@@ -59,6 +59,7 @@ public partial class Player : CharacterBody3D
 			{
 				_airborne = true;
 				vertical = JumpVelocity * JumpMultiplier;
+				SfxPlayer.Play(Sfx.Jump);
 			}
 			else
 			{

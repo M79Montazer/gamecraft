@@ -134,6 +134,14 @@ public partial class LevelSelect : Control
         card.AddThemeStyleboxOverride("focus", (StyleBoxFlat)normal.Duplicate());
         card.AddThemeStyleboxOverride("disabled", glass);
 
+        // unlocked cards get the standard UI sounds — these don't go through
+        // MainMenu.ApplyButtonStyle; locked cards stay silent
+        if (unlocked)
+        {
+            card.MouseEntered += () => SfxPlayer.Play(Sfx.UiHover);
+            card.Pressed += () => SfxPlayer.Play(Sfx.UiClick);
+        }
+
         AddLabel(card, number.ToString("00"), 23, fg, 52.5f, 36.5f, 188.5f);
         AddLabel(card, $"Level {number}", 31, fg, 143.5f, 13.5f, 234f);
 

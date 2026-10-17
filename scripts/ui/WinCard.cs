@@ -47,6 +47,7 @@ public partial class WinCard : Control
         _starCluster.QueueRedraw();
         _time.Text = $"{time:0.0} s";
         Visible = true;
+        SfxPlayer.Play(Sfx.Win);
         _nextLevel.Visible = nextLevelPath != null;
         (_nextLevel.Visible ? _nextLevel : _retry).GrabFocus();
     }
