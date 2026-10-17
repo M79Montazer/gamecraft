@@ -40,6 +40,9 @@ public partial class LevelRunner : Node3D
         // keep working while the tree is paused on the end card
         ProcessMode = ProcessModeEnum.Always;
 
+        // track 0 is the menu theme; tracks are 1-indexed per level number
+        MusicPlayer.Instance.Play(Progress.LevelNumber(SceneFilePath));
+
         EnsureAction("move_left", Key.A);
         EnsureAction("move_right", Key.D);
         EnsureAction("move_forward", Key.W);

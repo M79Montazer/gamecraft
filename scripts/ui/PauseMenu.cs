@@ -1,13 +1,15 @@
 using Godot;
 using System;
 
-// The pause overlay, laid out in scenes/ui/pause_menu.tscn. The buttons are
-// created here via MainMenu.MenuButton so they match every other menu. The
-// LevelRunner opens this and owns the actual un-pause via the Resumed event.
+// The pause overlay, laid out in scenes/ui/pause_menu.tscn. The buttons and
+// volume sliders are created here via MainMenu helpers so they match every
+// other menu. The LevelRunner opens this and owns the actual un-pause via the
+// Resumed event.
 public partial class PauseMenu : Control
 {
+    private const string MenuScene = "res://scenes/main.tscn";
+
     private Button _resume;
-    private Button _fullscreen;
 
     // Raised when the player resumes (RESUME button or Esc); LevelRunner
     // unpauses the tree and restores the mouse mode for the active camera.
@@ -25,14 +27,23 @@ public partial class PauseMenu : Control
         restart.Pressed += () => GetTree().ReloadCurrentScene();
         buttons.AddChild(restart);
 
-        _fullscreen = MainMenu.MenuButton("FULLSCREEN");
-        _fullscreen.Pressed += ToggleFullscreen;
-        buttons.AddChild(_fullscreen);
+        buttons.AddChild(VolumeRow("MUSIC", AppSettings.SetMusicVolume, AppSettings.MusicVolume));
+        buttons.AddChild(VolumeRow("SFX", AppSettings.SetSfxVolume, AppSettings.SfxVolume));
+
+        var mainMenu = MainMenu.MenuButton("MAIN MENU");
+        mainMenu.Pressed += GoToMainMenu;
+        buttons.AddChild(mainMenu);
+    }
+
+    private static HBoxContainer VolumeRow(string label, Action<float> apply, float value)
+    {
+        var slider = MainMenu.MenuSlider(value);
+        slider.ValueChanged += v => apply((float)v / 100f);
+        return MainMenu.SliderRow(label, slider);
     }
 
     public void Open()
     {
-        RefreshFullscreenLabel();
         Visible = true;
         _resume.GrabFocus();
     }
@@ -55,19 +66,13 @@ public partial class PauseMenu : Control
         Resume();
     }
 
-    private void ToggleFullscreen()
+    // Unlike the level select page, the main menu does not un-pause itself on
+    // entry, so leaving a paused level has to clear the pause (and free the
+    // mouse) here before the scene switch.
+    private void GoToMainMenu()
     {
-        GetWindow().Mode = IsFullscreen()
-            ? Window.ModeEnum.Windowed
-            : Window.ModeEnum.Fullscreen;
-        RefreshFullscreenLabel();
+        GetTree().Paused = false;
+        Input.MouseMode = Input.MouseModeEnum.Visible;
+        GetTree().ChangeSceneToFile(MenuScene);
     }
-
-    // the button names the mode a press would switch TO
-    private void RefreshFullscreenLabel()
-    {
-        _fullscreen.Text = IsFullscreen() ? "WINDOWED" : "FULLSCREEN";
-    }
-
-    private bool IsFullscreen() => GetWindow().Mode == Window.ModeEnum.Fullscreen;
 }

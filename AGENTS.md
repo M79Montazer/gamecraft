@@ -10,11 +10,6 @@ top-down camera.
 ```sh
 dotnet build                                                # compile C#
 ```
-
-- Godot exe lives at `D:/Godot_v4.7.2-stable_mono_win64/` (use the `_console` exe for headless).
-- Headless runs print RID/ObjectDB "leaked at exit" noise on quit — filter it, it is not a failure.
-- A C# `SceneTree` script is only runnable after `dotnet build` (class must be in the assembly); build error output can be missed when piping to `grep -c`, read the full build tail.
-
 ## Architecture
 
 - **Scene flow**: `scenes/main.tscn` (MainMenu) → `scenes/ui/level_select.tscn`
@@ -65,6 +60,9 @@ dotnet build                                                # compile C#
 - Renderer is `mobile` + Jolt physics (project.godot); input actions are
   registered at runtime in `LevelRunner.EnsureAction`, not in project.godot.
 
-##MCP
+## MCP
 - for blender MCP, Launch once per session: `"D:/Blender 5.2/blender.exe" --online-mode &`
 (port 9876).
+
+## Godot headless
+- do not run a headless Godot. after a build with no errors, tell the user to check and test it in Godot themself

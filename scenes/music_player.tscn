@@ -1,0 +1,19 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/MusicPlayer.cs" id="1_script"]
+[ext_resource type="AudioStream" path="res://assets/SFX/OST/01_Godot_Ready_OGG/00_Main_Menu_A_Small_Light_in_Space.ogg" id="2_menu"]
+[ext_resource type="AudioStream" path="res://assets/SFX/OST/01_Godot_Ready_OGG/01_Dispatch_Dispatch.ogg" id="3_lvl1"]
+[ext_resource type="AudioStream" path="res://assets/SFX/OST/01_Godot_Ready_OGG/02_Control_In_Sync.ogg" id="4_lvl2"]
+[ext_resource type="AudioStream" path="res://assets/SFX/OST/01_Godot_Ready_OGG/03_JumpJump_Bounce_Through_Orbit.ogg" id="5_lvl3"]
+[ext_resource type="AudioStream" path="res://assets/SFX/OST/01_Godot_Ready_OGG/04_Hollow_Edge_of_Nothing.ogg" id="6_lvl4"]
+[ext_resource type="AudioStream" path="res://assets/SFX/OST/01_Godot_Ready_OGG/05_Friends_Little_Signals.ogg" id="7_lvl5"]
+[ext_resource type="AudioStream" path="res://assets/SFX/OST/01_Godot_Ready_OGG/06_Lost_A_Beacon_Somewhere.ogg" id="8_lvl6"]
+[ext_resource type="AudioStream" path="res://assets/SFX/OST/01_Godot_Ready_OGG/07_Hero_Small_but_Mighty.ogg" id="9_lvl7"]
+[ext_resource type="AudioStream" path="res://assets/SFX/OST/01_Godot_Ready_OGG/08_Steve_One_Last_Jump.ogg" id="10_lvl8"]
+
+[node name="MusicPlayer" type="Node"]
+script = ExtResource("1_script")
+Tracks = Array[Object]([ExtResource("2_menu"), ExtResource("3_lvl1"), ExtResource("4_lvl2"), ExtResource("5_lvl3"), ExtResource("6_lvl4"), ExtResource("7_lvl5"), ExtResource("8_lvl6"), ExtResource("9_lvl7"), ExtResource("10_lvl8")])
+
+[node name="Player" type="AudioStreamPlayer" parent="."]
+bus = &"Music"
