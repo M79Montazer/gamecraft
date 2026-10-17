@@ -15,6 +15,10 @@ public partial class StageDialogue : Control
     [Export] public float CharactersPerSecond { get; set; } = 35.0f;
 
     [ExportGroup("Characters")]
+    // Leave empty to use the Name label authored in stage_dialogue.tscn.
+    // Set these on a level's intro_dialogue scene for level-specific names.
+    [Export] public string UpperCharacterName { get; set; } = string.Empty;
+    [Export] public string LowerCharacterName { get; set; } = string.Empty;
     [Export] public Texture2D UpperAvatar { get; set; }
     [Export] public Texture2D LowerAvatar { get; set; }
     [Export] public RobotVoiceProfile UpperVoiceProfile { get; set; }
@@ -89,8 +93,8 @@ public partial class StageDialogue : Control
     {
         _upperAvatar.Texture = UpperAvatar;
         _lowerAvatar.Texture = LowerAvatar;
-        _upperName.Text = UpperVoiceProfile?.DisplayName?.ToUpperInvariant() ?? "ROBOT";
-        _lowerName.Text = LowerVoiceProfile?.DisplayName?.ToUpperInvariant() ?? "ROBOT";
+        ConfigureCharacterName(_upperName, UpperCharacterName, UpperVoiceProfile);
+        ConfigureCharacterName(_lowerName, LowerCharacterName, LowerVoiceProfile);
 
         if (_backdrop.Material is ShaderMaterial material)
         {
@@ -101,6 +105,20 @@ public partial class StageDialogue : Control
         _upperText.Text = string.Empty;
         _lowerText.Text = string.Empty;
         _continueHint.Hide();
+    }
+
+    private static void ConfigureCharacterName(
+        Label label,
+        string characterName,
+        RobotVoiceProfile voiceProfile)
+    {
+        // An explicit scene override wins. Otherwise preserve the label text
+        // exactly as authored; the profile name is only a fallback for a blank
+        // label, so runtime code can never undo an editor name change again.
+        if (!string.IsNullOrWhiteSpace(characterName))
+            label.Text = characterName.ToUpperInvariant();
+        else if (string.IsNullOrWhiteSpace(label.Text))
+            label.Text = voiceProfile?.DisplayName?.ToUpperInvariant() ?? "ROBOT";
     }
 
     private static void EnsureAdvanceAction()
