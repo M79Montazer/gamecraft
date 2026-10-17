@@ -11,20 +11,32 @@ public static class Progress
 
     public static int Unlocked { get; private set; } = 1;
 
+    // best star count per completed level number
+    private static readonly Dictionary<int, int> Stars = new();
+
     static Progress()
     {
         var cfg = new ConfigFile();
-        if (cfg.Load(SavePath) == Error.Ok && cfg.HasSectionKey("levels", "unlocked"))
+        if (cfg.Load(SavePath) != Error.Ok)
+            return;
+        if (cfg.HasSectionKey("levels", "unlocked"))
             Unlocked = System.Math.Max(1, cfg.GetValue("levels", "unlocked", 1).AsInt32());
+        foreach (string key in cfg.GetSectionKeys("levels") ?? System.Array.Empty<string>())
+            if (key.StartsWith("stars/"))
+                Stars[int.Parse(key["stars/".Length..])] = cfg.GetValue("levels", key, 0).AsInt32();
     }
 
-    public static void MarkCompleted(int levelNumber)
+    public static int GetStars(int levelNumber) => Stars.GetValueOrDefault(levelNumber);
+
+    public static void MarkCompleted(int levelNumber, int stars)
     {
-        if (levelNumber < Unlocked)
-            return;
-        Unlocked = levelNumber + 1;
+        // replays only ever raise the best result, never lower it
+        Stars[levelNumber] = System.Math.Max(GetStars(levelNumber), System.Math.Clamp(stars, 0, 3));
+        Unlocked = System.Math.Max(Unlocked, levelNumber + 1);
         var cfg = new ConfigFile();
         cfg.SetValue("levels", "unlocked", Unlocked);
+        foreach (var (number, best) in Stars)
+            cfg.SetValue("levels", $"stars/{number}", best);
         cfg.Save(SavePath);
     }
 

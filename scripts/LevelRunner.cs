@@ -244,9 +244,10 @@ public partial class LevelRunner : Node3D
         _state = GameState.Won;
         _nothingness.Active = false;
         int number = Progress.LevelNumber(SceneFilePath);
-        Progress.MarkCompleted(number);
+        int earned = System.Math.Min(1 + _starsCollected, 3);
+        Progress.MarkCompleted(number, earned);
         PauseWorld();
-        _hud.ShowScoreCard(1 + _starsCollected, _time, NextLevelPath());
+        _hud.ShowScoreCard(earned, _time, NextLevelPath());
     }
 
     private void OnWinConditionEntered(WinCondition winCondition)

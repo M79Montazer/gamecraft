@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jump Jump Cards</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sarpanch:wght@500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --card-background: #00131a;
+      --card-accent: #87d1ef;
+      --glass-foreground: #727272;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 64px 24px;
+      display: grid;
+      place-items: center;
+      background: #ffffff;
+      font-family: "Sarpanch", sans-serif;
+    }
+
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 52px;
+      width: 100%;
+    }
+
+    .card {
+      position: relative;
+      flex: 0 0 402px;
+      width: 402px;
+      height: 330px;
+      overflow: hidden;
+      border: 1px solid var(--card-accent);
+      border-radius: 30px;
+      background: var(--card-background);
+      color: var(--card-accent);
+    }
+
+    .card--clicked {
+      box-shadow: 0 4px 70px var(--card-accent);
+    }
+
+    .card--glass {
+      color: var(--glass-foreground);
+      background: linear-gradient(
+        180deg,
+        rgba(174, 174, 178, 0.3),
+        rgba(135, 209, 239, 0.3)
+      );
+      -webkit-backdrop-filter: blur(26px);
+      backdrop-filter: blur(26px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .stars {
+      position: absolute;
+      top: 13.5px;
+      left: 108px;
+      width: 186px;
+      height: 75px;
+      overflow: visible;
+    }
+
+    .star {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1;
+      stroke-linejoin: miter;
+    }
+
+    .star--filled {
+      fill: currentColor;
+      stroke: none;
+    }
+
+    .card--glass .star--filled {
+      fill: none;
+      stroke: currentColor;
+    }
+
+    .number {
+      position: absolute;
+      top: 81px;
+      left: 56px;
+      width: 290px;
+      margin: 0;
+      text-align: center;
+      font-size: 36px;
+      font-weight: 500;
+      line-height: 46.8px;
+    }
+
+    .chevrons {
+      position: absolute;
+      top: 157px;
+      left: 169px;
+      width: 64px;
+      height: 64px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+
+    .title {
+      position: absolute;
+      top: 221px;
+      left: 21px;
+      width: 360px;
+      margin: 0;
+      text-align: center;
+      text-transform: capitalize;
+      white-space: nowrap;
+      font-size: 48px;
+      font-weight: 600;
+      line-height: 57.6px;
+    }
+
+    .svg-definitions {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+
+    @media (max-width: 449px) {
+      body {
+        padding-inline: 12px;
+      }
+
+      .cards {
+        gap: 32px;
+      }
+
+      .card {
+        zoom: 0.8;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <svg class="svg-definitions" aria-hidden="true">
+    <defs>
+      <path
+        id="star"
+        d="M32 0
+           39.185 22.111
+           62.434 22.111
+           43.625 35.777
+           50.809 57.889
+           32 44.223
+           13.191 57.889
+           20.375 35.777
+           1.566 22.111
+           24.815 22.111 Z"
+      />
+
+      <g id="stars">
+        <use class="star" href="#star" x="0" y="11" />
+        <use class="star" href="#star" x="57" y="0" />
+        <use class="star star--filled" href="#star" x="114" y="11" />
+      </g>
+
+      <g id="chevrons">
+        <path d="M19 29 L32.5 16 L46 29" />
+        <path d="M19 48 L32.5 35 L46 48" />
+      </g>
+    </defs>
+  </svg>
+
+  <main class="cards" aria-label="Jump Jump card variants">
+    <article class="card" aria-label="Normal variant">
+      <svg class="stars" viewBox="0 0 186 75" aria-hidden="true">
+        <use href="#stars" />
+      </svg>
+      <p class="number">01</p>
+      <svg class="chevrons" viewBox="0 0 64 64" aria-hidden="true">
+        <use href="#chevrons" />
+      </svg>
+      <h2 class="title">jump jump</h2>
+    </article>
+
+    <article class="card card--clicked" aria-label="Clicked variant">
+      <svg class="stars" viewBox="0 0 186 75" aria-hidden="true">
+        <use href="#stars" />
+      </svg>
+      <p class="number">01</p>
+      <svg class="chevrons" viewBox="0 0 64 64" aria-hidden="true">
+        <use href="#chevrons" />
+      </svg>
+      <h2 class="title">jump jump</h2>
+    </article>
+
+    <article class="card card--glass" aria-label="Glass variant">
+      <svg class="stars" viewBox="0 0 186 75" aria-hidden="true">
+        <use href="#stars" />
+      </svg>
+      <p class="number">01</p>
+      <svg class="chevrons" viewBox="0 0 64 64" aria-hidden="true">
+        <use href="#chevrons" />
+      </svg>
+      <h2 class="title">jump jump</h2>
+    </article>
+  </main>
+</body>
+</html>
