@@ -50,4 +50,14 @@ public partial class MusicPlayer : Node
         _player.Stream = Tracks[trackIndex];
         _player.Play();
     }
+
+    // Dialogue ducking is applied on the player rather than the Music bus, so
+    // it stacks cleanly with the user's saved music-volume setting.
+    public void SetDialogueDuck(bool active, float duckVolumeDb = -12.0f)
+    {
+        if (_player is null)
+            return;
+
+        _player.VolumeDb = active ? Mathf.Min(duckVolumeDb, 0.0f) : 0.0f;
+    }
 }

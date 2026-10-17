@@ -14,6 +14,10 @@ public partial class StageDialogue : Control
     [ExportGroup("Fallback Typewriter")]
     [Export] public float CharactersPerSecond { get; set; } = 35.0f;
 
+    [ExportGroup("Audio")]
+    [Export(PropertyHint.Range, "-30,0,0.5")]
+    public float MusicDuckDb { get; set; } = -12.0f;
+
     [ExportGroup("Characters")]
     // Leave empty to use the Name label authored in stage_dialogue.tscn.
     // Set these on a level's intro_dialogue scene for level-specific names.
@@ -46,6 +50,7 @@ public partial class StageDialogue : Control
     private RichTextLabel _activeText;
     private bool _usingSpeechTiming;
     private bool _transitioned;
+    private bool _musicDucked;
 
     public bool HasLines => Lines is { Count: > 0 };
 
@@ -60,6 +65,7 @@ public partial class StageDialogue : Control
 
         if (HasLines)
         {
+            SetMusicDucked(true);
             _currentLineIndex = 0;
             StartLine();
         }
@@ -208,6 +214,22 @@ public partial class StageDialogue : Control
         _continueHint.Show();
     }
 
+    private void SetMusicDucked(bool ducked)
+    {
+        if (_musicDucked == ducked)
+            return;
+
+        _musicDucked = ducked;
+        MusicPlayer.Instance?.SetDialogueDuck(ducked, MusicDuckDb);
+    }
+
+    public override void _ExitTree()
+    {
+        // Also restore the track if another scene removes the dialogue before
+        // its normal Finish path runs.
+        SetMusicDucked(false);
+    }
+
     public override void _UnhandledInput(InputEvent inputEvent)
     {
         if (_state == DialogueState.Finished || !Visible)
@@ -247,6 +269,7 @@ public partial class StageDialogue : Control
     {
         _state = DialogueState.Finished;
         _robotSpeech.CancelLine();
+        SetMusicDucked(false);
         Hide();
         GetTree().Paused = false;
 
