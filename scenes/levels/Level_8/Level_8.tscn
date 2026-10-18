@@ -34,6 +34,9 @@ fog_density = 0.012
 
 [node name="Test" type="Node3D" unique_id=863141745]
 script = ExtResource("1_77etd")
+Rings = PackedFloat32Array()
+NothingnessStartDelay = 10.0
+NothingnessSpeed = 0.4
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1523371232]
 environment = SubResource("Environment_1fq2y")
@@ -63,7 +66,7 @@ data = {
 metadata/_editor_floor_ = Vector3(0, 2, 0)
 
 [node name="Camera" type="Camera3D" parent="." unique_id=1203385529]
-transform = Transform3D(-4.371139e-08, -0.9770456, 0.21303038, 0, 0.21303038, 0.9770456, -1, 4.270802e-08, -9.3118535e-09, 22.916698, 59.025463, 12.819372)
+transform = Transform3D(-4.371139e-08, -0.9770456, 0.21303038, 0, 0.21303038, 0.9770456, -1, 4.270802e-08, -9.3118535e-09, 22.916698, 65.009, 12.819372)
 
 [node name="WinCondition" parent="." unique_id=1726249530 instance=ExtResource("4_cp176")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.43545437, 1.6374474, -50.007534)
@@ -81,7 +84,7 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.972841, 1.3623782, -0.5472
 Channel = "1"
 
 [node name="Crate" parent="." unique_id=648864118 instance=ExtResource("9_djno5")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -9.031068, 1, -4.396165)
+transform = Transform3D(5.0027666, 0, 0, 0, 2, 0, 0, 0, 2, -9.031068, 1, -4.396165)
 
 [node name="Door" parent="." unique_id=1008327234 instance=ExtResource("10_equlp")]
 transform = Transform3D(3.5251737, 0, 0, 0, 2, 0, 0, 0, 2, 8.700963, 1.0099173, 2.9060497)
@@ -98,10 +101,10 @@ StartOpen = true
 
 [node name="Door3" parent="." unique_id=558719087 instance=ExtResource("10_equlp")]
 transform = Transform3D(-1.5409023e-07, 0, 2, 0, 2, 0, -3.5251737, 0, -8.742278e-08, 1.0782914, 1.0099182, -20.23212)
-Channel = "1"
+Channel = "3"
 
 [node name="JumpPad2" parent="." unique_id=681654193 instance=ExtResource("7_uwcl1")]
-transform = Transform3D(2.3849761e-08, 0, -2, 0, 2, 0, 2, 0, 2.3849761e-08, 21.568787, 1.2101281, -5.4951963)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 21.568787, 1.2101281, -4.0298777)
 
 [node name="Door4" parent="." unique_id=1964371943 instance=ExtResource("10_equlp")]
 transform = Transform3D(3.4660954, 0, 0, 0, 2, 0, 0, 0, 2, -8.193474, 0.87535703, 24.65062)
@@ -132,13 +135,9 @@ transform = Transform3D(-1.3113416e-07, -3, 3.577464e-08, 0, 3.577464e-08, 3, -3
 transform = Transform3D(-1.3113416e-07, -3, 3.577464e-08, 0, 3.577464e-08, 3, -3, 1.3113416e-07, -1.5637592e-15, -15.5850315, 1.8556664, 2.93686)
 
 [node name="SwitchButton" parent="." unique_id=1950344911 instance=ExtResource("13_on471")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -18.816702, 1.1490982, -5.219881)
-ChannelA = "1"
-ChannelB = "2"
-
-[node name="Door5" parent="." unique_id=2143091055 instance=ExtResource("10_equlp")]
-transform = Transform3D(3.3180828, 0, 0, 0, 2, 0, 0, 0, 2, 29.690344, 1.0099186, 10.6992035)
-Channel = "5"
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -21.15334, 1.1490982, -5.219881)
+ChannelA = "2"
+ChannelB = "3"
 
 [node name="Star" parent="." unique_id=222525413 instance=ExtResource("14_c4eyx")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 32.702858, 1, -21.165136)

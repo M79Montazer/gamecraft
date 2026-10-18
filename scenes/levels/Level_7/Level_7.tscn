@@ -36,7 +36,7 @@ fog_density = 0.012
 [node name="Test" type="Node3D" unique_id=863141745]
 script = ExtResource("1_b4jyg")
 Rings = PackedFloat32Array()
-NothingnessStartDelay = 5.0
+NothingnessStartDelay = 8.0
 NothingnessSpeed = 0.5
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1523371232]
@@ -67,7 +67,7 @@ data = {
 metadata/_editor_floor_ = Vector3(0, 2, 0)
 
 [node name="Camera" type="Camera3D" parent="." unique_id=1203385529]
-transform = Transform3D(1, 0, 0, 0, 0.3058886, 0.9520674, 0, -0.9520674, 0.3058886, 0, 57.7749, 26.804253)
+transform = Transform3D(1, 0, 0, 0, 0.23790073, 0.9712895, 0, -0.9712895, 0.23790073, 0, 62.06068, 26.804253)
 
 [node name="WinCondition" parent="." unique_id=1726249530 instance=ExtResource("4_io64x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.72154, 1.5, 48.65489)
