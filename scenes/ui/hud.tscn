@@ -34,7 +34,7 @@ anchor_bottom = 1.0
 offset_top = -44.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "WASD move   ·   Space jump   ·   amber plates open the gates   ·   R retry   ·   Esc pause"
+text = "WASD move   ·   Space jump   ·   H change camera   ·   amber plates open the gates   ·   R retry   ·   Esc pause"
 horizontal_alignment = 1
 label_settings = SubResource("LabelSettings_hint")
 
