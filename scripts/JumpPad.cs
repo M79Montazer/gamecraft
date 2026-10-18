@@ -6,6 +6,9 @@ using Godot;
 // area (group "player_feet") is what normally trips entry/exit.
 public partial class JumpPad : Area3D
 {
+	// how much higher the jump goes while hovering this pad (1 = normal jump)
+	[Export] public float JumpMultiplier { get; set; } = 2f;
+
 	private MeshInstance3D _pad;
 	private StandardMaterial3D _mat;
 
@@ -55,7 +58,7 @@ public partial class JumpPad : Area3D
 	{
 		if (body is not Player player)
 			return;
-		player.JumpMultiplier = 2f;
+		player.JumpMultiplier = JumpMultiplier;
 
 		if (_mat == null)
 			return;
