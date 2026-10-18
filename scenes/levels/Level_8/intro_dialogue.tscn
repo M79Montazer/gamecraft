@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://ncp4ojndoi3n"]
+
+[ext_resource type="PackedScene" uid="uid://bkhhc5h3fwlm5" path="res://scenes/ui/Dialogue/stage_dialogue.tscn" id="1_xk3l7"]
+[ext_resource type="Script" uid="uid://lhn6khriqvfa" path="res://scripts/ui/MiniDialogue/DialogueLine.cs" id="2_m8fis"]
+[ext_resource type="Texture2D" uid="uid://ck4rohmcgu1fd" path="res://assets/MiniDialogue/MainCh.png" id="3_p0wh4"]
+[ext_resource type="Texture2D" uid="uid://ceyj6vn1lpcwu" path="res://assets/MiniDialogue/RoboCh.png" id="4_gxu7y"]
+[ext_resource type="Shader" uid="uid://dk1oym562qd83" path="res://scenes/ui/Dialogue/blur_background.gdshader" id="5_m8fis"]
+
+[sub_resource type="Resource" id="line_1"]
+script = ExtResource("2_m8fis")
+Speaker = 1
+Text = "Steve!"
+Emotion = 4
+
+[sub_resource type="Resource" id="line_2"]
+script = ExtResource("2_m8fis")
+Text = "You found him?"
+Emotion = 3
+
+[sub_resource type="Resource" id="line_3"]
+script = ExtResource("2_m8fis")
+Speaker = 1
+Text = "No. I’m Steve."
+
+[sub_resource type="Resource" id="line_4"]
+script = ExtResource("2_m8fis")
+Text = "No you are not."
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p0wh4"]
+resource_local_to_scene = true
+shader = ExtResource("5_m8fis")
+shader_parameter/blur_strength = 2.0
+shader_parameter/darkness = 0.35
+
+[node name="IntroDialogue" unique_id=1092870509 instance=ExtResource("1_xk3l7")]
+Lines = Array[ExtResource("2_m8fis")]([SubResource("line_1"), SubResource("line_2"), SubResource("line_3"), SubResource("line_4")])
+UpperAvatar = ExtResource("3_p0wh4")
+LowerAvatar = ExtResource("4_gxu7y")
+BlurStrength = 10.0
+BackdropDarkness = 0.6
+
+[node name="Backdrop" parent="." index="0"]
+material = SubResource("ShaderMaterial_p0wh4")
+
+[node name="Name" parent="DialogueCenter/DialogueRows/UpperDialog" index="2"]
+offset_top = 25.0
+offset_bottom = 76.0
+
+[node name="Message" parent="DialogueCenter/DialogueRows/UpperDialog" index="3"]
+offset_left = 305.0
+offset_top = 103.0
+offset_right = 836.0
+offset_bottom = 223.0
+
+[node name="Name" parent="DialogueCenter/DialogueRows/LowerDialog" index="2"]
+offset_top = 22.0
+offset_bottom = 73.0
+text = "Robot Friend"
+
+[node name="Message" parent="DialogueCenter/DialogueRows/LowerDialog" index="3"]
+offset_left = 65.0
+offset_top = 100.0
+offset_right = 608.0
+offset_bottom = 220.0
+
+[node name="ContinueHint" parent="." index="2"]
+anchors_preset = 7
