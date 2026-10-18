@@ -5,7 +5,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_prop"]
 size = Vector3(0.7, 0.7, 0.7)
 
-[node name="Box" type="StaticBody3D" unique_id=1509529938]
+[node name="Box" type="StaticBody3D" groups=["prop"] unique_id=1509529938]
 
 [node name="Collision" type="CollisionShape3D" parent="." unique_id=205408690]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0.088465065, 0)
