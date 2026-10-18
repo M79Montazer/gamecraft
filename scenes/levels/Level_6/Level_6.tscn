@@ -36,6 +36,9 @@ fog_density = 0.012
 
 [node name="Test" type="Node3D" unique_id=863141745]
 script = ExtResource("1_5qkca")
+Rings = PackedFloat32Array()
+NothingnessStartDelay = 3.0
+NothingnessSpeed = 0.5
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1523371232]
 environment = SubResource("Environment_1fq2y")

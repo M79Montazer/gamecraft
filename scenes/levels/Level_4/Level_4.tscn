@@ -6,8 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://45mp03pxt8ou" path="res://scenes/win_condition.tscn" id="4_hked3"]
 [ext_resource type="PackedScene" uid="uid://cpgpbs5ogwxca" path="res://scenes/player.tscn" id="5_gkvww"]
 [ext_resource type="PackedScene" path="res://scenes/third_person_camera.tscn" id="6_kn1ab"]
-[ext_resource type="PackedScene" path="res://scenes/floor_button.tscn" id="7_jx0gw"]
-[ext_resource type="PackedScene" path="res://scenes/door.tscn" id="8_28vgo"]
+[ext_resource type="PackedScene" uid="uid://bkoab37hifokg" path="res://scenes/floor_button.tscn" id="7_jx0gw"]
+[ext_resource type="PackedScene" uid="uid://bscep6moooxla" path="res://scenes/door.tscn" id="8_28vgo"]
 [ext_resource type="PackedScene" uid="uid://bawhaeqrv1j5d" path="res://scenes/star.tscn" id="9_sln6s"]
 [ext_resource type="PackedScene" uid="uid://e5m4wddxlky3" path="res://scenes/switch_button.tscn" id="10_b4sky"]
 
@@ -27,6 +27,9 @@ fog_density = 0.012
 
 [node name="Test2" type="Node3D" unique_id=863141745]
 script = ExtResource("1_b40e6")
+Rings = PackedFloat32Array()
+NothingnessStartDelay = 5.0
+NothingnessSpeed = 0.5
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1523371232]
 environment = SubResource("Environment_1fq2y")
@@ -56,13 +59,13 @@ data = {
 metadata/_editor_floor_ = Vector3(0, 2, 0)
 
 [node name="Camera" type="Camera3D" parent="." unique_id=1203385529]
-transform = Transform3D(1, 0, 0, 0, 0.23781586, 0.97131026, 0, -0.97131026, 0.23781586, 0, 57.944218, 22.00491)
+transform = Transform3D(1, 0, 0, 0, 0.22468933, 0.97443044, 0, -0.97443044, 0.22468933, 0, 62.068775, 22.00491)
 
 [node name="WinCondition" parent="." unique_id=1726249530 instance=ExtResource("4_hked3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4396362, 1.5, -49.627914)
 
 [node name="Player" parent="." unique_id=288310965 instance=ExtResource("5_gkvww")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0.9803982, 1.6, -13.228586)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0.61697197, 1.6, -13.7355995)
 
 [node name="ThirdPersonCamera" parent="." unique_id=524669408 instance=ExtResource("6_kn1ab")]
 
@@ -101,11 +104,11 @@ transform = Transform3D(0.0612691, 0, -2.026946, 0, 2, 0, 3.6000066, 0, 0.034496
 Channel = "7"
 
 [node name="Door5" parent="." unique_id=1040353993 instance=ExtResource("8_28vgo")]
-transform = Transform3D(-0.055262845, 0, 2.02094, 0, 2, 0, -3.2471013, 0, -0.034394644, -2.574829, 1.0099195, -44.300346)
+transform = Transform3D(-0.062775224, 0, 2.0256157, 0, 2, 0, -3.688509, 0, -0.03447422, -2.574829, 1.0099195, -44.300346)
 Channel = "8"
 StartOpen = true
 
 [node name="SwitchButton" parent="." unique_id=1950344911 instance=ExtResource("10_b4sky")]
-transform = Transform3D(-1.9997104, 0, -0.034033187, 0, 2, 0, 0.034033187, 0, -1.9997104, -5.651928, 1.1490982, -44.128227)
+transform = Transform3D(-1.9997104, 0, -0.034033187, 0, 2, 0, 0.034033187, 0, -1.9997104, -5.651928, 1.1490982, -43.187046)
 ChannelA = "7"
 ChannelB = "8"

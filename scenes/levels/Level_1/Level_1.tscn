@@ -24,6 +24,8 @@ fog_density = 0.012
 
 [node name="Test" type="Node3D" unique_id=863141745]
 script = ExtResource("1_bqf6g")
+Rings = PackedFloat32Array(8, 14)
+NothingnessStartDelay = 1.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1523371232]
 environment = SubResource("Environment_1fq2y")
@@ -59,7 +61,7 @@ transform = Transform3D(1, 0, 0, 0, 0.18398598, 0.9829289, 0, -0.9829289, 0.1839
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49.815285, 3.0821214, 9.427404)
 
 [node name="Player" parent="." unique_id=288310965 instance=ExtResource("5_wwhkl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16189384, 1.6, -0.007745743)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 1.3542676, 1.6, 8.67137)
 
 [node name="ThirdPersonCamera" parent="." unique_id=524669408 instance=ExtResource("6_figpf")]
 
