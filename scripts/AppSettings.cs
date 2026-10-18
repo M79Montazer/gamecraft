@@ -79,8 +79,9 @@ public partial class AppSettings : Node
         int index = AudioServer.GetBusIndex(bus);
         if (index < 0)
             return;
-        // LinearToDb(0) is -inf, which the mixer handles poorly — use a mute
-        AudioServer.SetBusVolumeDb(index, linear > 0f ? Mathf.LinearToDb(linear) : -80f);
+        // square for a perceptual curve — linear dB makes low slider values
+        // barely quieter; LinearToDb(0) is -inf, so mute instead
+        AudioServer.SetBusVolumeDb(index, linear > 0f ? Mathf.LinearToDb(linear * linear) : -80f);
     }
 
     private static void Save()
