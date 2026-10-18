@@ -24,7 +24,11 @@ public partial class PauseMenu : Control
         buttons.AddChild(_resume);
 
         var restart = MainMenu.MenuButton("RESTART");
-        restart.Pressed += () => GetTree().ReloadCurrentScene();
+        restart.Pressed += () =>
+        {
+            LevelRunner.SkipNextIntro();
+            GetTree().ReloadCurrentScene();
+        };
         buttons.AddChild(restart);
 
         buttons.AddChild(VolumeRow("MUSIC", AppSettings.SetMusicVolume, AppSettings.MusicVolume));

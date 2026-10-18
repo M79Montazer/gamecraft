@@ -16,7 +16,11 @@ public partial class LoseCard : Control
         var buttons = GetNode<HBoxContainer>("Center/Card/Box/Buttons");
 
         _retry = MainMenu.MenuButton("RETRY");
-        _retry.Pressed += () => GetTree().ReloadCurrentScene();
+        _retry.Pressed += () =>
+        {
+            LevelRunner.SkipNextIntro();
+            GetTree().ReloadCurrentScene();
+        };
         buttons.AddChild(_retry);
 
         var levelSelect = MainMenu.MenuButton("LEVEL SELECT");

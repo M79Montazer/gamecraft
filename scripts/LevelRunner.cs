@@ -5,292 +5,299 @@ using System.Collections.Generic;
 // alongside its GridMap, Player and Camera nodes.
 public partial class LevelRunner : Node3D
 {
-    private enum GameState { Playing, Won, Lost }
+	private enum GameState { Playing, Won, Lost }
 
-    private const string LevelSelectScene = "res://scenes/ui/level_select.tscn";
-    private const string NothingnessScene = "res://scenes/nothingness.tscn";
-    private const string HudScene = "res://scenes/ui/hud.tscn";
+	private const string LevelSelectScene = "res://scenes/ui/level_select.tscn";
+	private const string NothingnessScene = "res://scenes/nothingness.tscn";
+	private const string HudScene = "res://scenes/ui/hud.tscn";
 
-    // Distances marking the HUD zone boundaries, inner to outer.
-    [Export] public float[] Rings { get; set; } = { 8f, 14f, 20f };
+	// Distances marking the HUD zone boundaries, inner to outer.
+	[Export] public float[] Rings { get; set; } = { 8f, 14f, 20f };
 
-    // Seconds of calm after the level starts before the nothingness begins
-    // to spread (0 = starts immediately).
-    [Export] public float NothingnessStartDelay { get; set; } = 0f;
+	// Seconds of calm after the level starts before the nothingness begins
+	// to spread (0 = starts immediately).
+	[Export] public float NothingnessStartDelay { get; set; } = 0f;
 
-    // Base spread speed of the nothingness rim in blocks per second, before
-    // the per-ring speedups kick in.
-    [Export] public float NothingnessSpeed { get; set; } = 0.9f;
+	// Base spread speed of the nothingness rim in blocks per second, before
+	// the per-ring speedups kick in.
+	[Export] public float NothingnessSpeed { get; set; } = 0.9f;
 
-    private Player _player;
-    private Level _level;
-    private Nothingness _nothingness;
-    private Hud _hud;
-    private Camera3D _fixedCamera;
-    private ThirdPersonCamera _thirdPersonCamera;
-    private bool _thirdPersonActive;
-    private GameState _state = GameState.Playing;
-    private float _time;
-    private int _starsTotal;
-    private int _starsCollected;
+	private Player _player;
+	private Level _level;
+	private Nothingness _nothingness;
+	private Hud _hud;
+	private Camera3D _fixedCamera;
+	private ThirdPersonCamera _thirdPersonCamera;
+	private bool _thirdPersonActive;
+	private GameState _state = GameState.Playing;
+	private float _time;
+	private int _starsTotal;
+	private int _starsCollected;
 #if DEBUG
-    private bool _debugNothingnessOff;
+	private bool _debugNothingnessOff;
 #endif
 
-    // Intro dialogue is shown only the first time a level loads in a session;
-    // restarts and revisits skip straight to gameplay.
-    private static bool _introDialogueShown;
+	// Intro dialogue plays on every fresh entry into a level; retry paths
+	// (R key, retry/restart buttons) set this flag to skip it exactly once.
+	private static bool _skipIntroOnce;
 
-    public override void _Ready()
-    {
-        // a reload/scene change from a paused end card must start unpaused
-        GetTree().Paused = false;
-        // keep working while the tree is paused on the end card
-        ProcessMode = ProcessModeEnum.Always;
+	public static void SkipNextIntro() => _skipIntroOnce = true;
 
-        // track 0 is the menu theme; tracks are 1-indexed per level number
-        MusicPlayer.Instance.Play(Progress.LevelNumber(SceneFilePath));
+	public override void _Ready()
+	{
+		// a reload/scene change from a paused end card must start unpaused
+		GetTree().Paused = false;
+		// keep working while the tree is paused on the end card
+		ProcessMode = ProcessModeEnum.Always;
 
-        EnsureAction("move_left", Key.A);
-        EnsureAction("move_right", Key.D);
-        EnsureAction("move_forward", Key.W);
-        EnsureAction("move_back", Key.S);
-        EnsureAction("jump", Key.Space);
-        EnsureAction("toggle_camera", Key.H);
+		// track 0 is the menu theme; tracks are 1-indexed per level number
+		MusicPlayer.Instance.Play(Progress.LevelNumber(SceneFilePath));
+
+		EnsureAction("move_left", Key.A);
+		EnsureAction("move_right", Key.D);
+		EnsureAction("move_forward", Key.W);
+		EnsureAction("move_back", Key.S);
+		EnsureAction("jump", Key.Space);
+		EnsureAction("toggle_camera", Key.H);
 #if DEBUG
-        EnsureAction("debug_toggle_nothingness", Key.J);
+		EnsureAction("debug_toggle_nothingness", Key.J);
 #endif
 
-        _player = GetNode<Player>("Player");
-        // every GridMap in the level participates in the hollowing (floor
-        // blocks, walls, anything future levels add)
-        var maps = new List<GridMap>();
-        foreach (Node child in GetChildren())
-            if (child is GridMap map)
-                maps.Add(map);
-        _level = new Level(maps, Rings);
+		_player = GetNode<Player>("Player");
+		// every GridMap in the level participates in the hollowing (floor
+		// blocks, walls, anything future levels add)
+		var maps = new List<GridMap>();
+		foreach (Node child in GetChildren())
+			if (child is GridMap map)
+				maps.Add(map);
+		_level = new Level(maps, Rings);
 
-        _fixedCamera = GetNode<Camera3D>("Camera");
-        _thirdPersonCamera = GetNode<ThirdPersonCamera>("ThirdPersonCamera");
-        // H must only ever swap between these two, so any other camera in the
-        // scene (the player's FBX embeds one) is freed and ours starts current
-        foreach (Node cam in FindChildren("*", "Camera3D", true, false))
-            if (cam != _fixedCamera && cam != _thirdPersonCamera)
-                cam.QueueFree();
-        _fixedCamera.Current = true;
+		_fixedCamera = GetNode<Camera3D>("Camera");
+		_thirdPersonCamera = GetNode<ThirdPersonCamera>("ThirdPersonCamera");
+		// H must only ever swap between these two, so any other camera in the
+		// scene (the player's FBX embeds one) is freed and ours starts current
+		foreach (Node cam in FindChildren("*", "Camera3D", true, false))
+			if (cam != _fixedCamera && cam != _thirdPersonCamera)
+				cam.QueueFree();
+		_fixedCamera.Current = true;
 
-        _nothingness = GD.Load<PackedScene>(NothingnessScene).Instantiate<Nothingness>();
-        _nothingness.Level = _level;
-        // before AddChild: Nothingness._Ready copies GrowthSpeed into its
-        // live speed on enter tree
-        _nothingness.GrowthSpeed = NothingnessSpeed;
-        _nothingness.StartDelay = NothingnessStartDelay;
-        AddChild(_nothingness);
+		_nothingness = GD.Load<PackedScene>(NothingnessScene).Instantiate<Nothingness>();
+		_nothingness.Level = _level;
+		// before AddChild: Nothingness._Ready copies GrowthSpeed into its
+		// live speed on enter tree
+		_nothingness.GrowthSpeed = NothingnessSpeed;
+		_nothingness.StartDelay = NothingnessStartDelay;
+		AddChild(_nothingness);
 
 		_hud = GD.Load<PackedScene>(HudScene).Instantiate<Hud>();
 		AddChild(_hud);
 		_hud.PauseMenu.Resumed += OnPauseResumed;
 
-        // stars are instanced straight into the level scene; children _Ready
-        // before this root, so the group is populated by now
-        foreach (Node node in GetTree().GetNodesInGroup("star"))
-        {
-            if (node is Star star)
-            {
-                _starsTotal++;
-                star.Collected += OnStarCollected;
-            }
-        }
+		// stars are instanced straight into the level scene; children _Ready
+		// before this root, so the group is populated by now
+		foreach (Node node in GetTree().GetNodesInGroup("star"))
+		{
+			if (node is Star star)
+			{
+				_starsTotal++;
+				star.Collected += OnStarCollected;
+			}
+		}
 
-        // escape zones (scenes/win_condition.tscn) are instanced straight into
-        // the level scene; children _Ready before this root, so the group is
-        // populated by now
-        foreach (Node node in GetTree().GetNodesInGroup("win_condition"))
-            if (node is WinCondition winCondition)
-                winCondition.Entered += OnWinConditionEntered;
+		// escape zones (scenes/win_condition.tscn) are instanced straight into
+		// the level scene; children _Ready before this root, so the group is
+		// populated by now
+		foreach (Node node in GetTree().GetNodesInGroup("win_condition"))
+			if (node is WinCondition winCondition)
+				winCondition.Entered += OnWinConditionEntered;
 
-        // this node stays Always so R/Esc work while paused, but everything
-        // world-side must still freeze during the intro dialogue and end card
-        foreach (Node child in GetChildren())
-            if (child != _hud)
-                child.ProcessMode = ProcessModeEnum.Pausable;
+		// this node stays Always so R/Esc work while paused, but everything
+		// world-side must still freeze during the intro dialogue and end card
+		foreach (Node child in GetChildren())
+			if (child != _hud)
+				child.ProcessMode = ProcessModeEnum.Pausable;
 
-        StartIntroDialogue();
-    }
+		StartIntroDialogue();
+	}
 
-    // Stage-intro dialogue: if an "intro_dialogue.tscn" sits in this level's
-    // own folder (next to the level scene), show it as an overlay and pause
-    // the game until the conversation ends. Level scenes are regenerated by
-    // BakeLevel, so the dialogue lives beside the level instead of inside it
-    // and survives re-bakes. Levels without that file start playing directly.
-    private void StartIntroDialogue()
-    {
-        if (_introDialogueShown)
-            return;
-        string introPath = SceneFilePath.GetBaseDir().PathJoin("intro_dialogue.tscn");
-        if (!ResourceLoader.Exists(introPath))
-            return;
+	// Stage-intro dialogue: if an "intro_dialogue.tscn" sits in this level's
+	// own folder (next to the level scene), show it as an overlay and pause
+	// the game until the conversation ends. Level scenes are regenerated by
+	// BakeLevel, so the dialogue lives beside the level instead of inside it
+	// and survives re-bakes. Levels without that file start playing directly.
+	private void StartIntroDialogue()
+	{
+		if (_skipIntroOnce)
+		{
+			_skipIntroOnce = false;
+			return;
+		}
+		string introPath = SceneFilePath.GetBaseDir().PathJoin("intro_dialogue.tscn");
+		if (!ResourceLoader.Exists(introPath))
+			return;
 
-        _introDialogueShown = true;
-        var dialogue = GD.Load<PackedScene>(introPath).Instantiate<StageDialogue>();
-        AddChild(dialogue);
-        if (dialogue.HasLines)
-            GetTree().Paused = true;
-        else
-            dialogue.QueueFree(); // empty dialogue: skip straight to gameplay
-    }
+		var dialogue = GD.Load<PackedScene>(introPath).Instantiate<StageDialogue>();
+		AddChild(dialogue);
+		if (dialogue.HasLines)
+			GetTree().Paused = true;
+		else
+			dialogue.QueueFree(); // empty dialogue: skip straight to gameplay
+	}
 
-    public override void _Process(double delta)
-    {
-        // this node runs while paused (for R/Esc), but the clock must not
-        if (GetTree().Paused || _state != GameState.Playing)
-            return;
-        _time += (float)delta;
+	public override void _Process(double delta)
+	{
+		// this node runs while paused (for R/Esc), but the clock must not
+		if (GetTree().Paused || _state != GameState.Playing)
+			return;
+		_time += (float)delta;
 
-        Vector3 p = _player.GlobalPosition;
-        float dist = Mathf.Sqrt(p.X * p.X + p.Z * p.Z);
+		Vector3 p = _player.GlobalPosition;
+		float dist = Mathf.Sqrt(p.X * p.X + p.Z * p.Z);
 
-        if (p.Y < -4f)
-        {
-            SetEnd();
-            return;
-        }
+		if (p.Y < -4f)
+		{
+			SetEnd();
+			return;
+		}
 
-        string zone = dist > _level.Rings[2] ? "OUTER RING"
-            : dist > _level.Rings[1] ? "MIDDLE RING"
-            : dist > _level.Rings[0] ? "INNER RING"
-            : "THE CENTER";
-        string status = $"{zone}    {_time:0.0} s    stars {_starsCollected}/{_starsTotal}";
+		string zone = dist > _level.Rings[2] ? "OUTER RING"
+			: dist > _level.Rings[1] ? "MIDDLE RING"
+			: dist > _level.Rings[0] ? "INNER RING"
+			: "THE CENTER";
+		string status = $"{zone}    {_time:0.0} s    stars {_starsCollected}/{_starsTotal}";
 #if DEBUG
-        if (_debugNothingnessOff)
-            status += "    [nothingness OFF]";
+		if (_debugNothingnessOff)
+			status += "    [nothingness OFF]";
 #endif
-        _hud.SetStatus(status);
-    }
+		_hud.SetStatus(status);
+	}
 
-    public override void _UnhandledInput(InputEvent e)
-    {
-        if (e is InputEventKey { Pressed: true } key && (key.PhysicalKeycode == Key.R || key.Keycode == Key.R))
-            GetTree().ReloadCurrentScene();
-        else if (e.IsActionPressed("ui_cancel"))
-        {
-            // mid-run Esc opens the pause menu, which consumes the next Esc
-            // itself. Once the run is over (end card, score card) or the tree
-            // is already paused (intro dialogue), Esc still exits to the
-            // level select, as those overlays advertise.
-            if (_state == GameState.Playing && !GetTree().Paused)
-            {
-                PauseWorld();
-                _hud.PauseMenu.Open();
-            }
-            else
-            {
-                Input.MouseMode = Input.MouseModeEnum.Visible;
-                GetTree().ChangeSceneToFile(LevelSelectScene);
-            }
-        }
-        else if (e.IsActionPressed("toggle_camera"))
-            ToggleCamera();
+	public override void _UnhandledInput(InputEvent e)
+	{
+		if (e is InputEventKey { Pressed: true } key && (key.PhysicalKeycode == Key.R || key.Keycode == Key.R))
+		{
+			SkipNextIntro();
+			GetTree().ReloadCurrentScene();
+		}
+		else if (e.IsActionPressed("ui_cancel"))
+		{
+			// mid-run Esc opens the pause menu, which consumes the next Esc
+			// itself. Once the run is over (end card, score card) or the tree
+			// is already paused (intro dialogue), Esc still exits to the
+			// level select, as those overlays advertise.
+			if (_state == GameState.Playing && !GetTree().Paused)
+			{
+				PauseWorld();
+				_hud.PauseMenu.Open();
+			}
+			else
+			{
+				Input.MouseMode = Input.MouseModeEnum.Visible;
+				GetTree().ChangeSceneToFile(LevelSelectScene);
+			}
+		}
+		else if (e.IsActionPressed("toggle_camera"))
+			ToggleCamera();
 #if DEBUG
-        else if (e.IsActionPressed("debug_toggle_nothingness"))
-            ToggleNothingnessDebug();
+		else if (e.IsActionPressed("debug_toggle_nothingness"))
+			ToggleNothingnessDebug();
 #endif
-    }
+	}
 
 #if DEBUG
-    // J freezes the nothingness spread in place (rim, hollowing and block
-    // destruction) and resumes it from there; debug builds only, so exported
-    // release games never contain the key or the HUD marker.
-    private void ToggleNothingnessDebug()
-    {
-        if (_state != GameState.Playing)
-            return;
-        _debugNothingnessOff = !_debugNothingnessOff;
-        _nothingness.Active = !_debugNothingnessOff;
-    }
+	// J freezes the nothingness spread in place (rim, hollowing and block
+	// destruction) and resumes it from there; debug builds only, so exported
+	// release games never contain the key or the HUD marker.
+	private void ToggleNothingnessDebug()
+	{
+		if (_state != GameState.Playing)
+			return;
+		_debugNothingnessOff = !_debugNothingnessOff;
+		_nothingness.Active = !_debugNothingnessOff;
+	}
 #endif
 
-    // H swaps between the fixed overview camera and the orbiting third-person
-    // one; the third-person view captures the mouse for orbiting.
-    private void ToggleCamera()
-    {
-        _thirdPersonActive = !_thirdPersonActive;
-        // make both explicit: artist FBX models embed their own Camera3D, and
-        // unsetting one camera's Current alone would let the viewport fall back
-        // to whichever of those it finds first
-        _thirdPersonCamera.Current = _thirdPersonActive;
-        _fixedCamera.Current = !_thirdPersonActive;
-        Input.MouseMode = _thirdPersonActive
-            ? Input.MouseModeEnum.Captured
-            : Input.MouseModeEnum.Visible;
-    }
+	// H swaps between the fixed overview camera and the orbiting third-person
+	// one; the third-person view captures the mouse for orbiting.
+	private void ToggleCamera()
+	{
+		_thirdPersonActive = !_thirdPersonActive;
+		// make both explicit: artist FBX models embed their own Camera3D, and
+		// unsetting one camera's Current alone would let the viewport fall back
+		// to whichever of those it finds first
+		_thirdPersonCamera.Current = _thirdPersonActive;
+		_fixedCamera.Current = !_thirdPersonActive;
+		Input.MouseMode = _thirdPersonActive
+			? Input.MouseModeEnum.Captured
+			: Input.MouseModeEnum.Visible;
+	}
 
-    private static void EnsureAction(string action, Key key)
-    {
-        if (InputMap.HasAction(action))
-            return;
-        InputMap.AddAction(action);
-        InputMap.ActionAddEvent(action, new InputEventKey { PhysicalKeycode = key });
-    }
+	private static void EnsureAction(string action, Key key)
+	{
+		if (InputMap.HasAction(action))
+			return;
+		InputMap.AddAction(action);
+		InputMap.ActionAddEvent(action, new InputEventKey { PhysicalKeycode = key });
+	}
 
-    private void SetEnd()
-    {
-        _state = GameState.Lost;
-        _nothingness.Active = false;
-        PauseWorld();
-        _hud.ShowLose();
-    }
+	private void SetEnd()
+	{
+		_state = GameState.Lost;
+		_nothingness.Active = false;
+		PauseWorld();
+		_hud.ShowLose();
+	}
 
-    // Freeze everything under the end card: physics, nothingness and the ball
-    // all stop while the overlay is up.
-    private void PauseWorld()
-    {
-        Input.MouseMode = Input.MouseModeEnum.Visible;
-        GetTree().Paused = true;
-    }
+	// Freeze everything under the end card: physics, nothingness and the ball
+	// all stop while the overlay is up.
+	private void PauseWorld()
+	{
+		Input.MouseMode = Input.MouseModeEnum.Visible;
+		GetTree().Paused = true;
+	}
 
-    // The pause menu only hides itself; unpausing and restoring the mouse
-    // mode for whichever camera is active stay with the pause bookkeeping.
-    private void OnPauseResumed()
-    {
-        GetTree().Paused = false;
-        Input.MouseMode = _thirdPersonActive
-            ? Input.MouseModeEnum.Captured
-            : Input.MouseModeEnum.Visible;
-    }
+	// The pause menu only hides itself; unpausing and restoring the mouse
+	// mode for whichever camera is active stay with the pause bookkeeping.
+	private void OnPauseResumed()
+	{
+		GetTree().Paused = false;
+		Input.MouseMode = _thirdPersonActive
+			? Input.MouseModeEnum.Captured
+			: Input.MouseModeEnum.Visible;
+	}
 
-    // 1 star for escaping, plus one per star picked up, up to 3.
-    private void Win()
-    {
-        _state = GameState.Won;
-        _nothingness.Active = false;
-        int number = Progress.LevelNumber(SceneFilePath);
-        int earned = System.Math.Min(1 + _starsCollected, 3);
-        Progress.MarkCompleted(number, earned);
-        PauseWorld();
-        _hud.ShowScoreCard(earned, _time, NextLevelPath());
-    }
+	// 1 star for escaping, plus one per star picked up, up to 3.
+	private void Win()
+	{
+		_state = GameState.Won;
+		_nothingness.Active = false;
+		int number = Progress.LevelNumber(SceneFilePath);
+		int earned = System.Math.Min(1 + _starsCollected, 3);
+		Progress.MarkCompleted(number, earned);
+		PauseWorld();
+		_hud.ShowScoreCard(earned, _time, NextLevelPath());
+	}
 
-    private void OnWinConditionEntered(WinCondition winCondition)
-    {
-        if (_state == GameState.Playing)
-            Win();
-    }
+	private void OnWinConditionEntered(WinCondition winCondition)
+	{
+		if (_state == GameState.Playing)
+			Win();
+	}
 
-    // The level scene sorted right after this one, or null on the last level.
-    private string NextLevelPath()
-    {
-        List<string> scenes = Progress.FindLevelScenes();
-        string own = SceneFilePath.Replace("res://scenes/levels/", "");
-        int i = scenes.IndexOf(own);
-        if (i < 0 || i + 1 >= scenes.Count)
-            return null;
-        return $"res://scenes/levels/{scenes[i + 1]}";
-    }
+	// The level scene sorted right after this one, or null on the last level.
+	private string NextLevelPath()
+	{
+		List<string> scenes = Progress.FindLevelScenes();
+		string own = SceneFilePath.Replace("res://scenes/levels/", "");
+		int i = scenes.IndexOf(own);
+		if (i < 0 || i + 1 >= scenes.Count)
+			return null;
+		return $"res://scenes/levels/{scenes[i + 1]}";
+	}
 
-    private void OnStarCollected(Star star)
-    {
-        _starsCollected++;
-        _hud.SetStatus($"stars {_starsCollected}/{_starsTotal}");
-    }
+	private void OnStarCollected(Star star)
+	{
+		_starsCollected++;
+		_hud.SetStatus($"stars {_starsCollected}/{_starsTotal}");
+	}
 }
