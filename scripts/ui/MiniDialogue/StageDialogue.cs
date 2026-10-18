@@ -1,15 +1,21 @@
 using Godot;
 
-// Plays level-introduction dialogue through the editor-authored controls in
+// Plays level dialogue through the editor-authored controls in
 // stage_dialogue.tscn. Visual nodes and audio players live in the scene; this
 // controller only supplies content and playback state.
 public partial class StageDialogue : Control
 {
+    [Signal]
+    public delegate void DialogueCompletedEventHandler();
+
     private enum DialogueState { Typing, WaitingForInput, Finished }
 
     [ExportGroup("Dialogue")]
     [Export] public Godot.Collections.Array<DialogueLine> Lines { get; set; } = new();
     [Export] public PackedScene NextStage { get; set; }
+    // Intro conversations resume gameplay. Outro conversations leave the
+    // tree paused so their owner can replace them with an end card.
+    [Export] public bool UnpauseOnFinish { get; set; } = true;
 
     [ExportGroup("Fallback Typewriter")]
     [Export] public float CharactersPerSecond { get; set; } = 35.0f;
@@ -271,7 +277,10 @@ public partial class StageDialogue : Control
         _robotSpeech.CancelLine();
         SetMusicDucked(false);
         Hide();
-        GetTree().Paused = false;
+        if (UnpauseOnFinish)
+            GetTree().Paused = false;
+
+        EmitSignal(SignalName.DialogueCompleted);
 
         if (NextStage is not null && !_transitioned)
         {

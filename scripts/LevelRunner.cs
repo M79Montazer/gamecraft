@@ -275,7 +275,32 @@ public partial class LevelRunner : Node3D
 		int earned = System.Math.Min(1 + _starsCollected, 3);
 		Progress.MarkCompleted(number, earned);
 		PauseWorld();
-		_hud.ShowScoreCard(earned, _time, NextLevelPath());
+		string nextLevelPath = NextLevelPath();
+		if (!StartOutroDialogue(earned, nextLevelPath))
+			_hud.ShowScoreCard(earned, _time, nextLevelPath);
+	}
+
+	// A level can opt into a post-win conversation by placing an authored
+	// "outro_dialogue.tscn" beside its level scene. The completed run remains
+	// paused throughout, and the score card appears only after the last line.
+	private bool StartOutroDialogue(int earned, string nextLevelPath)
+	{
+		string outroPath = SceneFilePath.GetBaseDir().PathJoin("outro_dialogue.tscn");
+		if (!ResourceLoader.Exists(outroPath))
+			return false;
+
+		var dialogue = GD.Load<PackedScene>(outroPath).Instantiate<StageDialogue>();
+		if (!dialogue.HasLines)
+		{
+			dialogue.Free();
+			return false;
+		}
+
+		dialogue.UnpauseOnFinish = false;
+		dialogue.DialogueCompleted += () =>
+			_hud.ShowScoreCard(earned, _time, nextLevelPath);
+		AddChild(dialogue);
+		return true;
 	}
 
 	private void OnWinConditionEntered(WinCondition winCondition)

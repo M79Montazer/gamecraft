@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://b4aevk6mf1qia"]
+
+[ext_resource type="PackedScene" uid="uid://bkhhc5h3fwlm5" path="res://scenes/ui/Dialogue/stage_dialogue.tscn" id="1_base"]
+[ext_resource type="Script" uid="uid://lhn6khriqvfa" path="res://scripts/ui/MiniDialogue/DialogueLine.cs" id="2_line"]
+[ext_resource type="Texture2D" uid="uid://ck4rohmcgu1fd" path="res://assets/MiniDialogue/MainCh.png" id="3_rgn"]
+[ext_resource type="Texture2D" uid="uid://ceyj6vn1lpcwu" path="res://assets/MiniDialogue/RoboCh.png" id="4_friend"]
+[ext_resource type="Shader" uid="uid://dk1oym562qd83" path="res://scenes/ui/Dialogue/blur_background.gdshader" id="5_blur"]
+
+[sub_resource type="Resource" id="line_1"]
+script = ExtResource("2_line")
+Text = "It’s finally done. Robot Friends are safe."
+Emotion = 4
+
+[sub_resource type="Resource" id="line_2"]
+script = ExtResource("2_line")
+Speaker = 1
+Text = "That’s me."
+
+[sub_resource type="Resource" id="line_3"]
+script = ExtResource("2_line")
+Text = "That’s you."
+
+[sub_resource type="Resource" id="line_4"]
+script = ExtResource("2_line")
+Speaker = 1
+Text = "And you."
+Emotion = 4
+
+[sub_resource type="Resource" id="Resource_j8p3t"]
+script = ExtResource("2_line")
+Text = "And me."
+metadata/_custom_type_script = "uid://lhn6khriqvfa"
+
+[sub_resource type="Resource" id="Resource_r8qae"]
+script = ExtResource("2_line")
+Speaker = 1
+Text = "And our friend Steve."
+Emotion = 4
+metadata/_custom_type_script = "uid://lhn6khriqvfa"
+
+[sub_resource type="Resource" id="Resource_6irks"]
+script = ExtResource("2_line")
+Text = "Note to G-Craft: Fantastic RGN speaking. I hope you had a fun experience with us. Thank you for the opportunity."
+Emotion = 4
+metadata/_custom_type_script = "uid://lhn6khriqvfa"
+
+[sub_resource type="Resource" id="Resource_4m8xj"]
+script = ExtResource("2_line")
+Text = "But next time please be more gentle. Hollow was a tiny bit too much."
+metadata/_custom_type_script = "uid://lhn6khriqvfa"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_81jp3"]
+resource_local_to_scene = true
+shader = ExtResource("5_blur")
+shader_parameter/blur_strength = 2.0
+shader_parameter/darkness = 0.35
+
+[node name="OutroDialogue" unique_id=1038698093 instance=ExtResource("1_base")]
+Lines = Array[ExtResource("2_line")]([SubResource("line_1"), SubResource("line_2"), SubResource("line_3"), SubResource("line_4"), SubResource("Resource_j8p3t"), SubResource("Resource_r8qae"), SubResource("Resource_6irks"), SubResource("Resource_4m8xj")])
+UnpauseOnFinish = false
+UpperAvatar = ExtResource("3_rgn")
+LowerAvatar = ExtResource("4_friend")
+BlurStrength = 10.0
+BackdropDarkness = 0.6
+
+[node name="Backdrop" parent="." index="0" unique_id=292846168]
+material = SubResource("ShaderMaterial_81jp3")
+
+[node name="Name" parent="DialogueCenter/DialogueRows/UpperDialog" parent_id_path=PackedInt32Array(1697646042) index="2" unique_id=1441944186]
+offset_top = 25.0
+offset_bottom = 76.0
+
+[node name="Message" parent="DialogueCenter/DialogueRows/UpperDialog" parent_id_path=PackedInt32Array(1697646042) index="3" unique_id=926814633]
+offset_left = 305.0
+offset_top = 103.0
+offset_right = 836.0
+offset_bottom = 223.0
+
+[node name="Name" parent="DialogueCenter/DialogueRows/LowerDialog" parent_id_path=PackedInt32Array(2031713127) index="2" unique_id=778854088]
+offset_top = 22.0
+offset_bottom = 73.0
+text = "Robot Friend"
+
+[node name="Message" parent="DialogueCenter/DialogueRows/LowerDialog" parent_id_path=PackedInt32Array(2031713127) index="3" unique_id=28684745]
+offset_left = 65.0
+offset_top = 100.0
+offset_right = 608.0
+offset_bottom = 220.0
+
+[node name="ContinueHint" parent="." index="2" unique_id=1144971672]
+offset_top = -36.0
+offset_bottom = 0.0
