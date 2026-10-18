@@ -42,7 +42,9 @@ public static class Progress
 
     public static bool IsUnlocked(int levelNumber) => levelNumber <= Unlocked;
 
-    // All level scenes under scenes/levels/*, sorted level_2 before level_10.
+    // Player-facing level scenes under scenes/levels/*, sorted level_2 before
+    // level_10. Level 0 is retained in the project but hidden from the final
+    // level-select and progression UI.
     public static List<string> FindLevelScenes()
     {
         var scenes = new List<string>();
@@ -72,7 +74,7 @@ public static class Progress
                     file = file[..^".remap".Length];
                 // Only the folder's own <folder>.tscn is a level; other scenes
                 // (e.g. intro_dialogue.tscn) are support files.
-                if (file == $"{dir}.tscn" || file == $"{dir}.scn")
+                if ((file == $"{dir}.tscn" || file == $"{dir}.scn") && LevelNumber(dir) != 0)
                     scenes.Add($"{dir}/{file}");
             }
             sub.ListDirEnd();

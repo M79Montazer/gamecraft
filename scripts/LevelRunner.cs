@@ -33,9 +33,6 @@ public partial class LevelRunner : Node3D
 	private float _time;
 	private int _starsTotal;
 	private int _starsCollected;
-#if DEBUG
-	private bool _debugNothingnessOff;
-#endif
 
 	// Intro dialogue plays on every fresh entry into a level; retry paths
 	// (R key, retry/restart buttons) set this flag to skip it exactly once.
@@ -59,9 +56,6 @@ public partial class LevelRunner : Node3D
 		EnsureAction("move_back", Key.S);
 		EnsureAction("jump", Key.Space);
 		EnsureAction("toggle_camera", Key.H);
-#if DEBUG
-		EnsureAction("debug_toggle_nothingness", Key.J);
-#endif
 
 		_player = GetNode<Player>("Player");
 		// every GridMap in the level participates in the hollowing (floor
@@ -165,10 +159,6 @@ public partial class LevelRunner : Node3D
 			: dist > _level.Rings[0] ? "INNER RING"
 			: "THE CENTER";
 		string status = $"{zone}    {_time:0.0} s    stars {_starsCollected}/{_starsTotal}";
-#if DEBUG
-		if (_debugNothingnessOff)
-			status += "    [nothingness OFF]";
-#endif
 		_hud.SetStatus(status);
 	}
 
@@ -198,24 +188,7 @@ public partial class LevelRunner : Node3D
 		}
 		else if (e.IsActionPressed("toggle_camera"))
 			ToggleCamera();
-#if DEBUG
-		else if (e.IsActionPressed("debug_toggle_nothingness"))
-			ToggleNothingnessDebug();
-#endif
 	}
-
-#if DEBUG
-	// J freezes the nothingness spread in place (rim, hollowing and block
-	// destruction) and resumes it from there; debug builds only, so exported
-	// release games never contain the key or the HUD marker.
-	private void ToggleNothingnessDebug()
-	{
-		if (_state != GameState.Playing)
-			return;
-		_debugNothingnessOff = !_debugNothingnessOff;
-		_nothingness.Active = !_debugNothingnessOff;
-	}
-#endif
 
 	// H swaps between the fixed overview camera and the orbiting third-person
 	// one; the third-person view captures the mouse for orbiting.
